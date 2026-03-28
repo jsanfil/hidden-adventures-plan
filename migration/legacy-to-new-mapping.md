@@ -317,32 +317,31 @@ Special case:
 
 ## Category Normalization
 
-The rebuild should preserve the legacy feature floor while normalizing legacy category strings into cleaner slugs.
+The rebuild should use a fixed eight-category enum. These are code-safe enum values, not dashed slugs. UI should always render the friendly title, not the raw enum value.
 
-| Legacy Category | New `category_slug` | Suggested Label |
+| Enum Value | UI Title | Legacy Categories Mapped |
 | --- | --- | --- |
-| `Abandoned` | `abandoned` | Abandoned |
-| `Cave` | `cave` | Cave |
-| `Desert` | `desert` | Desert |
-| `Forest` | `forest` | Forest |
-| `RopeSwing` | `rope-swing` | Rope Swing |
-| `Trail` | `trail` | Trail |
-| `Viewpoint` | `viewpoint` | Viewpoint |
-| `road` | `roadside-stop` | Roadside Stop |
-| `Beach_Cove` | `beach-cove` | Beach or Cove |
-| `Creek_Rivers` | `creek-river` | Creek or River |
-| `Bridge` | `bridge` | Bridge |
-| `Fishing` | `fishing` | Fishing Spot |
-| `SwimmingHole` | `swimming-hole` | Swimming Hole |
-| `Bar` | `bar` | Bar |
-| `Cafe` | `cafe` | Cafe |
-| `LiveMusic` | `live-music` | Live Music |
-| `Restaurant` | `restaurant` | Restaurant |
+| `viewpoints` | Viewpoints | `Viewpoint` |
+| `trails` | Trails | `Trail` |
+| `water_spots` | Water Spots | `Beach_Cove`, `Creek_Rivers`, `SwimmingHole`, `RopeSwing`, `Fishing` |
+| `food_drink` | Food & Drink | `Restaurant`, `Cafe`, `Bar`, `LiveMusic` |
+| `abandoned_places` | Abandoned Places | `Abandoned` |
+| `caves` | Caves | `Cave` |
+| `nature_escapes` | Nature Escapes | `Forest`, `Desert` |
+| `roadside_stops` | Roadside Stops | `road`, `Bridge` |
 
-Notes:
+Why this normalization:
 
+- it preserves the most popular legacy categories as distinct top-level choices
+- it collapses low-volume legacy strings into broader labels that are easier to understand in product UI
+- it covers the full original category spectrum without introducing an `other` bucket into the fixed app taxonomy
+
+Implementation notes:
+
+- backend should store the enum-style identifier in `adventures.category_slug` until the column is renamed later
+- iOS should mirror the same eight values as a Swift enum with a computed display title
 - import tooling should keep the raw legacy category in an audit artifact for traceability
-- unknown categories should map to `other` only if new values appear in later data sources
+- if later legacy sources introduce unknown categories, quarantine them for review instead of auto-mapping to a ninth catch-all bucket
 
 ## Data Quality Rules
 
