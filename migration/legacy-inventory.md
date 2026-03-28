@@ -13,6 +13,7 @@
 - server: `/Users/josephsanfilippo/Documents/projects/adventureserver`
 - utilities: `/Users/josephsanfilippo/Documents/projects/utils`
 - PRD: `/Users/josephsanfilippo/Documents/projects/hidden.adventures/output/pdf/hidden-adventures-suite-prd.pdf`
+- full Mongo archive: `/Users/josephsanfilippo/Documents/projects/hidden-adventures-rebuild/hidden-adventures-plan/migration/archives/legacy-mongodb-backup-2026-03-01.archive`
 
 ## Auth and Identity
 
@@ -51,6 +52,8 @@
 - Fields: `name`, `desc`, `author`, `access`, `defaultImage`, `category`, `images[]`, `location`, `rating`, `ratingCount`, `acl[]`
 - Storage model: Mongo document with GeoJSON `Point` and numeric coordinates
 - Important behavior: `access` defaults to `private`
+- Important behavior: displayed average rating is derived as `rating / ratingCount`, where `rating` stores the accumulated sum of all submitted rating values
+- Important behavior: the shipped product only supports a single image per adventure through `defaultImage`; `images[]` was never fully implemented
 
 #### `profiles`
 
@@ -74,6 +77,7 @@
 
 - Fields: `username`, `adventureID`, `rating`
 - Important behavior: rating create/update/delete also adjusts aggregate fields on the related adventure
+- Migration note: if the `ratings` collection is absent from a backup, the adventure-level aggregate fields may still preserve the displayed legacy rating state
 
 #### `messages`
 
@@ -116,6 +120,17 @@
 - The server uses Morgan request logging piped into Winston transports.
 - The legacy server README recommends Node `16.x`, npm `8.x`, and MongoDB `4.2.x`.
 
+## Archive Availability
+
+### Findings
+
+- A full local Mongo export archive is now available in the plan repo for migration planning and conversion work.
+- The archive appears to be a `mongodump --archive` style file produced by Mongo tools `r3.6.5`.
+- Visible collections in the archive include `adventures`, `profiles`, `comments`, `favorites`, `sidekicks`, `messages`, and `filenames`.
+- This archive should be treated as the migration source of truth over ad hoc sample exports or inferred schema notes.
+- A profiled summary of the archive now lives at `migration/archive-profile.md` with a machine-readable companion at `migration/archive-profile.json`.
+- The archive does not contain a `ratings` collection, but adventure documents still include `rating` and `ratingCount` aggregates.
+
 ## Risk Notes
 
 - PRD is approved as feature-floor input only; do not treat it as a requirement to preserve the legacy UI structure.
@@ -123,7 +138,7 @@
 - The iOS API client disables SSL certificate evaluation; this must not carry into the rebuild.
 - The legacy backend is tightly coupled to MongoDB document mutation patterns and denormalized fields; those are migration inputs, not rebuild targets.
 - The sidekick model mutates adventure ACLs on relationship changes, which is a data-coupled sharing design the rebuild should replace with explicit visibility policy modeling.
-- Adventure deletion cascades into favorites and ratings but not comments in the legacy controller behavior.
+- Adventure deletion does not fully enforce referential cleanup for favorites and comments in the legacy system; orphaned rows can be removed during migration.
 - Delete-account flow does not explicitly remove user-authored ratings in all cases.
 - The image delete handler in the legacy server reads bucket/key from the request body instead of trusting the route param.
 - Media moderation is asynchronous and queue-based, which is useful operationally but may create UX gaps around upload success versus later rejection.

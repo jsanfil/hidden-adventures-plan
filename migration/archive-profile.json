@@ -1,0 +1,642 @@
+{
+  "collections": {
+    "adventures": {
+      "document_count": 353,
+      "field_presence": [
+        {
+          "count": 353,
+          "field": "__v"
+        },
+        {
+          "count": 353,
+          "field": "_id"
+        },
+        {
+          "count": 353,
+          "field": "access"
+        },
+        {
+          "count": 353,
+          "field": "acl"
+        },
+        {
+          "count": 353,
+          "field": "author"
+        },
+        {
+          "count": 353,
+          "field": "category"
+        },
+        {
+          "count": 353,
+          "field": "createdAt"
+        },
+        {
+          "count": 353,
+          "field": "defaultImage"
+        },
+        {
+          "count": 353,
+          "field": "desc"
+        },
+        {
+          "count": 353,
+          "field": "images"
+        },
+        {
+          "count": 353,
+          "field": "location"
+        },
+        {
+          "count": 353,
+          "field": "name"
+        },
+        {
+          "count": 353,
+          "field": "rating"
+        },
+        {
+          "count": 353,
+          "field": "ratingCount"
+        },
+        {
+          "count": 353,
+          "field": "updatedAt"
+        }
+      ],
+      "indexes": [
+        {
+          "key": {
+            "_id": 1
+          },
+          "name": "_id_",
+          "ns": "AdventuresDB.adventures",
+          "v": 2
+        },
+        {
+          "2dsphereIndexVersion": 3,
+          "key": {
+            "location": "2dsphere"
+          },
+          "name": "location",
+          "ns": "AdventuresDB.adventures",
+          "v": 2
+        },
+        {
+          "key": {
+            "access": 1
+          },
+          "name": "access",
+          "ns": "AdventuresDB.adventures",
+          "v": 2
+        },
+        {
+          "key": {
+            "acl": 1
+          },
+          "name": "acl",
+          "ns": "AdventuresDB.adventures",
+          "v": 2
+        },
+        {
+          "key": {
+            "author": 1
+          },
+          "name": "author",
+          "ns": "AdventuresDB.adventures",
+          "v": 2
+        },
+        {
+          "key": {
+            "category": 1
+          },
+          "name": "category",
+          "ns": "AdventuresDB.adventures",
+          "v": 2
+        }
+      ]
+    },
+    "comments": {
+      "document_count": 145,
+      "field_presence": [
+        {
+          "count": 145,
+          "field": "__v"
+        },
+        {
+          "count": 145,
+          "field": "_id"
+        },
+        {
+          "count": 145,
+          "field": "adventureID"
+        },
+        {
+          "count": 145,
+          "field": "createdAt"
+        },
+        {
+          "count": 145,
+          "field": "text"
+        },
+        {
+          "count": 145,
+          "field": "updatedAt"
+        },
+        {
+          "count": 145,
+          "field": "username"
+        },
+        {
+          "count": 119,
+          "field": "usernameImage"
+        }
+      ],
+      "indexes": [
+        {
+          "key": {
+            "_id": 1
+          },
+          "name": "_id_",
+          "ns": "AdventuresDB.comments",
+          "v": 2
+        },
+        {
+          "key": {
+            "username": 1
+          },
+          "name": "username",
+          "ns": "AdventuresDB.comments",
+          "v": 2
+        },
+        {
+          "key": {
+            "adventureID": 1
+          },
+          "name": "adventureID_1",
+          "ns": "AdventuresDB.comments",
+          "v": 2
+        }
+      ]
+    },
+    "favorites": {
+      "document_count": 1958,
+      "field_presence": [
+        {
+          "count": 1958,
+          "field": "__v"
+        },
+        {
+          "count": 1958,
+          "field": "_id"
+        },
+        {
+          "count": 1958,
+          "field": "adventureID"
+        },
+        {
+          "count": 1958,
+          "field": "createdAt"
+        },
+        {
+          "count": 1958,
+          "field": "updatedAt"
+        },
+        {
+          "count": 1958,
+          "field": "username"
+        }
+      ],
+      "indexes": [
+        {
+          "key": {
+            "_id": 1
+          },
+          "name": "_id_",
+          "ns": "AdventuresDB.favorites",
+          "v": 2
+        },
+        {
+          "key": {
+            "username": 1
+          },
+          "name": "username",
+          "ns": "AdventuresDB.favorites",
+          "v": 2
+        }
+      ]
+    },
+    "filenames": {
+      "document_count": 0,
+      "field_presence": [],
+      "indexes": [
+        {
+          "key": {
+            "_id": 1
+          },
+          "name": "_id_",
+          "ns": "AdventuresDB.filenames",
+          "v": 2
+        }
+      ]
+    },
+    "messages": {
+      "document_count": 0,
+      "field_presence": [],
+      "indexes": [
+        {
+          "key": {
+            "_id": 1
+          },
+          "name": "_id_",
+          "ns": "AdventuresDB.messages",
+          "v": 2
+        }
+      ]
+    },
+    "profiles": {
+      "document_count": 2630,
+      "field_presence": [
+        {
+          "count": 2630,
+          "field": "__v"
+        },
+        {
+          "count": 2630,
+          "field": "_id"
+        },
+        {
+          "count": 2630,
+          "field": "createdAt"
+        },
+        {
+          "count": 2630,
+          "field": "email"
+        },
+        {
+          "count": 2630,
+          "field": "fullName"
+        },
+        {
+          "count": 2630,
+          "field": "updatedAt"
+        },
+        {
+          "count": 2630,
+          "field": "username"
+        },
+        {
+          "count": 2629,
+          "field": "city"
+        },
+        {
+          "count": 2629,
+          "field": "state"
+        },
+        {
+          "count": 842,
+          "field": "profileImage"
+        },
+        {
+          "count": 655,
+          "field": "backgroundImage"
+        },
+        {
+          "count": 152,
+          "field": "adventureCount"
+        }
+      ],
+      "indexes": [
+        {
+          "key": {
+            "_id": 1
+          },
+          "name": "_id_",
+          "ns": "AdventuresDB.profiles",
+          "v": 2
+        },
+        {
+          "key": {
+            "username": 1
+          },
+          "name": "username",
+          "ns": "AdventuresDB.profiles",
+          "v": 2
+        }
+      ]
+    },
+    "sidekicks": {
+      "document_count": 1190,
+      "field_presence": [
+        {
+          "count": 1190,
+          "field": "__v"
+        },
+        {
+          "count": 1190,
+          "field": "_id"
+        },
+        {
+          "count": 1190,
+          "field": "createdAt"
+        },
+        {
+          "count": 1190,
+          "field": "sidekickName"
+        },
+        {
+          "count": 1190,
+          "field": "updatedAt"
+        },
+        {
+          "count": 1190,
+          "field": "username"
+        },
+        {
+          "count": 909,
+          "field": "sidekickImage"
+        }
+      ],
+      "indexes": [
+        {
+          "key": {
+            "_id": 1
+          },
+          "name": "_id_",
+          "ns": "AdventuresDB.sidekicks",
+          "v": 2
+        },
+        {
+          "key": {
+            "username": 1
+          },
+          "name": "username",
+          "ns": "AdventuresDB.sidekicks",
+          "v": 2
+        }
+      ]
+    }
+  },
+  "findings": {
+    "adventures": {
+      "access_distribution": [
+        {
+          "count": 298,
+          "value": "Public"
+        },
+        {
+          "count": 30,
+          "value": "Private"
+        },
+        {
+          "count": 25,
+          "value": "Sidekicks"
+        }
+      ],
+      "acl_non_empty_count": 209,
+      "authors_missing_profile_count": 1,
+      "category_distribution": [
+        {
+          "count": 87,
+          "value": "Viewpoint"
+        },
+        {
+          "count": 63,
+          "value": "Trail"
+        },
+        {
+          "count": 33,
+          "value": "Restaurant"
+        },
+        {
+          "count": 25,
+          "value": "Abandoned"
+        },
+        {
+          "count": 21,
+          "value": "Beach_Cove"
+        },
+        {
+          "count": 18,
+          "value": "Cafe"
+        },
+        {
+          "count": 16,
+          "value": "Cave"
+        },
+        {
+          "count": 14,
+          "value": "Creek_Rivers"
+        },
+        {
+          "count": 13,
+          "value": "Forest"
+        },
+        {
+          "count": 12,
+          "value": "RopeSwing"
+        },
+        {
+          "count": 10,
+          "value": "road"
+        },
+        {
+          "count": 10,
+          "value": "Bar"
+        },
+        {
+          "count": 9,
+          "value": "SwimmingHole"
+        },
+        {
+          "count": 9,
+          "value": "LiveMusic"
+        },
+        {
+          "count": 8,
+          "value": "Bridge"
+        },
+        {
+          "count": 3,
+          "value": "Desert"
+        },
+        {
+          "count": 2,
+          "value": "Fishing"
+        }
+      ],
+      "count": 353,
+      "images_array_empty_count": 353,
+      "missing_default_image_count": 0,
+      "missing_description_count": 0,
+      "missing_location_count": 0,
+      "sidekicks_without_acl_count": 4,
+      "top_authors": [
+        {
+          "count": 40,
+          "value": "jacksanfil"
+        },
+        {
+          "count": 32,
+          "value": "megan"
+        },
+        {
+          "count": 16,
+          "value": "jsanfildev"
+        },
+        {
+          "count": 16,
+          "value": "sebaschimp"
+        },
+        {
+          "count": 13,
+          "value": "caitlinlikens"
+        },
+        {
+          "count": 12,
+          "value": "joe"
+        },
+        {
+          "count": 8,
+          "value": "sampaur14"
+        },
+        {
+          "count": 7,
+          "value": "jennasanfil"
+        },
+        {
+          "count": 6,
+          "value": "emmacsims"
+        },
+        {
+          "count": 6,
+          "value": "gmpaulus"
+        },
+        {
+          "count": 5,
+          "value": "asanfil"
+        },
+        {
+          "count": 5,
+          "value": "FrankKeeney"
+        },
+        {
+          "count": 5,
+          "value": "danny.inclan"
+        },
+        {
+          "count": 5,
+          "value": "tarasabs"
+        },
+        {
+          "count": 4,
+          "value": "shireen"
+        }
+      ]
+    },
+    "comments": {
+      "count": 145,
+      "orphan_adventure_reference_count": 3,
+      "usernames_missing_profile_count": 0
+    },
+    "empty_collections": [],
+    "favorites": {
+      "count": 1958,
+      "orphan_adventure_reference_count": 61,
+      "usernames_missing_profile_count": 19
+    },
+    "filenames": {
+      "count": 0
+    },
+    "messages": {
+      "count": 0
+    },
+    "missing_collections": [
+      "ratings"
+    ],
+    "profiles": {
+      "adventure_count_mismatch_count": 0,
+      "count": 2630,
+      "missing_background_image_count": 1975,
+      "missing_email_count": 1,
+      "missing_full_name_count": 6,
+      "missing_profile_image_count": 1788
+    },
+    "ratings": {
+      "count": 0
+    },
+    "sidekicks": {
+      "count": 1190,
+      "links_with_missing_profile_count": 24,
+      "top_owners": [
+        {
+          "count": 107,
+          "value": "britneyho"
+        },
+        {
+          "count": 43,
+          "value": "jack_sparagna"
+        },
+        {
+          "count": 33,
+          "value": "jacksanfil"
+        },
+        {
+          "count": 26,
+          "value": "E"
+        },
+        {
+          "count": 23,
+          "value": "joey.bondi"
+        },
+        {
+          "count": 19,
+          "value": "kaylatutton"
+        },
+        {
+          "count": 18,
+          "value": "kiyomijade"
+        },
+        {
+          "count": 18,
+          "value": "lilyrooker"
+        },
+        {
+          "count": 18,
+          "value": "tayfowler77"
+        },
+        {
+          "count": 17,
+          "value": "shireen"
+        },
+        {
+          "count": 17,
+          "value": "sarahhagene"
+        },
+        {
+          "count": 15,
+          "value": "laurenmajors"
+        },
+        {
+          "count": 14,
+          "value": "bory"
+        },
+        {
+          "count": 13,
+          "value": "Kristen11"
+        },
+        {
+          "count": 12,
+          "value": "JakeHerington12"
+        }
+      ]
+    }
+  },
+  "source": {
+    "archive_path": "hidden-adventures-plan/migration/archives/legacy-mongodb-backup-2026-03-01.archive",
+    "archive_size_bytes": 1263783,
+    "concurrent_collections": 4,
+    "server_version": "3.6.5",
+    "tool_version": "r3.6.5"
+  }
+}

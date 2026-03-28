@@ -36,3 +36,13 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
 - local stack runs on laptop
 - initial contracts are documented
 - release slice 1 server endpoints are ready for client integration
+
+## Current State
+
+- The server repo now has published `public` application tables backed by a repeatable migration pipeline from the legacy Mongo archive.
+- Read-only slice 1 endpoints are implemented and verified for:
+  - `GET /api/feed`
+  - `GET /api/adventures/:id`
+  - `GET /api/profiles/:handle`
+- Endpoint reads already use the rebuilt visibility model against the published relational tables.
+- The remaining backend-platform gap is to lock the contract docs from the implemented response shapes and replace the temporary `viewerHandle` query param with Cognito-backed viewer resolution.

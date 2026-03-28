@@ -40,8 +40,8 @@
 | --- | --- | --- | --- | --- |
 | Product/UX | Active | hidden-adventures-plan | iOS foundation, deployment setup | none |
 | iOS foundation | Seeded | hidden-adventures-ios | Product/UX, deployment setup | none |
-| Backend/domain/API | Active | hidden-adventures-server | Product/UX, deployment setup | API surface draft |
-| Data migration | Ready To Start | hidden-adventures-plan | deployment setup | representative legacy extracts |
+| Backend/domain/API | Active | hidden-adventures-server | Product/UX, deployment setup | Cognito-backed viewer resolution |
+| Data migration | Active | hidden-adventures-plan | deployment setup | rollback checklist, media verification |
 | Deploy/dev environment | Bootstrapped | hidden-adventures-server | Product/UX, backend/domain/API | none |
 
 ## Release Slices
@@ -62,9 +62,20 @@
 - [x] Complete the legacy inventory in [migration/legacy-inventory.md](./migration/legacy-inventory.md)
 - [x] Start the product and UX workstream in [workstreams/product-ux.md](./workstreams/product-ux.md)
 - [x] Draft the relational backend schema in [workstreams/backend-schema-draft.md](./workstreams/backend-schema-draft.md)
-- [ ] Draft the slice 1 API surface in [workstreams/backend-platform.md](./workstreams/backend-platform.md)
+- [ ] Lock the slice 1 API surface in [workstreams/backend-platform.md](./workstreams/backend-platform.md) from the now-running feed/detail/profile endpoints
 - [ ] Produce the navigation and screen map in [workstreams/product-ux.md](./workstreams/product-ux.md)
-- [ ] Start the legacy-to-new data mapping document in [workstreams/data-migration.md](./workstreams/data-migration.md)
+- [x] Draft the legacy-to-new data mapping document in [migration/legacy-to-new-mapping.md](./migration/legacy-to-new-mapping.md)
+- [x] Draft the PostgreSQL import flow and staging strategy in [migration/postgresql-import-flow.md](./migration/postgresql-import-flow.md)
+- [x] Resolve the account-linking strategy for imported users
+- [ ] Finish the end-to-end migration playbook with rollback and reconciliation checklists
+- [x] Acquire the full legacy Mongo archive for migration planning
 - [x] Bootstrap the Xcode project in the iOS repo
 - [x] Install server dependencies
 - [x] Install Docker locally and bring up the server local stack
+
+## Current Implementation Snapshot
+
+- Server migration tooling can now stage the legacy Mongo archive, transform it into normalized work tables, publish a selected import run into the real `public` tables, and emit reconciliation reports.
+- Import run `2` is currently published from the canonical archive and populates `public.users`, `public.profiles`, `public.adventures`, `public.connections`, `public.adventure_favorites`, `public.adventure_comments`, `public.media_assets`, `public.adventure_media`, and `public.adventure_stats`.
+- The server now exposes the first read-only slice endpoints: `GET /api/feed`, `GET /api/adventures/:id`, and `GET /api/profiles/:handle`.
+- Those endpoints currently use an optional development-only `viewerHandle` query param to exercise visibility rules until Cognito-backed viewer resolution is wired.
