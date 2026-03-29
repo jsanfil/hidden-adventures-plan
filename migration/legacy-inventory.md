@@ -31,8 +31,12 @@
 - The expected audience is the Cognito app client ID.
 - If `custom:roles` is missing in the JWT payload, the server defaults the caller role to `user`.
 - The iOS app uses Cognito interactive auth for sign-in, sign-up, confirmation, forgot password, confirm forgot password, and device remember flows.
+- The legacy iOS sign-up flow sends the typed username directly to Cognito and also copies that same value into the profile model before posting the profile to the backend.
+- The legacy iOS client consistently uses the current Cognito username as the app identity key for profile lookup, authorship, favorites, comments, sidekicks, and delete-account routes.
+- We did not find a client-side flow that changes `profile.username` after sign-up.
 - Delete account is initiated from the iOS app by calling `DELETE /api/users/:username`, then the client signs out locally and clears the cached session.
 - The delete-account server controller deletes profiles, adventures, favorites, sidekicks, comments, and the Cognito user, but does not explicitly delete ratings authored by that user unless removed indirectly elsewhere.
+- Live-pool migration validation is captured in [cognito-account-linking-findings.md](./cognito-account-linking-findings.md).
 
 ## Data Collections
 

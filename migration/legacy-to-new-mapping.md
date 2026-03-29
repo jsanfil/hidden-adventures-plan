@@ -9,6 +9,7 @@ Define how the legacy Mongo archive maps into the rebuild relational model so mi
 - Legacy archive: `migration/archives/legacy-mongodb-backup-2026-03-01.archive`
 - Archive profile: [archive-profile.md](./archive-profile.md)
 - Legacy inventory: [legacy-inventory.md](./legacy-inventory.md)
+- Cognito linking findings: [cognito-account-linking-findings.md](./cognito-account-linking-findings.md)
 - Target relational model: [backend-schema-draft.md](../workstreams/backend-schema-draft.md)
 
 ## Migration Principles
@@ -40,19 +41,20 @@ This is the main open architecture constraint exposed by the archive.
 
 ### Account linking strategy
 
-Legacy code paths used Cognito username as the primary authenticated identity key, not email.
+Legacy code paths used Cognito username as the primary authenticated identity key, not email, and live-pool validation confirmed that the published legacy profile set maps cleanly by exact handle.
 
 Recommended one-time linking order:
 
 1. exact Cognito `Username` -> exact imported `users.handle`
-2. exact email match only when the legacy email maps to one and only one imported user
-3. manual review for anything ambiguous or unmatched
+2. skip everything else during bulk migration
+3. reserve verified-email matching for the runtime legacy-account claim flow, not the bulk link job
 
 Rules:
 
-- do not auto-link by email when more than one imported user shares the same email
+- do not bulk auto-link by email
 - do not invent placeholder Cognito subjects
 - once linked, persist the real Cognito `sub` into `users.cognito_subject`
+- do not create `public.users` rows for unmatched Cognito accounts that never had a legacy profile
 
 ## Collection Mapping Summary
 

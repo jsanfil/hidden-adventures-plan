@@ -9,6 +9,7 @@ Define a repeatable import pipeline that converts the legacy Mongo archive into 
 - Legacy archive: `migration/archives/legacy-mongodb-backup-2026-03-01.archive`
 - Archive profile: [archive-profile.md](./archive-profile.md)
 - Legacy mapping rules: [legacy-to-new-mapping.md](./legacy-to-new-mapping.md)
+- Cognito linking findings: [cognito-account-linking-findings.md](./cognito-account-linking-findings.md)
 - Target schema: [backend-schema-draft.md](../workstreams/backend-schema-draft.md)
 
 ## Recommended Strategy
@@ -186,18 +187,20 @@ Why:
 When binding imported users to Cognito accounts later, use:
 
 1. exact Cognito `Username` -> exact `users.handle`
-2. exact email match only when there is exactly one imported candidate
-3. manual review queue for all remaining unmatched or ambiguous cases
+2. skip everything else during the bulk link job
+3. use verified-email matching only in the runtime legacy-account claim flow
 
 Why this order:
 
 - legacy client and server code both treated Cognito username as the primary identity bridge
-- legacy profile emails are not unique enough to serve as a safe blind-link key on their own
+- live-pool validation showed the published legacy profile set maps completely by exact handle
+- the Cognito pool contains extra abandoned and duplicate accounts that should not be bulk-linked into app identity
 
 Implementation recommendation:
 
-- keep a `migration_meta.import_audit` action for `linked_by_username`, `linked_by_unique_email`, and `manual_review_required`
+- keep a `migration_meta.import_audit` action for `linked_by_username` and `skipped_no_legacy_profile_match`
 - record the Cognito `sub`, Cognito username, and matched imported user ID for every linkage event
+- persist a saved list of unmatched Cognito accounts for possible later cleanup rather than auto-deleting them during the link job
 
 ## Per-Entity Publish Rules
 

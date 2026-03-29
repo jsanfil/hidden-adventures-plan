@@ -49,7 +49,8 @@ Lock the first relational domain model for the rebuild so backend implementation
 
 Notes:
 
-- `handle` is the public identifier used for profile routes and migration from legacy `username`.
+- `handle` is the public username used for profile routes, author display, and migration from legacy `username`.
+- `handle` is stable and non-user-editable in v1.
 - `cognito_subject` is the durable auth link. JWT claims should never be trusted as the entire profile record.
 
 ### `profiles`
@@ -68,6 +69,7 @@ Notes:
 
 - Keep public-facing profile fields here rather than on `users`.
 - Legacy `fullName`, `city`, `state`, `profileImage`, and `backgroundImage` map naturally into this table.
+- `display_name` is optional, not unique, and may differ from `handle`.
 
 ### `connections`
 
