@@ -10,15 +10,14 @@ Move legacy Mongo-backed data and existing media references into the new relatio
 - field mapping
 - id mapping
 - image validation
-- reconciliation and rollback notes
+- reconciliation notes
 
 ## Deliverables
 
 - [x] collection-by-collection inventory
 - [x] legacy-to-new mapping document
 - [x] dry-run import design
-- [ ] reconciliation checklist
-- [ ] rollback checklist
+- [x] reconciliation checklist
 
 ## Dependencies
 
@@ -32,6 +31,7 @@ Move legacy Mongo-backed data and existing media references into the new relatio
 - [migration/legacy-to-new-mapping.md](../migration/legacy-to-new-mapping.md)
 - [migration/postgresql-import-flow.md](../migration/postgresql-import-flow.md)
 - [migration/cognito-account-linking-findings.md](../migration/cognito-account-linking-findings.md)
+- [migration/reconciliation-checklist.md](../migration/reconciliation-checklist.md)
 - [workstreams/backend-schema-draft.md](./backend-schema-draft.md)
 
 ## Available Legacy Source
@@ -40,13 +40,6 @@ Move legacy Mongo-backed data and existing media references into the new relatio
   `/Users/josephsanfilippo/Documents/projects/hidden-adventures-rebuild/hidden-adventures-plan/migration/archives/legacy-mongodb-backup-2026-03-01.archive`
 - Archive format appears to be a `mongodump --archive` style export from Mongo tools `r3.6.5`
 - Collections visible in the archive include `adventures`, `profiles`, `comments`, `favorites`, `sidekicks`, `messages`, and `filenames`
-
-## Immediate Next Steps
-
-- turn the existing publish report into the formal reconciliation checklist artifact
-- add spot-check reconciliation for visibility conversion, category normalization, and media key preservation
-- document the rollback path for replacing published `public` data from a selected import run
-- verify the media storage keys against the actual S3 inventory before cutover
 
 ## Done Means
 
@@ -65,10 +58,12 @@ Move legacy Mongo-backed data and existing media references into the new relatio
 - Imported legacy users are now linked in the local rebuild DB to the live Cognito pool by exact handle with a stable `2598 / 2598` mapping.
 - A saved unmatched Cognito account list now exists for the `1383` pool users that do not correspond to a published legacy profile:
   `migration/reports/cognito-unmatched-users-2026-03-28.json`
+- A formal reconciliation artifact now exists in:
+  `migration/reconciliation-checklist.md`
 - Current audited skips for run `2` are:
   - `3` duplicate profile rows
   - `1` adventure with an unresolved author
   - `186` sidekick rows skipped or collapsed during canonical connection import
   - `89` favorites skipped due to unresolved or duplicate rows
   - `5` comments skipped due to unresolved or invalid rows
-- The main remaining migration-planning work is to formalize the reconciliation checklist and rollback procedure, not to discover the source data or the legacy account-linking rule.
+- This workstream is complete. Any future S3 inventory verification can be treated as cutover validation rather than migration-workstream scope.

@@ -10,3 +10,4 @@ Primary working docs:
 - [legacy-to-new-mapping.md](./legacy-to-new-mapping.md)
 - [postgresql-import-flow.md](./postgresql-import-flow.md)
 - [cognito-account-linking-findings.md](./cognito-account-linking-findings.md)
+- [reconciliation-checklist.md](./reconciliation-checklist.md)

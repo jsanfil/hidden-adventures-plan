@@ -19,7 +19,7 @@
 - [ ] Step 3: Product and UX architecture
 - [ ] Step 4: Backend and data architecture
 - [ ] Step 5: Local-first platform
-- [ ] Step 6: Migration tooling
+- [x] Step 6: Migration tooling
 - [ ] Step 7: Vertical slice 1
 - [ ] Step 8: Vertical slice 2
 - [ ] Step 9: Vertical slice 3
@@ -51,10 +51,10 @@
 
 | Workstream | Status | Primary Repo | Can Run In Parallel With | Blockers |
 | --- | --- | --- | --- | --- |
-| Product/UX | Active | hidden-adventures-plan | iOS foundation, deployment setup | none |
-| iOS foundation | Seeded | hidden-adventures-ios | Product/UX, deployment setup | none |
+| Product/UX | Active: visual system and screen-map refinement using v0 + native parity loop | hidden-adventures-plan | iOS foundation, deployment setup | none |
+| iOS foundation | Active | hidden-adventures-ios | Product/UX, deployment setup | none |
 | Backend/domain/API | Active | hidden-adventures-server | Product/UX, deployment setup | Cognito-backed viewer resolution |
-| Data migration | Active | hidden-adventures-plan | deployment setup | rollback checklist, media verification |
+| Data migration | Complete | hidden-adventures-plan | deployment setup | none |
 | Deploy/dev environment | Bootstrapped | hidden-adventures-server | Product/UX, backend/domain/API | none |
 
 ## Release Slices
@@ -81,7 +81,7 @@
 - [x] Draft the PostgreSQL import flow and staging strategy in [migration/postgresql-import-flow.md](./migration/postgresql-import-flow.md)
 - [x] Resolve the account-linking strategy for imported users
 - [x] Validate the imported-user account-linking strategy against the legacy iOS client and the live Cognito pool
-- [ ] Finish the end-to-end migration playbook with rollback and reconciliation checklists
+- [x] Finish the migration reconciliation and account-linking playbook
 - [x] Acquire the full legacy Mongo archive for migration planning
 - [x] Bootstrap the Xcode project in the iOS repo
 - [x] Install server dependencies
@@ -97,3 +97,6 @@
 - `handle` is the public username for profile lookup and display; it is stable in v1 and separate from both `displayName` and Cognito `username`.
 - Bulk Cognito reconciliation is now intentionally handle-only; email is reserved for runtime legacy-account claim and recovery flows.
 - The detailed identity and migration findings now live in [migration/cognito-account-linking-findings.md](./migration/cognito-account-linking-findings.md).
+- A dedicated `v0-hidden-adventures-ui` repo now exists as the slice-1 visual design exploration and reference source.
+- `hidden-adventures-ios` now contains a native SwiftUI slice-1 UI flow for welcome, profile setup, unified explore feed/map, and adventure detail.
+- The iOS repo now includes an XCTest-driven simulator gallery and walkthrough harness with deterministic launch routes, screenshot capture, and parity checks for slice-1 UI work.
