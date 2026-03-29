@@ -3,11 +3,16 @@
 Each release slice should define:
 
 - scope
+- current status
 - acceptance criteria
 - local test checklist
 - staging validation checklist
-- migration impact notes
+- migration or cutover impact notes
 - rollback notes
 
-Start each slice from [slice-template.md](./slice-template.md).
+Current slice docs:
 
+- `slice-1.md`
+- `slice-2.md`
+
+Start new slices from [slice-template.md](./slice-template.md).

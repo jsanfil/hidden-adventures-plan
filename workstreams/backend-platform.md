@@ -2,7 +2,7 @@
 
 ## Goal
 
-Build the new relational backend, hybrid API, and local-first cloud deployment foundation.
+Build the new relational backend, hybrid API, and local-first cloud deployment foundation, with the immediate focus on locking the implemented Slice 1 contracts and supporting real client integration.
 
 ## Scope
 
@@ -16,8 +16,9 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
 ## Deliverables
 
 - [x] schema draft
-- [ ] API surface draft
+- [x] implemented Slice 1 server surface
 - [x] local Docker stack
+- [ ] contract documentation from implemented response shapes
 - [ ] staging deployment path
 - [ ] observability baseline
 
@@ -35,18 +36,26 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
 ## Done Means
 
 - local stack runs on laptop
-- initial contracts are documented
-- release slice 1 server endpoints are ready for client integration
+- initial contracts are documented from real endpoints
+- release Slice 1 server endpoints are consumable by the iOS integration thread
 
 ## Current State
 
-- The server repo now has published `public` application tables backed by a repeatable migration pipeline from the legacy Mongo archive.
-- The local rebuild DB now has a fully linked legacy identity set: `2598` imported users/profiles bound to Cognito by exact handle and `1383` extra Cognito accounts intentionally left unmatched.
-- Read-only slice 1 endpoints are implemented and verified for:
+- The server repo has published `public` application tables backed by a repeatable migration pipeline from the legacy Mongo archive.
+- The local rebuild DB has a fully linked legacy identity set: `2598` imported users and profiles bound to Cognito by exact handle and `1383` extra Cognito accounts intentionally left unmatched.
+- The current Slice 1 server surface is implemented and tested for:
+  - `GET /api/auth/bootstrap`
+  - `POST /api/auth/handle`
   - `GET /api/feed`
   - `GET /api/adventures/:id`
   - `GET /api/profiles/:handle`
-- Endpoint reads already use the rebuilt visibility model against the published relational tables.
-- Read visibility now resolves the viewer from Cognito-backed auth context and uses local `users.id`, while public profile lookup remains handle-based.
-- Bulk reconciliation is now handle-only by design. Verified-email matching remains a runtime legacy-account claim capability, not a migration primitive.
-- The remaining backend-platform gap is to lock the contract docs from the implemented response shapes and continue expanding authenticated endpoint coverage without reintroducing handle-based viewer identity.
+- Read endpoints already use the rebuilt visibility model against the published relational tables.
+- Authenticated viewer resolution now comes from Cognito-backed auth context and local `users.id`.
+- `viewerHandle` is retired as a client-facing planning primitive and should only appear in negative tests that enforce its removal from the public interface.
+- Bulk reconciliation is handle-only by design. Verified-email matching remains a runtime legacy-account claim capability, not a migration primitive.
+
+## Next Output
+
+- lock the contract docs from the implemented payloads and auth expectations
+- keep authenticated endpoint growth additive and integration-friendly
+- support the iOS thread without reintroducing handle-based viewer identity
