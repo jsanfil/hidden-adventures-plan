@@ -18,8 +18,8 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
 - [x] app module structure agreed
 - [x] Slice 1 screens and navigation implemented for the native fixture-backed UI flow
 - [x] Slice 1 UI test harness documented and checked in
-- [ ] real server-backed Slice 1 services
-- [ ] real auth/bootstrap wiring
+- [x] real server-backed Slice 1 services
+- [x] real auth/bootstrap wiring
 
 ## Dependencies
 
@@ -29,7 +29,11 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
 ## Current State
 
 - The native Slice 1 shell exists and is usable for parity work and UI validation.
-- The app still relies on fixture-backed services and a fixture-backed viewer identity, so the next milestone is real API integration rather than additional shell invention.
+- The default runtime now composes `RemoteAdventureService`, `RemoteProfileService`, and `RemoteAuthService` at the app root.
+- Service protocols no longer expose `viewerHandle` request overrides; the app uses server-backed auth/bootstrap state instead.
+- Live server mode is the default outside UI tests, with `HA_SERVER_MODE=dev_test` and seeded local bearer tokens available for local Slice 1 verification.
+- Fixture preview remains a deliberate runtime mode for screenshots, previews, and deterministic walkthrough captures.
+- The current live Slice 1 fallbacks are explicit rather than silent: handle-only profile setup, feed-derived map cards, and placeholder media until later route contracts lock.
 - The `UITEST_START_SCREEN` gallery and walkthrough harness are now part of the required Slice 1 acceptance path and must survive the integration work.
 
 ## Source of Truth
@@ -40,10 +44,10 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
 
 ## Integration Priority
 
-- replace fixture-backed services with real network clients
-- wire auth/bootstrap into the app shell
-- preserve direct-launch and walkthrough UI test coverage during integration
-- keep any temporary fallbacks explicit and documented rather than silent
+- keep the live server runtime stable for auth bootstrap, handle selection, feed, detail, and profile
+- preserve direct-launch and walkthrough UI test coverage in fixture-preview mode
+- validate the live local happy path explicitly against the sibling server
+- remove temporary live fallbacks only when the corresponding server contracts are locked
 
 ## v0-to-SwiftUI Workflow
 

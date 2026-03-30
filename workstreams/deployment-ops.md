@@ -14,11 +14,11 @@ Keep local development simple and production deployment cheap, repeatable, and s
 
 ## Deliverables
 
-- [ ] image versioning convention
-- [ ] deploy checklist
-- [ ] rollback checklist
-- [ ] secrets and environment doc
-- [ ] staging validation checklist
+- [x] image versioning convention
+- [x] deploy checklist
+- [x] rollback checklist
+- [x] secrets and environment doc
+- [x] staging validation checklist
 
 ## Dependencies
 
@@ -28,9 +28,10 @@ Keep local development simple and production deployment cheap, repeatable, and s
 ## Current State
 
 - local Docker development is bootstrapped and usable
-- production and staging guidance is still intentionally light
+- a first deployment baseline now exists under `hidden-adventures-server/deploy/`
+- image versioning, rollout and rollback steps, env templates, and a staging smoke script are documented and checked in
 - this remains a separate enabling lane and should not block Slice 2 definition work
-- this should close only after the team can perform a repeatable deploy, rollback, and smoke validation without ad hoc server edits
+- the remaining work is execution: the team still needs to run the first real staging smoke path without ad hoc server edits
 
 ## Done Means
 
