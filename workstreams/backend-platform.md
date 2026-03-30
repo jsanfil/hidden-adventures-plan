@@ -2,7 +2,7 @@
 
 ## Goal
 
-Build the new relational backend, hybrid API, and local-first cloud deployment foundation, with the immediate focus on locking the implemented Slice 1 contracts and supporting real client integration.
+Build the new relational backend, hybrid API, and local-first cloud deployment foundation, with the immediate focus on holding the locked Slice 1 contracts steady and supporting real client integration.
 
 ## Scope
 
@@ -18,7 +18,7 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
 - [x] schema draft
 - [x] implemented Slice 1 server surface
 - [x] local Docker stack
-- [ ] contract documentation from implemented response shapes
+- [x] contract documentation from implemented response shapes
 - [ ] staging deployment path
 - [ ] observability baseline
 
@@ -49,13 +49,16 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
   - `GET /api/feed`
   - `GET /api/adventures/:id`
   - `GET /api/profiles/:handle`
+- The implemented Slice 1 surface is now mirrored by plan-repo contract notes and checked-in Postman Native Git troubleshooting requests under `hidden-adventures-api-tests/postman/collections/hidden-adventures-slice-1/`.
+- The locked Slice 1 contract now requires bearer auth for every business route except `GET /api/health`.
+- Non-production defaults to `AUTH_MODE=local_identity`, which supports seeded verification tokens such as `local:connected_viewer`, `local:non_connected_viewer`, and `local:new_user`.
 - Read endpoints already use the rebuilt visibility model against the published relational tables.
-- Authenticated viewer resolution now comes from Cognito-backed auth context and local `users.id`.
+- Authenticated viewer resolution now comes from auth context and local `users.id`, with Cognito in production and seeded local identities in local verification flows.
 - `viewerHandle` is retired as a client-facing planning primitive and should only appear in negative tests that enforce its removal from the public interface.
 - Bulk reconciliation is handle-only by design. Verified-email matching remains a runtime legacy-account claim capability, not a migration primitive.
 
 ## Next Output
 
-- lock the contract docs from the implemented payloads and auth expectations
+- keep the locked contract docs current if additive Slice 1-safe server changes land
 - keep authenticated endpoint growth additive and integration-friendly
-- support the iOS thread without reintroducing handle-based viewer identity
+- support live-runtime acceptance and staging smoke work without reintroducing handle-based viewer identity

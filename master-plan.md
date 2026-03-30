@@ -29,13 +29,16 @@
 - Slice 1 native SwiftUI shell implemented with a deterministic UI gallery and walkthrough harness
 - Slice 1 server read endpoints implemented and tested
 - auth bootstrap and handle-selection endpoints implemented and tested
+- Slice 1 contract docs and Postman troubleshooting requests now reflect the implemented server surface and auth model
+- Slice 1 local auth hardening and seeded fixture workflow now support repeatable bearer-token verification outside Cognito
+- Slice 1 iOS runtime now defaults to server-backed auth/bootstrap, feed, detail, and profile clients while fixture preview remains explicit for the UI harness
+- first deployment baseline is checked in with image versioning guidance, env templates, rollout and rollback notes, and a staging smoke script
 
 ### In Progress
 
-- Slice 1 contract lock from real server response shapes
-- iOS real API integration and auth/bootstrap wiring
+- local live-runtime Slice 1 acceptance across auth bootstrap, feed, detail, and profile
 - release acceptance documentation for Slice 1
-- deployment and staging baseline
+- first staging smoke execution from the deployment baseline
 
 ### Not Started / Later
 
@@ -71,9 +74,9 @@
 | Thread | Status | Primary Repo(s) | Owns | Produces | Depends On |
 | --- | --- | --- | --- | --- | --- |
 | Program control and doc sync | Active | `hidden-adventures-plan` | roadmap truth, slice docs, milestone board, cross-repo status sync | current-state snapshot, thread handoff notes, acceptance criteria | verified repo facts only |
-| Slice 1 contract lock | Active | `hidden-adventures-server`, `hidden-adventures-api-tests`, `hidden-adventures-plan` | server contract docs, manual Postman assets that track the live API, small contract-safe server refinements | locked payload docs, updated Postman requests for troubleshooting, gap list for iOS integration | implemented server endpoints |
-| Slice 1 iOS real integration | Ready after contract lock | `hidden-adventures-ios` | network services, auth bootstrap wiring, server-backed Slice 1 flows | local server-backed device and simulator flows | locked Slice 1 contracts |
-| Deployment and staging baseline | Active | `hidden-adventures-server` | image versioning, env and secrets docs, deploy and rollback checklists, staging smoke flow | staging validation path and ops checklist | local server runtime foundation |
+| Slice 1 contract lock | Complete | `hidden-adventures-server`, `hidden-adventures-api-tests`, `hidden-adventures-plan` | server contract docs, manual Postman assets that track the live API, small contract-safe server refinements | locked payload docs, updated Postman requests for troubleshooting, gap list for iOS integration | implemented server endpoints |
+| Slice 1 iOS real integration | Implemented | `hidden-adventures-ios` | network services, auth bootstrap wiring, server-backed Slice 1 flows | local server-backed runtime, updated UI harness notes, explicit live fallbacks | locked Slice 1 contracts |
+| Deployment and staging baseline | Baseline ready | `hidden-adventures-server` | image versioning, env and secrets docs, deploy and rollback checklists, staging smoke flow | staging validation path and ops checklist | local server runtime foundation |
 | Slice 2 product and UX incubation | Active | `hidden-adventures-plan`, `v0-hidden-adventures-ui` | create and edit flows, visibility UX, screen-map expansion | implementation-ready Slice 2 spec and visual references | Slice 1 scope stability |
 
 ## Release Slices
@@ -94,20 +97,21 @@
   - `GET /api/feed`
   - `GET /api/adventures/:id`
   - `GET /api/profiles/:handle`
-- Those endpoints are backed by Vitest coverage and reject the retired `viewerHandle` query-param pattern.
+- Those endpoints are backed by Vitest coverage, reject the retired `viewerHandle` query-param pattern, and now require bearer auth for every business route except `GET /api/health`.
+- Local verification no longer depends on Cognito: non-production defaults to `AUTH_MODE=local_identity` with seeded tokens such as `local:connected_viewer`, `local:non_connected_viewer`, and `local:new_user`.
+- The Postman Native Git repo includes checked-in Slice 1 troubleshooting requests under `postman/collections/hidden-adventures-slice-1/` that use bearer auth for connected-viewer paths instead of `viewerHandle`.
 - `handle` is the public username for profile lookup and display; it is stable in v1 and separate from both `displayName` and Cognito `username`.
 - A dedicated `v0-hidden-adventures-ui` repo exists as the Slice 1 visual design exploration and reference source.
 - `hidden-adventures-ios` contains a native SwiftUI Slice 1 UI flow for welcome, profile setup, unified explore feed and map, and adventure detail.
-- The iOS repo includes an XCTest-driven simulator gallery and walkthrough harness with deterministic launch routes, screenshot capture, and parity checks for Slice 1 UI work.
-- The remaining Slice 1 gap is end-to-end integration: the iOS app still runs against fixture-backed services rather than the real server and auth bootstrap flow.
+- The iOS repo now defaults to real server-backed clients for auth bootstrap, handle selection, feed, detail, and profile, while the XCTest-driven gallery and walkthrough harness remain in explicit fixture-preview mode for deterministic screenshots and acceptance captures.
+- Deployment artifacts now live in `hidden-adventures-server/deploy/`, including env templates, a staging compose example, and a smoke script for root, health, feed, detail, profile, and optional auth checks.
+- The remaining Slice 1 gap is acceptance closure rather than basic implementation: the live runtime still needs explicit happy-path validation against a running local server, and the documented staging smoke path still needs its first real execution.
 
 ## Next Milestone Focus
 
-- lock the Slice 1 contract from the implemented server surface
-- update API-test assets to authenticated viewer behavior
-- replace iOS fixture-backed Slice 1 services with real network clients
-- validate the local end-to-end happy path across auth bootstrap, feed, detail, and profile
-- stand up the first staging and rollback baseline
+- validate the local live-runtime happy path with seeded local auth across auth bootstrap, feed, detail, and profile
+- execute the first staging smoke run from the checked-in deployment baseline
+- close the remaining Slice 1 acceptance notes around explicit live fallbacks for profile write, media delivery, and map behavior
 
 ## Tracking Rules
 

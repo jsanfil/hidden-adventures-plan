@@ -23,9 +23,9 @@
 
 ## Readiness Gates
 
-- [ ] Slice 1 contract lock complete
+- [x] Slice 1 contract lock complete
 - [ ] Slice 1 local end-to-end acceptance complete
-- [ ] deployment baseline exists for future slice smoke tests
+- [x] deployment baseline exists for future slice smoke tests
 
 ## Local Test Checklist
 
