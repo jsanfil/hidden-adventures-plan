@@ -2,16 +2,11 @@
 
 ## Owning Repo
 
-- `hidden-adventures-plan`
 - `v0-hidden-adventures-ui`
-
-## Recommended Branch
-
-- `codex/slice2-ux-incubation`
 
 ## Mission
 
-Move Slice 2 definition forward in parallel while Slice 1 hardens. Produce implementation-ready create, edit, upload, and visibility UX without silently rewriting Slice 1 scope or contracts.
+Move Slice 2 definition forward while Slice 1 acceptance closes. Produce implementation-ready create, edit, upload, and visibility UX references without silently rewriting Slice 1 scope or contracts.
 
 ## Allowed Scope
 
@@ -19,12 +14,12 @@ Move Slice 2 definition forward in parallel while Slice 1 hardens. Produce imple
 - screen-map expansion
 - v0 exploration for Slice 2 concepts
 - product copy and visibility UX clarification
-- plan-doc updates for Slice 2 only
+- handoff notes for the planning lane to fold back into program docs
 
 ## Blocked Scope
 
 - changing locked Slice 1 contracts
-- changing Slice 1 navigation without routing it back through thread 1
+- changing Slice 1 navigation without routing it back through the planning lane
 - iOS implementation work for Slice 2
 - backend contract invention beyond what is needed to express product intent
 
@@ -48,11 +43,11 @@ Move Slice 2 definition forward in parallel while Slice 1 hardens. Produce imple
 
 ## Startup Prompt
 
-You are Thread 5 for the Hidden Adventures rebuild. Work in `hidden-adventures-plan` and `v0-hidden-adventures-ui` on branch `codex/slice2-ux-incubation`. Define Slice 2 create, edit, upload, and visibility UX clearly enough for later implementation. Do not silently change Slice 1 scope, contracts, or navigation. Keep the work definition-first and hand back clean notes that the backend and iOS threads can consume later.
+You are the Slice 2 UX lane for the Hidden Adventures rebuild. Work only in `v0-hidden-adventures-ui` on `main`. Define Slice 2 create, edit, upload, and visibility UX clearly enough for later implementation. Do not silently change Slice 1 scope, contracts, or navigation. Keep the work definition-first and hand back clean notes that the planning, backend, and iOS repos can consume later.
 
 ## Handoff Format
 
-- Slice 2 flows clarified
-- any changed or new screen-map decisions
-- any contract-sensitive assumptions that need review
-- what is ready for later implementation and what is still open
+- what changed
+- what is now stable
+- what another repo may rely on
+- what remains unresolved

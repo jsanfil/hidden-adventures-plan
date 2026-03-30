@@ -62,3 +62,4 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
 - keep the locked contract docs current if additive Slice 1-safe server changes land
 - keep authenticated endpoint growth additive and integration-friendly
 - support live-runtime acceptance and staging smoke work without reintroducing handle-based viewer identity
+- record the first real staging smoke execution with the image identifier, runtime shape, smoke results, and any rollback friction

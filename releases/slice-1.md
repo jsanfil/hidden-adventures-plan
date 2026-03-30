@@ -19,6 +19,7 @@
 - deployment baseline docs, env templates, and staging smoke script exist in `hidden-adventures-server/deploy/`
 - migration-backed local data is published and testable
 - the deterministic UI harness still runs in explicit fixture-preview mode, so live-runtime acceptance remains a separate final check
+- the program is now in Slice 1 acceptance-closure mode; Slice 2 stays definition-only until the live local checks below are closed
 
 ## Acceptance Criteria
 
@@ -40,6 +41,7 @@
 - live Slice 1 keeps a few explicit temporary fallbacks: handle-only profile setup, feed-derived map cards, and placeholder media until later contracts lock
 - the local live-runtime happy path has not yet been explicitly re-run end to end in this planning cycle
 - the deployment baseline exists, but its staging smoke path has not yet been executed against a real staging host
+- Postman remains a manual troubleshooting path only and does not close Slice 1 acceptance on its own
 
 ## Current Server Contract
 
@@ -100,6 +102,10 @@
 - [ ] optional manual Postman check: `GET /api/profiles/:handle` resolves by handle with `Authorization: Bearer {{connectedViewerToken}}`
 - [ ] explicit live-app check: run the iOS app in live mode against the local server with `HA_TEST_AUTH_TOKEN=local:connected_viewer`
 - [ ] explicit live-app check: run the bootstrap and handle-selection flow with `HA_TEST_AUTH_TOKEN=local:new_user`
+
+Completion note:
+
+- Slice 1 acceptance should not be marked complete until the explicit live-app checks above are done against a running local server and the fallback inventory is reconfirmed.
 
 ## Staging Validation Checklist
 

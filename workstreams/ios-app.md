@@ -35,6 +35,7 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
 - Fixture preview remains a deliberate runtime mode for screenshots, previews, and deterministic walkthrough captures.
 - The current live Slice 1 fallbacks are explicit rather than silent: handle-only profile setup, feed-derived map cards, and placeholder media until later route contracts lock.
 - The `UITEST_START_SCREEN` gallery and walkthrough harness are now part of the required Slice 1 acceptance path and must survive the integration work.
+- The next proof point is explicit live-runtime validation with `HA_TEST_AUTH_TOKEN=local:connected_viewer` and `HA_TEST_AUTH_TOKEN=local:new_user`; a passing fixture-preview harness alone does not close Slice 1 acceptance.
 
 ## Source of Truth
 

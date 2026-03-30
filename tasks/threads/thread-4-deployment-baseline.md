@@ -4,13 +4,9 @@
 
 - `hidden-adventures-server`
 
-## Recommended Branch
-
-- `codex/deploy-baseline`
-
 ## Mission
 
-Define the first repeatable deployment, rollback, environment, and staging smoke-test baseline without changing product scope.
+Execute and refine the first repeatable deployment, rollback, environment, and staging smoke-test baseline without changing product scope.
 
 ## Allowed Scope
 
@@ -20,12 +16,13 @@ Define the first repeatable deployment, rollback, environment, and staging smoke
 - staging smoke checklist
 - rollback checklist
 - light repo changes that support deploy clarity
+- staging execution notes captured from a real smoke run
 
 ## Blocked Scope
 
 - product feature work
 - iOS feature work
-- changing Slice 1 contracts unless required for deploy correctness and coordinated with thread 2
+- changing Slice 1 contracts unless required for deploy correctness and coordinated through the active server lane
 
 ## Inputs
 
@@ -39,20 +36,22 @@ Define the first repeatable deployment, rollback, environment, and staging smoke
 - rollback checklist
 - env and secrets notes
 - first staging validation path
+- first real staging validation record
 
 ## Required Checks
 
 - deploy path is understandable without ad hoc server edits
 - rollback path is documented
 - staging smoke flow references the actual Slice 1 server surface
+- capture the image identifier, runtime shape, smoke results, and any rollback friction from the first real run
 
 ## Startup Prompt
 
-You are Thread 4 for the Hidden Adventures rebuild. Work only in `hidden-adventures-server` on branch `codex/deploy-baseline`. Define the first repeatable deployment and staging baseline. Focus on image versioning, environment and secrets documentation, rollout and rollback steps, and a simple staging smoke flow for the current Slice 1 server surface. Do not drift into feature work.
+You are the deployment and staging lane for the Hidden Adventures rebuild. Work only in `hidden-adventures-server` on `main`. Execute and refine the checked-in deployment baseline for the current Slice 1 server surface. Focus on image versioning, environment and secrets documentation, rollout and rollback steps, and the first real staging smoke flow. Do not drift into feature work. Do not run this as a separate active server thread if another `hidden-adventures-server` implementation thread is already in flight; reuse that thread and switch focus instead.
 
 ## Handoff Format
 
-- deploy artifacts or docs added
-- assumptions about hosting and environment
-- staging smoke path
-- unresolved risks or missing infra details
+- what changed
+- what is now stable
+- what another repo may rely on
+- what remains unresolved

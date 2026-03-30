@@ -4,10 +4,6 @@
 
 - `hidden-adventures-ios`
 
-## Recommended Branch
-
-- `codex/slice1-ios-real-integration`
-
 ## Mission
 
 Replace the fixture-backed Slice 1 services with real server-backed integration and auth/bootstrap wiring while preserving the existing UI shell and UI-test harness.
@@ -29,7 +25,7 @@ Replace the fixture-backed Slice 1 services with real server-backed integration 
 
 ## Inputs
 
-- thread 2 contract handoff
+- server lane contract handoff
 - current SwiftUI shell
 - current UI gallery and walkthrough harness
 
@@ -38,6 +34,7 @@ Replace the fixture-backed Slice 1 services with real server-backed integration 
 - real network-backed Slice 1 flow
 - auth/bootstrap integration
 - preserved or updated UI harness notes
+- explicit live-runtime acceptance notes and fallback inventory
 
 ## Required Checks
 
@@ -48,11 +45,11 @@ Replace the fixture-backed Slice 1 services with real server-backed integration 
 
 ## Startup Prompt
 
-You are Thread 3 for the Hidden Adventures rebuild. Work only in `hidden-adventures-ios` on branch `codex/slice1-ios-real-integration`. Replace the fixture-backed Slice 1 services with real server-backed integration using the locked contracts from Thread 2. Do not invent server behavior. Preserve the current UI-gallery and walkthrough harness as part of the acceptance path. Keep any temporary fallback explicit and documented.
+You are the iOS app lane for the Hidden Adventures rebuild. Work only in `hidden-adventures-ios` on `main`. Hold the real server-backed Slice 1 integration steady using the locked server contracts. Do not invent server behavior. Preserve the current UI-gallery and walkthrough harness as part of the acceptance path. Keep any temporary live fallback explicit and documented, and focus the next cycle on proving the local happy path against the sibling server.
 
 ## Handoff Format
 
-- what fixture-backed paths were replaced
-- what still depends on fixtures, if anything
-- build and UI-harness results
-- any server-side blockers or contract mismatches discovered
+- what changed
+- what is now stable
+- what another repo may rely on
+- what remains unresolved

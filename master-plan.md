@@ -14,6 +14,14 @@
 - `hidden-adventures-api-tests`
 - `v0-hidden-adventures-ui`
 
+## Execution Model
+
+- Run Codex work in parallel across repos, not as multiple active implementation threads in the same repo.
+- Use each repo's `main` branch directly unless there is a repo-specific reason not to.
+- Keep `hidden-adventures-plan` as the control tower for milestone status, release notes, and cross-repo truth.
+- Require every repo lane to end each cycle with a short handoff covering what changed, what is now stable, what another repo may rely on, and what remains unresolved.
+- Treat Vitest as the official server verification path and Postman as a manual troubleshooting companion only.
+
 ## Current Program State
 
 ### Completed
@@ -33,6 +41,7 @@
 - Slice 1 local auth hardening and seeded fixture workflow now support repeatable bearer-token verification outside Cognito
 - Slice 1 iOS runtime now defaults to server-backed auth/bootstrap, feed, detail, and profile clients while fixture preview remains explicit for the UI harness
 - first deployment baseline is checked in with image versioning guidance, env templates, rollout and rollback notes, and a staging smoke script
+- the worktree-based thread setup has been retired in favor of repo-based execution on `main`
 
 ### In Progress
 
@@ -54,7 +63,7 @@
 - Use a hybrid API, not resource-pure CRUD for every workflow.
 - Replace ACL arrays with explicit visibility and connection policies.
 - Prefer local-first development and production parity via containers.
-- Do not let thread-level experimentation silently change scope, contracts, or navigation without flowing back through this repo.
+- Do not let repo-level implementation drift silently change scope, contracts, or navigation without flowing back through this repo.
 
 ## Auth Strategy
 
@@ -69,15 +78,15 @@
 - New users who do not reclaim a legacy profile should create a fresh rebuild account and choose a unique public `handle` during onboarding.
 - Prefer extending the existing pool with a rebuild app client and Apple/Google federation rather than creating a brand-new pool.
 
-## Active Codex Threads
+## Active Repo Lanes
 
-| Thread | Status | Primary Repo(s) | Owns | Produces | Depends On |
+| Lane | Status | Primary Repo | Owns | Produces | Depends On |
 | --- | --- | --- | --- | --- | --- |
-| Program control and doc sync | Active | `hidden-adventures-plan` | roadmap truth, slice docs, milestone board, cross-repo status sync | current-state snapshot, thread handoff notes, acceptance criteria | verified repo facts only |
-| Slice 1 contract lock | Complete | `hidden-adventures-server`, `hidden-adventures-api-tests`, `hidden-adventures-plan` | server contract docs, manual Postman assets that track the live API, small contract-safe server refinements | locked payload docs, updated Postman requests for troubleshooting, gap list for iOS integration | implemented server endpoints |
-| Slice 1 iOS real integration | Implemented | `hidden-adventures-ios` | network services, auth bootstrap wiring, server-backed Slice 1 flows | local server-backed runtime, updated UI harness notes, explicit live fallbacks | locked Slice 1 contracts |
-| Deployment and staging baseline | Baseline ready | `hidden-adventures-server` | image versioning, env and secrets docs, deploy and rollback checklists, staging smoke flow | staging validation path and ops checklist | local server runtime foundation |
-| Slice 2 product and UX incubation | Active | `hidden-adventures-plan`, `v0-hidden-adventures-ui` | create and edit flows, visibility UX, screen-map expansion | implementation-ready Slice 2 spec and visual references | Slice 1 scope stability |
+| Planning and doc sync | Active | `hidden-adventures-plan` | roadmap truth, slice docs, milestone board, cross-repo status sync | current-state snapshot, lane handoff notes, acceptance criteria | verified repo facts only |
+| Backend and ops | Active | `hidden-adventures-server` | locked Slice 1 server surface, local acceptance support, staging smoke execution | passing server checks, deploy and smoke notes, contract-safe server follow-up | implemented server endpoints and deploy assets |
+| App integration and acceptance | Active | `hidden-adventures-ios` | live-runtime validation, fallback inventory, UI-harness stability | local server-backed runtime notes, passing UI harness, live acceptance findings | locked Slice 1 contracts |
+| Manual API troubleshooting assets | On demand | `hidden-adventures-api-tests` | Postman requests that mirror the live API for troubleshooting | updated troubleshooting collections and environment notes | server contract changes only |
+| Slice 2 product and UX definition | Active | `v0-hidden-adventures-ui` | create and edit flows, visibility UX, screen-map expansion | implementation-ready Slice 2 visual references and screen maps | Slice 1 scope stability |
 
 ## Release Slices
 
@@ -109,13 +118,15 @@
 
 ## Next Milestone Focus
 
+- keep the repo-based operating model simple: one active implementation thread per repo on `main`
 - validate the local live-runtime happy path with seeded local auth across auth bootstrap, feed, detail, and profile
 - execute the first staging smoke run from the checked-in deployment baseline
 - close the remaining Slice 1 acceptance notes around explicit live fallbacks for profile write, media delivery, and map behavior
+- keep Slice 2 in UX and spec definition only until Slice 1 acceptance is closed
 
 ## Tracking Rules
 
 - Every major task should map to an issue.
-- Every issue should declare scope, owner repo, dependencies, acceptance criteria, and linked branch or PR.
+- Every issue should declare scope, owner repo, dependencies, acceptance criteria, and the linked commit, PR, or merged artifact that proves status.
 - Do not mark a task complete until the code or docs are merged and verified in the owning repo.
-- Thread-level work that changes scope, contracts, or navigation must update this repo before or alongside the implementation merge.
+- Repo-lane work that changes scope, contracts, or navigation must update this repo before or alongside the implementation merge.

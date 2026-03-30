@@ -11,7 +11,8 @@
 ## Current Status
 
 - definition and UX incubation only
-- no Slice 2 implementation should start until Slice 1 is documented, integrated, and locally testable end to end
+- no Slice 2 implementation should start until Slice 1 acceptance is closed on the live local runtime
+- `v0-hidden-adventures-ui` remains the active Slice 2 working repo; any status or milestone updates still flow back through `hidden-adventures-plan`
 
 ## Acceptance Criteria
 

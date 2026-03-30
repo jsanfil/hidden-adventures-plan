@@ -1,39 +1,41 @@
 # Parallel Tracks
 
-Use this file to make independent Codex threads explicit and to keep cross-thread handoffs small, testable, and reviewable.
+Use this file to make repo-based Codex execution explicit and to keep cross-repo handoffs small, testable, and reviewable.
 
-## Active Thread Matrix
+## Active Repo Lane Matrix
 
-| Thread | Owner Repo(s) | Current Status | Immediate Goal | Handoff Artifact | Gate To Close |
+| Lane | Owner Repo | Current Status | Immediate Goal | Handoff Artifact | Gate To Close |
 | --- | --- | --- | --- | --- | --- |
-| Program control and doc sync | `hidden-adventures-plan` | Active | keep the program docs aligned with verified repo truth | updated roadmap, slice docs, milestone notes | all linked docs merged and consistent |
-| Slice 1 contract lock | `hidden-adventures-server`, `hidden-adventures-api-tests`, `hidden-adventures-plan` | Complete | document the implemented server surface and authenticated behavior | locked endpoint notes, authenticated Postman assets, integration gap list | iOS thread can consume contracts without inference |
-| Slice 1 iOS real integration | `hidden-adventures-ios` | Implemented | hold the new server-backed runtime steady and close live acceptance gaps | server-backed Slice 1 client flow, runtime config notes, passing simulator UI harness | local happy path works against real server |
-| Deployment and staging baseline | `hidden-adventures-server` | Baseline ready | execute the first real smoke run from the new deploy artifacts | deployment checklist, rollback checklist, staging notes, smoke script | first staging validation can be executed repeatably |
-| Slice 2 product and UX incubation | `hidden-adventures-plan`, `v0-hidden-adventures-ui` | Active | refine create, edit, upload, visibility, and expanded screen map | implementation-ready Slice 2 spec and approved visual references | Slice 2 can start without changing Slice 1 contracts silently |
+| Planning and doc sync | `hidden-adventures-plan` | Active | keep the roadmap, release docs, and milestone language aligned with verified repo facts | updated roadmap, slice docs, workstream notes | linked docs merged and consistent |
+| Backend and ops | `hidden-adventures-server` | Active | support Slice 1 acceptance closure and execute the first real staging smoke run | passing server checks, staging smoke notes, deploy artifact status | local acceptance support and first staging smoke both recorded |
+| App integration and acceptance | `hidden-adventures-ios` | Active | validate the live Slice 1 runtime against the local server without breaking the fixture-preview UI harness | live-runtime notes, fallback inventory, passing UI harness results | local happy path works against the real server |
+| Manual API troubleshooting assets | `hidden-adventures-api-tests` | On demand | keep Postman troubleshooting requests aligned only when the live Slice 1 API changes | updated request collections and environment notes | troubleshooting assets match the current server surface |
+| Slice 2 UX and spec | `v0-hidden-adventures-ui` | Definition only | refine create, edit, upload, visibility, and expanded screen map without starting implementation | approved visual references and screen maps | Slice 2 can begin later without silently changing Slice 1 contracts |
 
-## Thread Rules
+## Lane Rules
 
-- Each thread should own one clear deliverable set and one primary repo or repo pair.
-- Threads may run in parallel only when the consumer thread can work from a stable handoff artifact rather than verbal assumptions.
-- Slice 1 integration work should consume the locked Slice 1 contract notes, use bearer-auth viewer identity, and must not reintroduce `viewerHandle` assumptions.
-- Slice 2 product work may continue in parallel, but it must not quietly rewrite Slice 1 flow boundaries or public interfaces.
-- Data migration is no longer an active day-to-day thread. Treat it as closed work with cutover-validation follow-up only.
+- Parallelism is allowed across repos, not as multiple active implementation threads in the same repo.
+- Each active lane should work on the owning repo's `main` branch unless there is a repo-specific reason to do otherwise.
+- `hidden-adventures-plan` is the only repo that should declare milestone status and cross-repo truth.
+- Slice 1 integration work must consume the locked Slice 1 contract notes, use bearer-auth viewer identity, and must not reintroduce `viewerHandle` assumptions.
+- Vitest is the official server verification path. Postman remains a manual troubleshooting companion only.
+- Slice 2 work may continue only as UX and spec definition until Slice 1 local live-runtime acceptance is closed.
+- Data migration is no longer an active day-to-day lane. Treat it as closed work with cutover-validation follow-up only.
 
 ## Stepwise Milestones
 
-1. Documentation reset
-2. Slice 1 contract freeze
-3. Slice 1 iOS real integration
-4. Slice 1 end-to-end local acceptance
-5. Deployment and staging baseline
-6. Slice 2 execution start
+1. Documentation reset to the repo-based operating model
+2. Slice 1 contract lock held steady on the implemented server surface
+3. Slice 1 iOS real integration held steady with the fixture-preview harness preserved
+4. Slice 1 end-to-end local acceptance verified against the live local server
+5. First real staging smoke execution recorded from the checked-in deployment baseline
+6. Slice 2 implementation start after Slice 1 acceptance closure
 
 ## Standard Handoff Notes
 
-Every thread handoff should answer:
+Every lane handoff should answer:
 
 - what changed
 - what is now stable
-- what the next thread may rely on
-- what remains intentionally unresolved
+- what another repo may rely on
+- what remains unresolved

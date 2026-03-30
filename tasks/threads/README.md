@@ -1,42 +1,42 @@
-# Codex Thread Ops
+# Codex Repo Lane Ops
 
-Use these docs to launch parallel Codex App threads against the current rebuild plan.
+Use these docs to run Codex work by repo, not by worktree.
 
-## Recommended Launch Order
+## Current Operating Model
 
-1. thread-1-program-control.md
-2. thread-2-slice-1-contract-lock.md
-3. thread-4-deployment-baseline.md
-4. thread-5-slice-2-ux.md
-5. thread-3-ios-real-integration.md
+- Keep one planning and status thread in `hidden-adventures-plan`.
+- Keep one backend or ops thread in `hidden-adventures-server`.
+- Keep one app thread in `hidden-adventures-ios`.
+- Open `hidden-adventures-api-tests` only when the manual troubleshooting assets need to change.
+- Open `v0-hidden-adventures-ui` only when Slice 2 UX reference work is active.
 
-Launch thread 3 after thread 2 has produced its first contract handoff.
+## Playbooks By Repo
 
-## Recommended Branches
+- `thread-1-program-control.md`: plan repo control tower and status sync
+- `thread-2-slice-1-contract-lock.md`: server contract maintenance on the locked Slice 1 surface
+- `thread-3-ios-real-integration.md`: iOS live-runtime acceptance and fallback cleanup
+- `thread-4-deployment-baseline.md`: server deployment and staging execution lane
+- `thread-5-slice-2-ux.md`: Slice 2 UX and screen-map definition work in `v0-hidden-adventures-ui`
 
-- thread 1: `codex/plan-sync`
-- thread 2: `codex/slice1-contract-lock`
-- thread 3: `codex/slice1-ios-real-integration`
-- thread 4: `codex/deploy-baseline`
-- thread 5: `codex/slice2-ux-incubation`
+Server note:
+
+- `thread-2-slice-1-contract-lock.md` and `thread-4-deployment-baseline.md` both target `hidden-adventures-server`. Do not run them as separate active implementation threads at the same time. Reuse the one active server thread and switch phase focus as needed.
 
 ## How To Use In Codex App
 
-For each thread:
+For each repo lane:
 
-1. open a new Codex App thread
+1. open or reuse the Codex App thread that already owns that repo
 2. switch to the owning repo as the working directory
-3. create or switch to the recommended branch
-4. paste the `Startup Prompt` section from the thread brief
-5. keep the thread within its `Allowed Scope`
-6. require the thread to end each cycle with the `Handoff Format`
+3. stay on the repo's `main` branch unless there is a repo-specific reason not to
+4. paste the `Startup Prompt` section from the lane brief
+5. keep the work inside the lane's `Allowed Scope`
+6. require the lane to end each cycle with the `Handoff Format`
 
 ## Global Rules
 
-- thread 1 is the only thread that should update program-wide status docs by default
-- thread 2 owns server contract truth for Slice 1
-- thread 3 should not infer contracts that thread 2 has not locked
-- thread 4 should not change server behavior except for deploy and ops needs
-- thread 5 may define Slice 2 behavior, but must not silently change Slice 1 scope or contracts
-- Vitest is the official server verification path
-- Postman is a manual troubleshooting companion and must stay current, but it is not the acceptance runner
+- the planning lane is the only lane that should update program-wide status docs by default
+- the iOS lane should not infer contracts the server lane has not already locked
+- the server lane should treat Vitest as the official verification path
+- Postman is a manual troubleshooting companion and must stay current only when the live API changes
+- Slice 2 work stays definition-only until Slice 1 live local acceptance is closed

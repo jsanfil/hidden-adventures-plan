@@ -19,6 +19,7 @@ Keep local development simple and production deployment cheap, repeatable, and s
 - [x] rollback checklist
 - [x] secrets and environment doc
 - [x] staging validation checklist
+- [ ] first real staging smoke execution record
 
 ## Dependencies
 

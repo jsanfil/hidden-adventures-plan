@@ -4,13 +4,9 @@
 
 - `hidden-adventures-plan`
 
-## Recommended Branch
-
-- `codex/plan-sync`
-
 ## Mission
 
-Keep the rebuild plan repo aligned with verified implementation reality across the sibling repos. This thread owns roadmap truth, slice status, thread coordination notes, and acceptance-language cleanup.
+Keep the rebuild plan repo aligned with verified implementation reality across the sibling repos. This lane owns roadmap truth, slice status, repo coordination notes, and acceptance-language cleanup.
 
 ## Allowed Scope
 
@@ -29,7 +25,7 @@ Keep the rebuild plan repo aligned with verified implementation reality across t
 
 ## Inputs
 
-- outputs from threads 2 through 5
+- handoffs from the other repo lanes
 - merged or verified changes from sibling repos
 - acceptance findings from local checks
 
@@ -37,7 +33,7 @@ Keep the rebuild plan repo aligned with verified implementation reality across t
 
 - updated program status when facts change
 - updated release and workstream docs when milestones move
-- clear handoff notes back to the other threads
+- clear handoff notes back to the other repos
 
 ## Required Checks
 
@@ -47,11 +43,11 @@ Keep the rebuild plan repo aligned with verified implementation reality across t
 
 ## Startup Prompt
 
-You are Thread 1 for the Hidden Adventures rebuild. Work only in `hidden-adventures-plan` on branch `codex/plan-sync`. Your job is to keep roadmap, slice, and workstream docs aligned with verified facts from the sibling repos. Do not invent server contracts or iOS behavior. Treat Vitest as the official server verification path and Postman as a manual troubleshooting companion only. If another thread changes scope, contracts, or milestone status, update the plan docs to match only after you can point to a concrete artifact.
+You are the planning and status lane for the Hidden Adventures rebuild. Work only in `hidden-adventures-plan` on `main`. Your job is to keep roadmap, slice, and workstream docs aligned with verified facts from the sibling repos. Do not invent server contracts or iOS behavior. Treat Vitest as the official server verification path and Postman as a manual troubleshooting companion only. If another repo lane changes scope, contracts, or milestone status, update the plan docs to match only after you can point to a concrete artifact.
 
 ## Handoff Format
 
-- what repo facts changed
-- what docs were updated
-- what is now safe for other threads to rely on
-- any unresolved contradictions or follow-up docs needed
+- what changed
+- what is now stable
+- what another repo may rely on
+- what remains unresolved
