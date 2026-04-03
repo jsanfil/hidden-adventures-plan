@@ -31,6 +31,8 @@ Keep local development simple and production deployment cheap, repeatable, and s
 - local Docker development is bootstrapped and usable
 - a first deployment baseline now exists under `hidden-adventures-server/deploy/`
 - image versioning, rollout and rollback steps, env templates, and a staging smoke script are documented and checked in
+- the approved environment model now assumes local is the primary non-production validation surface, with no required dedicated staging environment in this phase
+- production assumptions are now tied to the cross-repo testing and environment baseline in `workstreams/testing-environments.md`
 - this remains a separate enabling lane and should not block Slice 2 definition work
 - the remaining work is execution: the team still needs to run the first real staging smoke path without ad hoc server edits
 

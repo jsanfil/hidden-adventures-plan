@@ -38,7 +38,7 @@
 - Slice 1 server read endpoints implemented and tested
 - auth bootstrap and handle-selection endpoints implemented and tested
 - Slice 1 contract docs and Postman troubleshooting requests now reflect the implemented server surface and auth model
-- Slice 1 local auth hardening and seeded fixture workflow now support repeatable bearer-token verification outside Cognito
+- the testing and environment operating model now distinguishes local manual QA from local automation, with separate local databases and manifest-driven fixture packs
 - Slice 1 iOS runtime now defaults to server-backed auth/bootstrap, feed, detail, and profile clients while fixture preview remains explicit for the UI harness
 - first deployment baseline is checked in with image versioning guidance, env templates, rollout and rollback notes, and a staging smoke script
 - the worktree-based thread setup has been retired in favor of repo-based execution on `main`
@@ -67,7 +67,8 @@
 
 ## Auth Strategy
 
-- Keep the current Cognito user pool as the legacy credential source; do not replace the pool and force a password migration.
+- Keep the current production Cognito user pool as the legacy credential source for live users; do not replace the pool and force a password migration.
+- Use a separate non-production Cognito pool and app client for local manual QA.
 - Treat `users.cognito_subject` as the durable backend identity key and `users.handle` as the public app alias.
 - Keep username/password as a legacy compatibility path only; new-account auth should not be username/password-first.
 - New-account priority for the rebuild is email plus Apple/Google, with phone-primary auth deferred to a later slice.
@@ -76,7 +77,8 @@
 - Legacy users who do not remember username or password should reclaim their old app identity through a verified-email recovery flow at runtime, not through bulk migration heuristics.
 - Bulk Cognito reconciliation is intentionally stricter than runtime recovery: migration links imported users by exact Cognito `username -> users.handle` and skips everything else.
 - New users who do not reclaim a legacy profile should create a fresh rebuild account and choose a unique public `handle` during onboarding.
-- Prefer extending the existing pool with a rebuild app client and Apple/Google federation rather than creating a brand-new pool.
+- Prefer extending the existing production pool with a rebuild app client and Apple/Google federation rather than creating a brand-new production pool.
+- Use deterministic signed test JWTs for automated local regression instead of depending on live Cognito tokens.
 
 ## Active Repo Lanes
 
@@ -107,19 +109,23 @@
   - `GET /api/adventures/:id`
   - `GET /api/profiles/:handle`
 - Those endpoints are backed by Vitest coverage, reject the retired `viewerHandle` query-param pattern, and now require bearer auth for every business route except `GET /api/health`.
-- Local verification no longer depends on Cognito: non-production defaults to `AUTH_MODE=local_identity` with seeded tokens such as `local:connected_viewer`, `local:non_connected_viewer`, and `local:new_user`.
+- Local testing now splits into two explicit runtime modes:
+  - `local-manual-qa` uses the `hidden_adventures_qa` database, the `qa-rich` manifest pack, real non-prod Cognito, and real non-prod S3
+  - `local-automation-test-core` uses the `hidden_adventures_test` database, the `test-core` manifest pack, and deterministic signed test JWTs
+- The canonical cross-repo operating model for testing, fixtures, local databases, AWS separation, and manual tester workflow lives in [workstreams/testing-environments.md](./workstreams/testing-environments.md).
 - The Postman Native Git repo includes checked-in Slice 1 troubleshooting requests under `postman/collections/hidden-adventures-slice-1/` that use bearer auth for connected-viewer paths instead of `viewerHandle`.
 - `handle` is the public username for profile lookup and display; it is stable in v1 and separate from both `displayName` and Cognito `username`.
 - A dedicated `v0-hidden-adventures-ui` repo exists as the Slice 1 visual design exploration and reference source.
 - `hidden-adventures-ios` contains a native SwiftUI Slice 1 UI flow for welcome, profile setup, unified explore feed and map, and adventure detail.
-- The iOS repo now defaults to real server-backed clients for auth bootstrap, handle selection, feed, detail, and profile, while the XCTest-driven gallery and walkthrough harness remain in explicit fixture-preview mode for deterministic screenshots and acceptance captures.
+- The iOS repo now supports explicit `LocalManualQA`, `LocalAutomation`, and `Production` server modes, while the XCTest-driven gallery and walkthrough harness remain in explicit fixture-preview mode for deterministic screenshots and acceptance captures.
 - Deployment artifacts now live in `hidden-adventures-server/deploy/`, including env templates, a staging compose example, and a smoke script for root, health, feed, detail, profile, and optional auth checks.
 - The remaining Slice 1 gap is acceptance closure rather than basic implementation: the live runtime still needs explicit happy-path validation against a running local server, and the documented staging smoke path still needs its first real execution.
 
 ## Next Milestone Focus
 
 - keep the repo-based operating model simple: one active implementation thread per repo on `main`
-- validate the local live-runtime happy path with seeded local auth across auth bootstrap, feed, detail, and profile
+- validate the local manual-QA happy path across auth bootstrap, feed, detail, and profile using the dedicated non-prod Cognito flow
+- validate the local automation happy path against the deterministic `test-core` dataset and test JWT auth
 - execute the first staging smoke run from the checked-in deployment baseline
 - close the remaining Slice 1 acceptance notes around explicit live fallbacks for profile write, media delivery, and map behavior
 - keep Slice 2 in UX and spec definition only until Slice 1 acceptance is closed

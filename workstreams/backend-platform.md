@@ -51,15 +51,18 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
   - `GET /api/profiles/:handle`
 - The implemented Slice 1 surface is now mirrored by plan-repo contract notes and checked-in Postman Native Git troubleshooting requests under `hidden-adventures-api-tests/postman/collections/hidden-adventures-slice-1/`.
 - The locked Slice 1 contract now requires bearer auth for every business route except `GET /api/health`.
-- Non-production defaults to `AUTH_MODE=local_identity`, which supports seeded verification tokens such as `local:connected_viewer`, `local:non_connected_viewer`, and `local:new_user`.
+- Local runtime now splits into:
+  - `local-manual-qa`, which uses the `hidden_adventures_qa` database, a rich manifest-driven fixture pack, real non-prod Cognito, and real non-prod S3
+  - `local-automation-test-core`, which uses the `hidden_adventures_test` database, a deterministic manifest-driven fixture pack, and signed test JWTs
 - Read endpoints already use the rebuilt visibility model against the published relational tables.
-- Authenticated viewer resolution now comes from auth context and local `users.id`, with Cognito in production and seeded local identities in local verification flows.
+- Authenticated viewer resolution now comes from auth context and local `users.id`, with Cognito for manual QA and production, and deterministic test JWTs for local automation.
 - `viewerHandle` is retired as a client-facing planning primitive and should only appear in negative tests that enforce its removal from the public interface.
 - Bulk reconciliation is handle-only by design. Verified-email matching remains a runtime legacy-account claim capability, not a migration primitive.
+- The cross-repo environment and testing source of truth now lives in `workstreams/testing-environments.md`.
 
 ## Next Output
 
 - keep the locked contract docs current if additive Slice 1-safe server changes land
 - keep authenticated endpoint growth additive and integration-friendly
-- support live-runtime acceptance and staging smoke work without reintroducing handle-based viewer identity
+- support local manual-QA acceptance, local automation regression, and staging smoke work without reintroducing handle-based viewer identity
 - record the first real staging smoke execution with the image identifier, runtime shape, smoke results, and any rollback friction

@@ -31,11 +31,14 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
 - The native Slice 1 shell exists and is usable for parity work and UI validation.
 - The default runtime now composes `RemoteAdventureService`, `RemoteProfileService`, and `RemoteAuthService` at the app root.
 - Service protocols no longer expose `viewerHandle` request overrides; the app uses server-backed auth/bootstrap state instead.
-- Live server mode is the default outside UI tests, with `HA_SERVER_MODE=dev_test` and seeded local bearer tokens available for local Slice 1 verification.
+- Live server mode is the default outside UI tests, and the app now distinguishes `LocalManualQA`, `LocalAutomation`, and `Production` server configurations.
 - Fixture preview remains a deliberate runtime mode for screenshots, previews, and deterministic walkthrough captures.
 - The current live Slice 1 fallbacks are explicit rather than silent: handle-only profile setup, feed-derived map cards, and placeholder media until later route contracts lock.
 - The `UITEST_START_SCREEN` gallery and walkthrough harness are now part of the required Slice 1 acceptance path and must survive the integration work.
-- The next proof point is explicit live-runtime validation with `HA_TEST_AUTH_TOKEN=local:connected_viewer` and `HA_TEST_AUTH_TOKEN=local:new_user`; a passing fixture-preview harness alone does not close Slice 1 acceptance.
+- The next proof points are explicit validation in both local modes:
+  - `LocalAutomation` against the `test-core` dataset and deterministic signed test JWT auth
+  - `LocalManualQA` against the `qa-rich` dataset, the non-prod Cognito pool, and the local QA database
+- A passing fixture-preview harness alone does not close Slice 1 acceptance.
 
 ## Source of Truth
 
@@ -46,6 +49,7 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
 ## Integration Priority
 
 - keep the live server runtime stable for auth bootstrap, handle selection, feed, detail, and profile
+- keep explicit scheme-based environment switching stable for manual QA, automation, and production
 - preserve direct-launch and walkthrough UI test coverage in fixture-preview mode
 - validate the live local happy path explicitly against the sibling server
 - remove temporary live fallbacks only when the corresponding server contracts are locked
@@ -75,7 +79,8 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
   - lock server contracts first
   - replace fixture-backed service usage
   - rerun the UI suites
-  - validate the local happy path against the real server
+  - validate the local automation happy path against the real server
+  - validate the manual QA path against the local Cognito-backed server mode when auth wiring is ready
 
 ## Done Means
 
