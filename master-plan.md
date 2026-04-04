@@ -107,6 +107,8 @@
 - The server now exposes the real Slice 1 server surface for:
   - `GET /api/auth/bootstrap`
   - `POST /api/auth/handle`
+  - `GET /api/me/profile`
+  - `PUT /api/me/profile`
   - `GET /api/feed`
   - `GET /api/adventures/:id`
   - `GET /api/profiles/:handle`
@@ -119,10 +121,10 @@
 - The Postman Native Git repo includes checked-in Slice 1 troubleshooting requests under `postman/collections/hidden-adventures-slice-1/` that use bearer auth for connected-viewer paths instead of `viewerHandle`.
 - `handle` is the public username for profile lookup and display; it is stable in v1 and separate from both `displayName` and Cognito `username`.
 - A dedicated `v0-hidden-adventures-ui` repo exists as the Slice 1 visual design exploration and reference source.
-- `hidden-adventures-ios` contains a native SwiftUI Slice 1 UI flow for welcome, unified email-auth entry, new-user onboarding/profile setup, unified explore feed and map, and adventure detail.
+- `hidden-adventures-ios` contains a native SwiftUI Slice 1 UI flow for welcome, unified email-auth entry, code verification, new-user onboarding/profile setup, unified explore feed and map, and adventure detail.
 - The iOS repo now supports explicit `LocalManualQA`, `LocalAutomation`, and `Production` server modes, while the XCTest-driven gallery and walkthrough harness remain in explicit fixture-preview mode for deterministic screenshots and acceptance captures.
-- Slice 1 auth now includes additional runtime behavior beyond bootstrap alone: persisted sessions should relaunch directly into Explore/Feed, logout should clear the local session and require email OTP on next entry, and onboarding intent should only apply to users who bootstrap as `new_user_needs_handle`.
-- If profile setup is expected to capture meaningful user information beyond handle selection, Slice 1 must either add profile-write support or explicitly document that non-handle fields remain temporary/local until a profile-write contract lands.
+- Slice 1 auth now includes additional runtime behavior beyond bootstrap alone: persisted sessions relaunch directly into Explore/Feed, logout clears the local session and requires email OTP on next entry, and onboarding intent only applies to users who bootstrap as `new_user_needs_handle`.
+- Profile setup now persists meaningful user information beyond handle selection through `GET /api/me/profile` and `PUT /api/me/profile`, covering `displayName`, `bio`, `homeCity`, and `homeRegion`.
 - Deployment artifacts now live in `hidden-adventures-server/deploy/`, including env templates, a staging compose example, and a smoke script for root, health, feed, detail, profile, and optional auth checks.
 - The remaining Slice 1 gap is acceptance closure rather than basic implementation: the live runtime still needs explicit happy-path validation for new-user onboarding, linked-user direct sign-in, persisted session relaunch, and the documented staging smoke path still needs its first real execution.
 
@@ -132,8 +134,7 @@
 - validate the local manual-QA happy path across email OTP auth entry, auth bootstrap, onboarding, feed, detail, and profile using the dedicated non-prod Cognito flow
 - validate the local automation happy path against the deterministic `test-core` dataset and test JWT auth
 - execute the first staging smoke run from the checked-in deployment baseline
-- decide whether Slice 1 profile setup should remain handle-only or expand to include real profile-write persistence for new-user onboarding
-- close the remaining Slice 1 acceptance notes around explicit live fallbacks for profile write, media delivery, and map behavior
+- close the remaining Slice 1 acceptance notes around manual QA for new-user onboarding, linked-user sign-in, persisted-session relaunch, media delivery placeholders, and map behavior
 - keep Slice 2 in UX and spec definition only until Slice 1 acceptance is closed
 
 ## Tracking Rules

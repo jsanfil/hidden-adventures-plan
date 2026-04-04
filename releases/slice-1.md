@@ -14,7 +14,7 @@
 
 - visual exploration exists in `v0-hidden-adventures-ui`
 - native SwiftUI shell exists in `hidden-adventures-ios`, and the default runtime now targets the live Slice 1 server surface
-- local server endpoints exist for auth bootstrap, handle selection, feed, detail, and profile
+- local server endpoints exist for auth bootstrap, handle selection, viewer profile read/write, feed, detail, and public profile
 - contract notes and Postman troubleshooting requests exist for the implemented Slice 1 surface
 - local automation still uses deterministic signed test JWTs for repeatable Slice 1 verification
 - local manual QA and production auth now target real Cognito email OTP flows
@@ -30,17 +30,18 @@
 - [x] server exposes `GET /api/feed`
 - [x] server exposes `GET /api/adventures/:id`
 - [x] server exposes `GET /api/profiles/:handle`
+- [x] server exposes `GET /api/me/profile` and `PUT /api/me/profile`
 - [x] server tests cover authenticated viewer resolution without `viewerHandle`
 - [x] native Slice 1 shell exists with deterministic UI harness coverage
 - [x] Slice 1 contracts are documented from real payloads and auth expectations
 - [x] Postman assets model authenticated viewer behavior instead of `viewerHandle`
-- [x] iOS uses real network services and auth bootstrap for Slice 1 flows
+- [x] iOS uses real network services, native email OTP auth, and auth bootstrap for Slice 1 flows
 - [ ] local happy path works end to end across email OTP auth entry, auth bootstrap, onboarding, feed, detail, and profile
 
 ## Missing Gaps
 
 - the passing iOS UI gallery and walkthrough still exercise fixture-preview mode rather than the live server runtime
-- live Slice 1 keeps a few explicit temporary fallbacks: handle-only profile setup unless profile-write expands, feed-derived map cards, and placeholder media until later contracts lock
+- live Slice 1 still keeps a few explicit temporary fallbacks: feed-derived map cards and placeholder media until later contracts lock
 - the local live-runtime happy path has not yet been explicitly re-run end to end for both new-user onboarding and linked-user direct sign-in in this planning cycle
 - the deployment baseline exists, but its staging smoke path has not yet been executed against a real staging host
 - Postman remains a manual troubleshooting path only and does not close Slice 1 acceptance on its own
@@ -50,7 +51,7 @@
 ### Auth model
 
 - `GET /api/health` is the only public Slice 1 route
-- `GET /api/auth/bootstrap`, `POST /api/auth/handle`, `GET /api/feed`, `GET /api/adventures/:id`, and `GET /api/profiles/:handle` all require `Authorization: Bearer <token>`
+- `GET /api/auth/bootstrap`, `POST /api/auth/handle`, `GET /api/me/profile`, `PUT /api/me/profile`, `GET /api/feed`, `GET /api/adventures/:id`, and `GET /api/profiles/:handle` all require `Authorization: Bearer <token>`
 - the rebuild app should expose one visible email OTP entry path for both `Get Started` and `Sign In`
 - local automation uses deterministic signed test JWTs for integration and regression work
 - local manual QA and production use Cognito-backed email OTP auth
@@ -71,6 +72,14 @@
   normalizes the stored handle to lowercase before creating a rebuild user
   returns the same bootstrap-style account payload on success
   returns `409` when the requested handle is unavailable
+- `GET /api/me/profile`
+  returns `{ profile }`
+  requires auth
+  mirrors the `profile` object shape used by `GET /api/profiles/:handle`
+- `PUT /api/me/profile`
+  accepts `{ "displayName": string | null, "bio": string | null, "homeCity": string | null, "homeRegion": string | null }`
+  trims strings, normalizes empty values to `null`, and creates the profile row on first write when needed
+  returns `{ profile }` with the saved viewer profile payload
 - `GET /api/feed`
   returns `{ items, paging }`
   requires auth

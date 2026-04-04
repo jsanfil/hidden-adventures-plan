@@ -46,6 +46,8 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
 - The current Slice 1 server surface is implemented and tested for:
   - `GET /api/auth/bootstrap`
   - `POST /api/auth/handle`
+  - `GET /api/me/profile`
+  - `PUT /api/me/profile`
   - `GET /api/feed`
   - `GET /api/adventures/:id`
   - `GET /api/profiles/:handle`
@@ -63,8 +65,8 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
 
 ## Next Output
 
-- keep the locked contract docs current if additive Slice 1-safe server changes land
+- keep the locked contract docs current now that additive Slice 1-safe viewer profile read/write support has landed
 - keep authenticated endpoint growth additive and integration-friendly
 - support local manual-QA acceptance, local automation regression, and staging smoke work without reintroducing handle-based viewer identity
-- clarify whether Slice 1 needs additive backend support for onboarding/profile persistence beyond handle-only setup
+- validate the viewer profile read/write flow during acceptance testing, especially first-write row creation and normalized empty-field persistence
 - record the first real staging smoke execution with the image identifier, runtime shape, smoke results, and any rollback friction
