@@ -134,7 +134,7 @@
 - validate the local manual-QA happy path across email OTP auth entry, auth bootstrap, onboarding, feed, detail, and profile using the dedicated non-prod Cognito flow
 - validate the local automation happy path against the deterministic `test-core` dataset and test JWT auth
 - execute the first staging smoke run from the checked-in deployment baseline
-- close the remaining Slice 1 acceptance notes around manual QA for new-user onboarding, linked-user sign-in, persisted-session relaunch, media delivery placeholders, and map behavior
+- close the remaining Slice 1 acceptance notes around manual QA for new-user onboarding, linked-user sign-in, persisted-session relaunch, authenticated media delivery, and map behavior
 - keep Slice 2 in UX and spec definition only until Slice 1 acceptance is closed
 
 ## Tracking Rules

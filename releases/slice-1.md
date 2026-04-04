@@ -29,6 +29,8 @@
 - [x] server exposes `POST /api/auth/handle`
 - [x] server exposes `GET /api/feed`
 - [x] server exposes `GET /api/adventures/:id`
+- [x] server exposes `GET /api/adventures/:id/media`
+- [x] server exposes `GET /api/media/:id`
 - [x] server exposes `GET /api/profiles/:handle`
 - [x] server exposes `GET /api/me/profile` and `PUT /api/me/profile`
 - [x] server tests cover authenticated viewer resolution without `viewerHandle`
@@ -41,7 +43,7 @@
 ## Missing Gaps
 
 - the passing iOS UI gallery and walkthrough still exercise fixture-preview mode rather than the live server runtime
-- live Slice 1 still keeps a few explicit temporary fallbacks: feed-derived map cards and placeholder media until later contracts lock
+- live Slice 1 still keeps an explicit temporary fallback for feed-derived map cards until a locked map contract exists
 - the local live-runtime happy path has not yet been explicitly re-run end to end for both new-user onboarding and linked-user direct sign-in in this planning cycle
 - the deployment baseline exists, but its staging smoke path has not yet been executed against a real staging host
 - Postman remains a manual troubleshooting path only and does not close Slice 1 acceptance on its own
@@ -51,7 +53,7 @@
 ### Auth model
 
 - `GET /api/health` is the only public Slice 1 route
-- `GET /api/auth/bootstrap`, `POST /api/auth/handle`, `GET /api/me/profile`, `PUT /api/me/profile`, `GET /api/feed`, `GET /api/adventures/:id`, and `GET /api/profiles/:handle` all require `Authorization: Bearer <token>`
+- `GET /api/auth/bootstrap`, `POST /api/auth/handle`, `GET /api/me/profile`, `PUT /api/me/profile`, `GET /api/feed`, `GET /api/adventures/:id`, `GET /api/adventures/:id/media`, `GET /api/media/:id`, and `GET /api/profiles/:handle` all require `Authorization: Bearer <token>`
 - the rebuild app should expose one visible email OTP entry path for both `Get Started` and `Sign In`
 - local automation uses deterministic signed test JWTs for integration and regression work
 - local manual QA and production use Cognito-backed email OTP auth
@@ -89,6 +91,15 @@
   requires auth
   accepts no query params; `viewerHandle` returns `400`
   returns `404` when the adventure is not visible or does not exist
+- `GET /api/adventures/:id/media`
+  returns `{ items }`
+  requires auth
+  returns ordered media refs for the visible adventure detail carousel
+  returns `404` when the adventure is not visible or does not exist
+- `GET /api/media/:id`
+  returns authenticated image bytes for a visible adventure media id
+  requires auth
+  the app should use media ids for delivery and not treat `storageKey` as a URL
 - `GET /api/profiles/:handle`
   returns `{ profile, adventures, paging }`
   requires auth

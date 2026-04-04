@@ -258,6 +258,7 @@ This schema supports a clean first API surface:
 - `GET /api/feed`
 - `GET /api/map`
 - `GET /api/adventures/:id`
+- `GET /api/adventures/:id/media`
 - `GET /api/profiles/:handle`
 - `GET /api/media/:id` or a signed-delivery equivalent
 
