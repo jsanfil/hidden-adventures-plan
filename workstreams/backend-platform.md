@@ -57,7 +57,8 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
 - Read endpoints already use the rebuilt visibility model against the published relational tables.
 - Authenticated viewer resolution now comes from auth context and local `users.id`, with Cognito for manual QA and production, and deterministic test JWTs for local automation.
 - `viewerHandle` is retired as a client-facing planning primitive and should only appear in negative tests that enforce its removal from the public interface.
-- Bulk reconciliation is handle-only by design. Verified-email matching remains a runtime legacy-account claim capability, not a migration primitive.
+- Bulk reconciliation is complete and runtime auth for existing users should now rely on `users.cognito_subject` as the durable identity key.
+- Any bootstrap result that still implies manual recovery should now be treated as a data-quality or mapping defect, not a planned user-facing capability.
 - The cross-repo environment and testing source of truth now lives in `workstreams/testing-environments.md`.
 
 ## Next Output
@@ -65,4 +66,5 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
 - keep the locked contract docs current if additive Slice 1-safe server changes land
 - keep authenticated endpoint growth additive and integration-friendly
 - support local manual-QA acceptance, local automation regression, and staging smoke work without reintroducing handle-based viewer identity
+- clarify whether Slice 1 needs additive backend support for onboarding/profile persistence beyond handle-only setup
 - record the first real staging smoke execution with the image identifier, runtime shape, smoke results, and any rollback friction

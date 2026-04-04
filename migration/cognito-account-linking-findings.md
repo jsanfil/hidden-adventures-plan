@@ -1,5 +1,11 @@
 # Cognito Account Linking Findings
 
+Superseded runtime-planning note:
+
+- This document remains the historical record of migration-time reconciliation and identity-bridge proof.
+- Current runtime planning no longer includes user-facing recovery as a supported auth branch.
+- The rebuild runtime direction is now email OTP on the existing Cognito pool and app client, with existing linked users resolved by `users.cognito_subject`.
+
 ## Goal
 
 Capture the proven legacy identity behavior, the live Cognito pool findings, and the resulting implementation rules for the rebuild.
@@ -76,23 +82,24 @@ Rationale:
 - the live pool contains duplicate and abandoned Cognito accounts
 - exact-handle bulk linking yields a complete `2598 / 2598` mapping for legacy profiles without needing email heuristics
 
-## Runtime Claim and New-User Rules
+## Runtime And New-User Rules
 
-Bulk migration and runtime account recovery are different concerns.
+Bulk migration and runtime auth are different concerns.
 
 Bulk migration:
 
 - exact handle only
 
-Runtime legacy recovery:
+Current runtime planning:
 
-- allow verified-email claim flow for a returning user who cannot remember username or password
-- email-based recovery should bind only after interactive verification and only when the result is safe
+- existing linked users should resolve by `users.cognito_subject`
+- the app's visible auth path is now email plus one-time code
+- any runtime state that still suggests manual recovery should be treated as a data-quality or mapping issue for investigation, not a planned user-facing flow
 
 New user creation:
 
 - do not infer a legacy profile from bulk Cognito presence alone
-- if no legacy profile is reclaimed, create a fresh rebuild user
+- if no rebuild user exists for the authenticated Cognito subject, create a fresh rebuild user
 - require the user to choose a public `handle` during onboarding
 
 ## Current Local Applied State
@@ -113,7 +120,6 @@ The post-apply sync is stable:
 ## Follow-On Implementation Guidance
 
 - Preserve `handle` as the public app alias, not the long-term login identifier.
-- Keep email-based legacy recovery in the runtime bootstrap/claim flow, not in the bulk sync job.
 - Keep Cognito as the identity provider, but treat the rebuild backend `users` row as the authoritative application identity record.
 - Extend Cognito for Apple/Google in a new or updated rebuild app client rather than rewriting the legacy identity history.
 

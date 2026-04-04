@@ -23,6 +23,8 @@
 
 ### Findings
 
+- Legacy auth findings in this document are source evidence from the shipped product, not the current rebuild runtime contract.
+- The rebuild runtime strategy now intentionally diverges from the legacy username/password UX and instead uses email OTP on the current Cognito pool and app client.
 - The iOS client is configured from `Config/Secrets.xcconfig` into `Info.plist` keys for server host/base path, Cognito client ID, Cognito pool ID, Cognito user pool region, and sign-in provider key.
 - The example configuration pins the Cognito region to `us-west-2`.
 - The server expects Cognito JWT validation inputs via `.env`: `COGNITO_PUBKEY`, `COGNITO_AUDIENCE`, `COGNITO_ISSUER`, `COGNITO_POOLID`, and `COGNITO_CLIENTID`.

@@ -1,5 +1,10 @@
 # Migration Reconciliation Checklist
 
+Historical note:
+
+- This document records the completed migration bridge and unmatched-account audit as historical evidence.
+- The unmatched Cognito-account artifacts remain useful migration records, but they are no longer treated as planned runtime-recovery inputs for the rebuild app flow.
+
 ## Goal
 
 Record the concrete checks that justify closing the migration planning and implementation workstream for the rebuild dataset.

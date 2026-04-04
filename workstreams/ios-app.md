@@ -34,10 +34,14 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
 - Live server mode is the default outside UI tests, and the app now distinguishes `LocalManualQA`, `LocalAutomation`, and `Production` server configurations.
 - Fixture preview remains a deliberate runtime mode for screenshots, previews, and deterministic walkthrough captures.
 - The current live Slice 1 fallbacks are explicit rather than silent: handle-only profile setup, feed-derived map cards, and placeholder media until later route contracts lock.
+- The welcome screen now has two intentful entry points into one email-auth mechanism: `Get Started` for onboarding intent and `Sign In` for returning-user intent.
+- New users should continue into handle selection and profile setup only after verified auth when bootstrap returns `new_user_needs_handle`.
+- Linked legacy users and linked rebuild users should skip onboarding and land directly in Explore/Feed after verified auth.
+- The rebuild app should expose no visible username/password path unless live validation reveals a blocker that forces a temporary fallback.
 - The `UITEST_START_SCREEN` gallery and walkthrough harness are now part of the required Slice 1 acceptance path and must survive the integration work.
 - The next proof points are explicit validation in both local modes:
   - `LocalAutomation` against the `test-core` dataset and deterministic signed test JWT auth
-  - `LocalManualQA` against the `qa-rich` dataset, the non-prod Cognito pool, and the local QA database
+  - `LocalManualQA` against the `qa-rich` dataset, the non-prod Cognito email OTP flow, and the local QA database
 - A passing fixture-preview harness alone does not close Slice 1 acceptance.
 
 ## Source of Truth
@@ -48,8 +52,10 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
 
 ## Integration Priority
 
-- keep the live server runtime stable for auth bootstrap, handle selection, feed, detail, and profile
+- keep the live server runtime stable for email OTP auth entry, auth bootstrap, handle selection, feed, detail, and profile
 - keep explicit scheme-based environment switching stable for manual QA, automation, and production
+- keep the onboarding-versus-linked routing split explicit: new users continue to onboarding/profile setup, linked users skip to Feed
+- add persisted-session relaunch and logout behavior to the supported Slice 1 auth flow
 - preserve direct-launch and walkthrough UI test coverage in fixture-preview mode
 - validate the live local happy path explicitly against the sibling server
 - remove temporary live fallbacks only when the corresponding server contracts are locked
@@ -80,11 +86,15 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
   - replace fixture-backed service usage
   - rerun the UI suites
   - validate the local automation happy path against the real server
-  - validate the manual QA path against the local Cognito-backed server mode when auth wiring is ready
+  - validate the manual QA path against the local Cognito-backed server mode when email OTP auth wiring is ready
+  - validate the new-user onboarding path
+  - validate the linked-user direct-login path
+  - validate persisted-session relaunch into Feed
 
 ## Done Means
 
 - slice-specific acceptance criteria are met
 - app builds locally in Xcode
 - Slice 1 is no longer fixture-backed for its core happy path
+- real auth/bootstrap wiring includes email OTP session persistence, logout handling, and post-auth routing into onboarding or Feed
 - linked issue and PR are closed

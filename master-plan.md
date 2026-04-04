@@ -67,17 +67,19 @@
 
 ## Auth Strategy
 
-- Keep the current production Cognito user pool as the legacy credential source for live users; do not replace the pool and force a password migration.
+- Keep the current production Cognito user pool for live users; do not replace the pool now that the existing pool supports the rebuild auth direction.
 - Use a separate non-production Cognito pool and app client for local manual QA.
 - Treat `users.cognito_subject` as the durable backend identity key and `users.handle` as the public app alias.
-- Keep username/password as a legacy compatibility path only; new-account auth should not be username/password-first.
-- New-account priority for the rebuild is email plus Apple/Google, with phone-primary auth deferred to a later slice.
+- Use email plus one-time code as the app's visible auth method for both new and existing users.
+- Reuse the current production pool with verified email alias sign-in, `EMAIL_OTP` first-factor support, and a rebuild-capable app client with `ALLOW_USER_AUTH`.
+- `Get Started` is the onboarding-intent path, but onboarding should only continue after verified auth when bootstrap returns `new_user_needs_handle`.
+- `Sign In` is the returning-user path, but the backend remains authoritative after verified auth and may still identify the user as new.
+- New users should create a fresh rebuild account and choose a unique public `handle` during onboarding.
+- Existing linked users, including migrated legacy users, should resolve by `users.cognito_subject` and skip onboarding/profile setup.
+- Username/password and runtime recovery are out of scope for the rebuild app unless live production validation reveals a blocker severe enough to justify a temporary fallback.
 - Face ID and biometrics are a device-side session unlock mechanism after account linking, not a separate Cognito identity mode.
-- Legacy users who still know their old credentials can sign in through the existing pool and complete a first-login upgrade or bootstrap flow.
-- Legacy users who do not remember username or password should reclaim their old app identity through a verified-email recovery flow at runtime, not through bulk migration heuristics.
-- Bulk Cognito reconciliation is intentionally stricter than runtime recovery: migration links imported users by exact Cognito `username -> users.handle` and skips everything else.
-- New users who do not reclaim a legacy profile should create a fresh rebuild account and choose a unique public `handle` during onboarding.
-- Prefer extending the existing production pool with a rebuild app client and Apple/Google federation rather than creating a brand-new production pool.
+- Bulk Cognito reconciliation remains a historical migration concern: imported legacy users are already linked in the rebuild dataset and runtime auth now depends on those existing `cognito_subject` mappings.
+- Apple and Google federation remain future pool/app-client extensions rather than a Slice 1 requirement.
 - Use deterministic signed test JWTs for automated local regression instead of depending on live Cognito tokens.
 
 ## Active Repo Lanes
@@ -92,7 +94,7 @@
 
 ## Release Slices
 
-- Slice 1: auth bootstrap, profile bootstrap, feed, map, detail, image delivery
+- Slice 1: email OTP auth entry, auth bootstrap, handle selection, new-user onboarding/profile bootstrap, feed, map, detail, image delivery
 - Slice 2: create and edit adventure, uploads, location and category, visibility controls
 - Slice 3: connections, favorites, comments, ratings, profile collections
 - Slice 4: support and reporting, delete-account, moderation and admin, beta, cutover
@@ -101,7 +103,7 @@
 
 - Server migration tooling can stage the legacy Mongo archive, transform it into normalized work tables, publish a selected import run into the real `public` tables, and emit reconciliation reports.
 - Import run `2` is currently published from the canonical archive and populates `public.users`, `public.profiles`, `public.adventures`, `public.connections`, `public.adventure_favorites`, `public.adventure_comments`, `public.media_assets`, `public.adventure_media`, and `public.adventure_stats`.
-- Imported legacy profiles are fully linked in the local rebuild DB to Cognito by exact handle, with `2598` linked legacy users and `1383` extra Cognito accounts intentionally left unmatched.
+- Imported legacy profiles are fully linked in the local rebuild DB to Cognito by exact handle, and the published rebuild dataset now treats `users.cognito_subject` as the durable identity bridge for those existing users.
 - The server now exposes the real Slice 1 server surface for:
   - `GET /api/auth/bootstrap`
   - `POST /api/auth/handle`
@@ -109,24 +111,28 @@
   - `GET /api/adventures/:id`
   - `GET /api/profiles/:handle`
 - Those endpoints are backed by Vitest coverage, reject the retired `viewerHandle` query-param pattern, and now require bearer auth for every business route except `GET /api/health`.
+- The current production Cognito pool has been verified for the rebuild auth path: email is an alias sign-in attribute, `EMAIL_OTP` is enabled as a first auth factor, and the rebuild app client supports `ALLOW_USER_AUTH`.
 - Local testing now splits into two explicit runtime modes:
-  - `local-manual-qa` uses the `hidden_adventures_qa` database, the `qa-rich` manifest pack, real non-prod Cognito, and real non-prod S3
+  - `local-manual-qa` uses the `hidden_adventures_qa` database, the `qa-rich` manifest pack, real non-prod Cognito email OTP auth, and real non-prod S3
   - `local-automation-test-core` uses the `hidden_adventures_test` database, the `test-core` manifest pack, and deterministic signed test JWTs
 - The canonical cross-repo operating model for testing, fixtures, local databases, AWS separation, and manual tester workflow lives in [workstreams/testing-environments.md](./workstreams/testing-environments.md).
 - The Postman Native Git repo includes checked-in Slice 1 troubleshooting requests under `postman/collections/hidden-adventures-slice-1/` that use bearer auth for connected-viewer paths instead of `viewerHandle`.
 - `handle` is the public username for profile lookup and display; it is stable in v1 and separate from both `displayName` and Cognito `username`.
 - A dedicated `v0-hidden-adventures-ui` repo exists as the Slice 1 visual design exploration and reference source.
-- `hidden-adventures-ios` contains a native SwiftUI Slice 1 UI flow for welcome, profile setup, unified explore feed and map, and adventure detail.
+- `hidden-adventures-ios` contains a native SwiftUI Slice 1 UI flow for welcome, unified email-auth entry, new-user onboarding/profile setup, unified explore feed and map, and adventure detail.
 - The iOS repo now supports explicit `LocalManualQA`, `LocalAutomation`, and `Production` server modes, while the XCTest-driven gallery and walkthrough harness remain in explicit fixture-preview mode for deterministic screenshots and acceptance captures.
+- Slice 1 auth now includes additional runtime behavior beyond bootstrap alone: persisted sessions should relaunch directly into Explore/Feed, logout should clear the local session and require email OTP on next entry, and onboarding intent should only apply to users who bootstrap as `new_user_needs_handle`.
+- If profile setup is expected to capture meaningful user information beyond handle selection, Slice 1 must either add profile-write support or explicitly document that non-handle fields remain temporary/local until a profile-write contract lands.
 - Deployment artifacts now live in `hidden-adventures-server/deploy/`, including env templates, a staging compose example, and a smoke script for root, health, feed, detail, profile, and optional auth checks.
-- The remaining Slice 1 gap is acceptance closure rather than basic implementation: the live runtime still needs explicit happy-path validation against a running local server, and the documented staging smoke path still needs its first real execution.
+- The remaining Slice 1 gap is acceptance closure rather than basic implementation: the live runtime still needs explicit happy-path validation for new-user onboarding, linked-user direct sign-in, persisted session relaunch, and the documented staging smoke path still needs its first real execution.
 
 ## Next Milestone Focus
 
 - keep the repo-based operating model simple: one active implementation thread per repo on `main`
-- validate the local manual-QA happy path across auth bootstrap, feed, detail, and profile using the dedicated non-prod Cognito flow
+- validate the local manual-QA happy path across email OTP auth entry, auth bootstrap, onboarding, feed, detail, and profile using the dedicated non-prod Cognito flow
 - validate the local automation happy path against the deterministic `test-core` dataset and test JWT auth
 - execute the first staging smoke run from the checked-in deployment baseline
+- decide whether Slice 1 profile setup should remain handle-only or expand to include real profile-write persistence for new-user onboarding
 - close the remaining Slice 1 acceptance notes around explicit live fallbacks for profile write, media delivery, and map behavior
 - keep Slice 2 in UX and spec definition only until Slice 1 acceptance is closed
 

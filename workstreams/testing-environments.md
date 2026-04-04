@@ -37,11 +37,11 @@ The rebuild now uses:
 
 - database: `hidden_adventures_qa`
 - fixture pack: `qa-rich`
-- auth: real Cognito
+- auth: real Cognito email OTP
 - media: real non-prod S3
 - iOS scheme: `HiddenAdventures-LocalManualQA`
 - server env file: `.env.local.manual-qa`
-- primary use: backend preparation for interactive mobile-app testing and production-like login or account creation
+- primary use: backend preparation for interactive mobile-app testing and production-like email-code login or account creation
 
 #### `local-automation-test-core`
 
@@ -111,6 +111,7 @@ The rebuild now uses:
 ### Local Non-Prod Resources
 
 - dedicated non-prod Cognito pool and app client for manual QA
+- QA personas should have usable verified email addresses so OTP delivery can be exercised during local manual QA
 - dedicated non-prod S3 bucket for local fixture media
 - no sharing of production Cognito or production S3 with local manual QA
 
@@ -141,8 +142,9 @@ The rebuild now uses:
 6. Seed `hidden_adventures_qa` from `qa-rich`.
 7. Start the server with `npm run dev:manual-qa`.
 8. Launch the iOS app with `HiddenAdventures-LocalManualQA`.
-9. Sign in with a QA persona or create a new account through the real Cognito-backed flow.
-10. Reseed the QA database whenever a clean baseline is needed.
+9. Validate OTP delivery and sign in with a linked QA persona through the real Cognito email-code flow.
+10. Validate the new-user path through `Get Started`, including handle selection and onboarding routing.
+11. Reseed the QA database whenever a clean baseline is needed.
 
 This workflow is for preparing a realistic backend for manual mobile-app testing. Automated server verification belongs to the `test-core` regression lane.
 

@@ -50,8 +50,9 @@ Redesign Hidden Adventures around modern journeys, strong visual identity, and a
 
 ## Slice 1 Route Map
 
-- `welcome -> profile setup -> explore shell (feed/map) -> adventure detail`
+- `welcome -> email auth -> bootstrap -> (profile setup for new users only) -> explore shell (feed/map) -> adventure detail`
 - Treat feed and map as two modes of one exploration system, even if the v0 reference presents them as separate screens.
+- `Get Started` and `Sign In` are not duplicate buttons: they express user intent and affect post-auth framing, while backend bootstrap remains authoritative about whether the user is linked or new.
 
 ## Slice 2 Output Expectations
 
