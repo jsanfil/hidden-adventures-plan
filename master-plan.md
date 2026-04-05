@@ -72,6 +72,8 @@
 - Treat `users.cognito_subject` as the durable backend identity key and `users.handle` as the public app alias.
 - Use email plus one-time code as the app's visible auth method for both new and existing users.
 - Reuse the current production pool with verified email alias sign-in, `EMAIL_OTP` first-factor support, and a rebuild-capable app client with `ALLOW_USER_AUTH`.
+- Manual-QA Cognito sign-up currently has an observed non-prod pool constraint: after an email address has already been used for sign-up confirmation testing, deleting and recreating that Cognito user may still fail to trigger a new confirmation email to the same address. Until AWS behavior proves otherwise, manual QA for `Get Started` should use a brand-new email address when confirmation delivery fails on a reused address.
+- Gmail can separately filter or suppress confirmation mail from the Cognito sender `no-reply@verificationemail.com`, so a missing code in Gmail should be treated as an email-delivery issue before assuming Cognito failed to send.
 - `Get Started` is the onboarding-intent path, but onboarding should only continue after verified auth when bootstrap returns `new_user_needs_handle`.
 - `Sign In` is the returning-user path, but the backend remains authoritative after verified auth and may still identify the user as new.
 - New users should create a fresh rebuild account and choose a unique public `handle` during onboarding.
@@ -114,6 +116,8 @@
   - `GET /api/profiles/:handle`
 - Those endpoints are backed by Vitest coverage, reject the retired `viewerHandle` query-param pattern, and now require bearer auth for every business route except `GET /api/health`.
 - The current production Cognito pool has been verified for the rebuild auth path: email is an alias sign-in attribute, `EMAIL_OTP` is enabled as a first auth factor, and the rebuild app client supports `ALLOW_USER_AUTH`.
+- Local manual-QA auth now includes an additional operator note for Cognito sign-up testing: a reused email address can stop receiving a new confirmation email even after its deleted Cognito user is recreated, so fresh addresses are the reliable path for `Get Started` validation.
+- Gmail-specific filtering of `no-reply@verificationemail.com` means confirmation delivery should be verified in another inbox or provider before treating it as a Cognito sender failure.
 - Local testing now splits into two explicit runtime modes:
   - `local-manual-qa` uses the `hidden_adventures_qa` database, the `qa-rich` manifest pack, real non-prod Cognito email OTP auth, and real non-prod S3
   - `local-automation-test-core` uses the `hidden_adventures_test` database, the `test-core` manifest pack, and deterministic signed test JWTs
