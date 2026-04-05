@@ -29,6 +29,7 @@ Record the concrete checks that justify closing the migration planning and imple
 - [x] Import run `2` published into the rebuild `public` tables
 - [x] Legacy-profile-backed users linked to Cognito by exact handle
 - [x] Extra Cognito accounts preserved as unmatched instead of being auto-linked
+- [x] Original Cognito pool export path documented and scripted for future reruns
 - [x] Audited skips and collapses documented
 - [x] Row counts reconcile against archive totals plus documented skips/collapses
 - [x] Spot checks reconcile for visibility normalization and single-image media projection
@@ -96,6 +97,8 @@ Artifacts:
 
 - [cognito-unmatched-users-2026-03-28.json](./reports/cognito-unmatched-users-2026-03-28.json)
 - [cognito-unmatched-users-2026-03-28.csv](./reports/cognito-unmatched-users-2026-03-28.csv)
+- live export command in server repo: `npm run migration:export-cognito`
+- live export output directory: `~/.hidden-adventures/backups/cognito/`
 
 ## Spot Checks
 
@@ -130,3 +133,13 @@ The migration workstream is complete for planning and implementation purposes in
 - migration tooling is implemented and repeatable
 - the published dataset reconciles against the archive and documented skip/collapse rules
 - the legacy identity bridge is proven and applied
+
+## Repeatable Recovery Note
+
+If the local rebuild database ever needs to be reconstructed again:
+
+1. export the original Cognito pool with `npm run migration:export-cognito`
+2. rerun stage -> transform -> link-cognito -> publish
+3. verify the final run against the expected reconciliation counts in this document
+
+The transform path now contains the documented exclusion of the 29 zero-activity duplicate legacy profiles, so that cleanup no longer needs to be done manually after publish.

@@ -62,6 +62,10 @@ What we did in the local migration environment:
 - reset `15` manually linked `cognito_subject` assignments after confirming they were not canonical
 - reran the bulk mapping from a clean state
 
+Current implementation note:
+
+- the transform step now codifies that 29-profile exclusion set directly in server migration code, so future rebuilds reproduce the same `2598` imported legacy-user set without manual cleanup
+
 ## Final Bulk-Linking Rule
 
 For migration-time bulk reconciliation:
@@ -116,6 +120,18 @@ The post-apply sync is stable:
 
 - `already_linked_by_cognito_subject`: `2598`
 - `skipped_no_legacy_profile_match`: `1383`
+
+## Repeatable Source-Of-Truth Workflow
+
+When this migration needs to be rerun later, the source-of-truth identity input should come from the original Cognito pool, not from a local database snapshot.
+
+Current workflow:
+
+1. from `hidden-adventures-server`, run `npm run migration:export-cognito`
+2. the export is written outside git under `~/.hidden-adventures/backups/cognito/`
+3. use that JSON file as the `--input` to `npm run migration:link-cognito`
+
+This keeps bulk-link inputs tied to the real pool while still leaving a local timestamped artifact for audit and reruns.
 
 ## Follow-On Implementation Guidance
 

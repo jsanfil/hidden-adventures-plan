@@ -11,6 +11,7 @@ Define a repeatable import pipeline that converts the legacy Mongo archive into 
 - Legacy mapping rules: [legacy-to-new-mapping.md](./legacy-to-new-mapping.md)
 - Cognito linking findings: [cognito-account-linking-findings.md](./cognito-account-linking-findings.md)
 - Target schema: [backend-schema-draft.md](../workstreams/backend-schema-draft.md)
+- Original Cognito pool export: generate on demand from the server repo with `npm run migration:export-cognito`
 
 ## Recommended Strategy
 
@@ -202,6 +203,35 @@ Implementation recommendation:
 - record the Cognito `sub`, Cognito username, and matched imported user ID for every linkage event
 - persist a saved list of unmatched Cognito accounts for possible later cleanup rather than auto-deleting them during the link job
 
+### Repeatable Cognito export
+
+The trusted source for migration-time identity binding is the original Cognito pool, not an old local database backup.
+
+Operational rule:
+
+1. export the original pool immediately before any new bulk-link or full rebuild run
+2. store the raw export outside git in the local backup area
+3. feed that export into `migration:link-cognito`
+
+Current server-side command:
+
+- from `hidden-adventures-server`:
+  `npm run migration:export-cognito`
+
+Current output location:
+
+- `~/.hidden-adventures/backups/cognito/cognito-users-<pool-id>-<timestamp>.json`
+
+Expected payload shape:
+
+- array of Cognito users
+- each row includes `Username` plus `Attributes`
+- `Attributes` must include the real Cognito `sub`
+
+Security note:
+
+- do not commit raw Cognito exports to git because they contain live identity data
+
 ## Per-Entity Publish Rules
 
 ### Users and profiles
@@ -256,6 +286,56 @@ A dry run is considered acceptable only if it records:
 - profile `adventureCount` mismatches remain within expected tolerance, ideally zero
 - all imported adventures retain their `defaultImage` mapping
 - all imported average ratings equal `rating / ratingCount` from the archive
+
+## Full Rebuild Runbook
+
+This is the current trusted end-to-end rebuild flow for the canonical local `hidden_adventures` database.
+
+1. Take a local backup before mutating the database.
+   `npm run db:backup:local`
+2. Export the original Cognito pool.
+   `npm run migration:export-cognito`
+3. Reset the local import database.
+   `POSTGRES_HOST=127.0.0.1 node --env-file=.env --import tsx ./src/scripts/db-reset-local-database.ts`
+4. Apply the schema migrations.
+   `POSTGRES_HOST=127.0.0.1 node --env-file=.env --import tsx ./src/scripts/run-migrations.ts`
+5. Stage the canonical archive.
+   `POSTGRES_HOST=127.0.0.1 npm run migration:stage-archive -- --archive ../hidden-adventures-plan/migration/archives/legacy-mongodb-backup-2026-03-01.archive --report /tmp/ha-stage-report.json`
+6. Transform the staged run into normalized work tables.
+   `POSTGRES_HOST=127.0.0.1 npm run migration:transform-stage -- --run-id <RUN_ID> --report /tmp/ha-transform-report.json`
+7. Link Cognito subjects from the fresh pool export.
+   `POSTGRES_HOST=127.0.0.1 npm run migration:link-cognito -- --input ~/.hidden-adventures/backups/cognito/cognito-users-<pool-id>-<timestamp>.json --run-id <RUN_ID> --apply --report /tmp/ha-cognito-link-report.json`
+8. Publish the run into `public.*`.
+   `POSTGRES_HOST=127.0.0.1 npm run migration:publish-run -- --run-id <RUN_ID> --report /tmp/ha-publish-report.json`
+
+Expected profile reconciliation:
+
+- archive `profiles`: `2630`
+- skipped exact-handle duplicates during import: `3`
+- excluded zero-activity duplicate legacy profiles: `29`
+- published legacy users/profiles: `2598`
+
+The 29 zero-activity duplicate legacy profiles are intentionally excluded during transform and should appear in audit as:
+
+- `profiles.excluded_profile = 29`
+
+Expected Cognito reconciliation:
+
+- imported legacy users/profiles: `2598`
+- linked by exact username: `2598`
+- unlinked imported legacy profiles after apply: `0`
+
+Expected published counts:
+
+- `users`: `2598`
+- `profiles`: `2598`
+- `adventures`: `352`
+- `connections`: `1004`
+- `adventure_favorites`: `1869`
+- `adventure_comments`: `140`
+- `media_assets`: `1839`
+- `adventure_media`: `352`
+- `adventure_stats`: `352`
 
 ## Publish Mechanics
 
