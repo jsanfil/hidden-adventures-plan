@@ -14,4 +14,5 @@ Execution notes:
 - Use each owning repo's `main` branch unless there is a repo-specific reason to do otherwise.
 - Keep `hidden-adventures-plan` as the only repo that declares milestone status and cross-repo truth.
 
-Repo-lane playbooks for Codex App live under `tasks/threads/`, and the active lane matrix lives in `tasks/parallel-tracks.md`.
+The active repo-lane matrix lives in `tasks/parallel-tracks.md`.
+Historical lane playbooks from the prior execution model now live under `archive/tasks-threads/`.

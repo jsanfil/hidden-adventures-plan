@@ -3,8 +3,9 @@
 ## Summary
 
 - Run the modernization as a brand-new rebuild program, not inside the legacy repos.
-- Use this repo as the global control tower for roadmap, release slices, decisions, migration closure, and cross-repo execution status.
-- Treat Slice 1 as complete and use the next milestone to move deliberately into later feature and operational follow-up.
+- Use this repo as the global control tower for roadmap, feature sequencing, decisions, migration closure, and cross-repo execution status.
+- Keep Slice 1 as the only bundled milestone that is already complete.
+- Deliver the rest of the product one major feature at a time instead of planning another large implementation slice.
 
 ## Program Repos
 
@@ -18,10 +19,44 @@
 
 - Run Codex work in parallel across repos, not as multiple active implementation threads in the same repo.
 - Use each repo's `main` branch directly unless there is a repo-specific reason not to.
-- Keep `hidden-adventures-plan` as the control tower for milestone status, release notes, and cross-repo truth.
+- Keep `hidden-adventures-plan` as the control tower for feature status, release notes, and cross-repo truth.
 - Require every repo lane to end each cycle with a short handoff covering what changed, what is now stable, what another repo may rely on, and what remains unresolved.
 - Treat Vitest as the official server verification path and Postman as a manual troubleshooting companion only.
 - Use [workstreams/v0-screen-porting-workflow.md](./workstreams/v0-screen-porting-workflow.md) as the repeatable pattern for any remaining screen port from `v0-hidden-adventures-ui` into `hidden-adventures-ios`.
+
+## Feature Delivery Loop
+
+Every remaining major feature should move through the same implementation loop:
+
+1. Design the feature or view in `v0-hidden-adventures-ui`.
+2. Build the SwiftUI version in `hidden-adventures-ios` with mock or fixture data and iterate until the UI is accepted.
+3. Implement any required server APIs in `hidden-adventures-server`.
+4. Wire the iOS app to the live APIs and keep the fixture-backed path intact for UI coverage.
+
+This loop applies to all post-Slice-1 work unless a feature is purely operational.
+
+## Feature Completion Standard
+
+Each feature is complete only when all of these gates are satisfied:
+
+- `Design accepted`
+  v0 screens, screenshots, and UX notes are explicit enough for implementation.
+- `Mock iOS accepted`
+  SwiftUI fixture-backed implementation is visually accepted, gallery coverage is updated, and parity review against v0 is complete.
+- `Server accepted`
+  Required API additions are implemented and covered by server tests without silently changing completed feature contracts.
+- `Integrated iOS accepted`
+  The app is wired to the live APIs, fixture mode remains intact for UI coverage, and the local happy path works.
+- `QA accepted`
+  Automation and manual QA are recorded for the affected user journey at each step where they apply.
+
+## Tracking Model
+
+- `master-plan.md` is the program rollup and the only place that should summarize status across all major features.
+- Each major feature has its own doc under `features/`.
+- The feature doc is the source of truth for detailed scope, dependencies, gate checklists, and proof of completion.
+- A feature should be marked `Done` in this master plan only after its feature doc shows all completion gates satisfied and the linked repo work is merged and verified.
+- Family-level docs are no longer the active unit of completion tracking.
 
 ## Current Program State
 
@@ -48,14 +83,13 @@
 ### In Progress
 
 - first staging smoke execution from the deployment baseline
-- Slice 2 UX and implementation planning on a deliberate start cadence
+- post-Slice-1 planning restructure from slice-based execution to feature-by-feature delivery
 
-### Not Started / Later
+### Later
 
-- map view implementation
-- Slice 2 create, edit, upload, and visibility execution
-- Slice 3 social engagement expansion
-- Slice 4 support, moderation, beta, and cutover
+- all remaining user-facing feature work listed in the execution order below
+- LightSail staging hardening beyond the first smoke pass
+- production-readiness validation and cutover preparation after the core feature set is complete
 
 ## Program Principles
 
@@ -72,7 +106,7 @@
 - Keep the current production Cognito user pool for live users; do not replace the pool now that the existing pool supports the rebuild auth direction.
 - Use a separate non-production Cognito pool and app client for local manual QA.
 - Treat `users.cognito_subject` as the durable backend identity key and `users.handle` as the public app alias.
-- Use email plus one-time code as the app's visible auth method for both new and existing users.
+- Use email plus one-time code as the current app-visible auth method for both new and existing users until expanded auth is intentionally scheduled.
 - Reuse the current production pool with verified email alias sign-in, `EMAIL_OTP` first-factor support, and a rebuild-capable app client with `ALLOW_USER_AUTH`.
 - Manual-QA Cognito sign-up currently has an observed non-prod pool constraint: after an email address has already been used for sign-up confirmation testing, deleting and recreating that Cognito user may still fail to trigger a new confirmation email to the same address. Until AWS behavior proves otherwise, manual QA for `Get Started` should use a brand-new email address when confirmation delivery fails on a reused address.
 - Gmail can separately filter or suppress confirmation mail from the Cognito sender `no-reply@verificationemail.com`, so a missing code in Gmail should be treated as an email-delivery issue before assuming Cognito failed to send.
@@ -80,28 +114,50 @@
 - `Sign In` is the returning-user path, but the backend remains authoritative after verified auth and may still identify the user as new.
 - New users should create a fresh rebuild account and choose a unique public `handle` during onboarding.
 - Existing linked users, including migrated legacy users, should resolve by `users.cognito_subject` and skip onboarding/profile setup.
-- Username/password and runtime recovery are out of scope for the rebuild app unless live production validation reveals a blocker severe enough to justify a temporary fallback.
-- Face ID and biometrics are a device-side session unlock mechanism after account linking, not a separate Cognito identity mode.
+- Username/password and runtime recovery are out of scope for the current auth baseline unless live production validation reveals a blocker severe enough to justify a temporary fallback.
+- Face ID and biometrics are a device-side session unlock mechanism after account linking in the current baseline, not a separate identity mode.
+- Apple, Google, phone-number auth, passkeys, and richer biometric sign-in are tracked as a dedicated later feature rather than incidental extensions of Slice 1.
 - Bulk Cognito reconciliation remains a historical migration concern: imported legacy users are already linked in the rebuild dataset and runtime auth now depends on those existing `cognito_subject` mappings.
-- Apple and Google federation remain future pool/app-client extensions rather than a Slice 1 requirement.
 - Use deterministic signed test JWTs for automated local regression instead of depending on live Cognito tokens.
+
+## Feature Rollup
+
+| Order | Feature | Status | Feature Doc | Summary |
+| --- | --- | --- | --- | --- |
+| 1 | Create Adventure | Next Up | [features/create-adventure.md](./features/create-adventure.md) | authoring entry, metadata, primary media, location, category, visibility |
+| 2 | Edit Adventure | Not Started | [features/edit-adventure.md](./features/edit-adventure.md) | edit existing adventure content using the authoring foundation |
+| 3 | Map Discovery + Location Search | Not Started | [features/map-discovery-location-search.md](./features/map-discovery-location-search.md) | real map plus vague-location search and 25-mile discovery scope |
+| 4 | Connections + Profile Discovery | Not Started | [features/connections-profile-discovery.md](./features/connections-profile-discovery.md) | searchable profiles, connection states, connection-aware visibility value |
+| 5 | Profile Collections | Not Started | [features/profile-collections.md](./features/profile-collections.md) | authored adventures and favorites on profile surfaces |
+| 6 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows plus saved-state rendering |
+| 7 | Comments | Not Started | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail |
+| 8 | Ratings | Not Started | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates |
+| 9 | Adventure Sharing + Friend Invites | Not Started | [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md) | shareable links, text/social share, contact-based invites |
+| 10 | Expanded Authentication | Not Started | [features/expanded-authentication.md](./features/expanded-authentication.md) | phone, Google, Apple, passkeys, biometrics |
+| 11 | Support, Reporting, And Account Management | Not Started | [features/support-reporting-account-management.md](./features/support-reporting-account-management.md) | support, reports, legal/settings, logout, delete-account |
+
+## Public Interface Expectations
+
+Upcoming features are expected to add or expand public interfaces in these areas:
+
+- `Discovery search`
+  Feed and map will need a location search input, candidate-location selection, and a 25-mile location filter mode in addition to current-location default behavior.
+- `Connections`
+  Server support will be needed for profile search, connection state transitions, and connection-aware profile and adventure reads.
+- `Sharing and invites`
+  App and server support will be needed for shareable adventure links and invite flows; contacts access and text-share behavior should be planned as client capabilities with minimal server dependency unless referral tracking is added later.
+- `Expanded auth`
+  Auth work is a dedicated later feature, not an incidental extension of Slice 1. Federated identity, phone auth, passkeys, and biometrics should be treated as deliberate contract and QA expansions.
 
 ## Active Repo Lanes
 
 | Lane | Status | Primary Repo | Owns | Produces | Depends On |
 | --- | --- | --- | --- | --- | --- |
-| Planning and doc sync | Active | `hidden-adventures-plan` | roadmap truth, slice docs, milestone board, cross-repo status sync | current-state snapshot, lane handoff notes, acceptance criteria | verified repo facts only |
-| Backend and ops | Active | `hidden-adventures-server` | maintain the locked Slice 1 server surface and prepare later staging smoke execution | passing server checks, deploy and smoke notes, contract-safe server follow-up | implemented server endpoints and deploy assets |
-| App integration and acceptance | Active | `hidden-adventures-ios` | preserve Slice 1 runtime stability and support deliberate next-slice planning | local server-backed runtime notes, passing UI harness, follow-up findings | locked Slice 1 contracts |
+| Planning and doc sync | Active | `hidden-adventures-plan` | roadmap truth, feature inventory, milestone board, cross-repo status sync | current-state snapshot, feature sequencing notes, acceptance criteria | verified repo facts only |
+| Backend and ops | Active | `hidden-adventures-server` | maintain the locked Slice 1 server surface, support additive feature APIs, and continue staging baseline follow-up | passing server checks, additive contract notes, deploy and smoke notes | implemented server endpoints and deploy assets |
+| App integration and acceptance | Active | `hidden-adventures-ios` | preserve Slice 1 runtime stability and execute the current scheduled feature loop without breaking fixture preview | local runtime notes, passing UI harness, integration findings | locked Slice 1 contracts plus approved feature contracts |
 | Manual API troubleshooting assets | On demand | `hidden-adventures-api-tests` | Postman requests that mirror the live API for troubleshooting | updated troubleshooting collections and environment notes | server contract changes only |
-| Slice 2 product and UX definition | Active | `v0-hidden-adventures-ui` | create and edit flows, visibility UX, screen-map expansion | implementation-ready Slice 2 visual references and screen maps | Slice 1 scope stability |
-
-## Release Slices
-
-- Slice 1: email OTP auth entry, auth bootstrap, handle selection, new-user onboarding/profile bootstrap, basic feed, profile, detail, image delivery
-- Slice 2: create and edit adventure, uploads, location and category, visibility controls
-- Slice 3: connections, favorites, comments, ratings, profile collections
-- Slice 4: support and reporting, delete-account, moderation and admin, beta, cutover
+| Feature UX definition | Active | `v0-hidden-adventures-ui` | design and refine the next scheduled feature before native implementation starts | approved visual references, screenshots, and screen-map notes | current feature selection and Slice 1 scope stability |
 
 ## Current Implementation Snapshot
 
@@ -132,17 +188,18 @@
 - Slice 1 auth now includes additional runtime behavior beyond bootstrap alone: persisted sessions relaunch directly into Explore/Feed, logout clears the local session and requires email OTP on next entry, and onboarding intent only applies to users who bootstrap as `new_user_needs_handle`.
 - Profile setup now persists meaningful user information beyond handle selection through `GET /api/me/profile` and `PUT /api/me/profile`, covering `displayName`, `bio`, `homeCity`, and `homeRegion`.
 - Deployment artifacts now live in `hidden-adventures-server/deploy/`, including env templates, a staging compose example, and a smoke script for root, health, feed, detail, profile, and optional auth checks.
-- Slice 1 is closed under the current milestone definition, while map view and the first staging smoke execution remain later follow-up work.
+- Slice 1 is closed under the current milestone definition, while the remaining feature inventory and the first staging smoke execution are tracked as later work.
 
-## Next Milestone Focus
+## Later Operational Phase
 
-- keep the repo-based operating model simple: one active implementation thread per repo on `main`
-- begin Slice 2 only when you deliberately choose to move from definition into implementation
-- keep the local desktop environment as the preferred day-to-day workflow while later slice work ramps up
-- preserve Slice 1 stability across signup, login, basic feed, profile, and adventure detail while new work begins
-- plan or execute map view later as separate follow-up work, not as unfinished Slice 1 scope
-- execute the first staging smoke run from the checked-in deployment baseline
-- keep Slice 2 sequencing deliberate so scope, contracts, and navigation changes still flow back through this repo first
+After the core feature inventory is complete:
+
+- run LightSail staging hardening and the full staging smoke cycle
+- prepare production environment, secrets, and rollout safety checks
+- execute final production-readiness validation
+- plan cutover and post-launch follow-up
+
+Operational readiness stays outside the per-feature implementation loop unless a specific feature depends on infrastructure that does not yet exist.
 
 ## Tracking Rules
 
