@@ -39,4 +39,4 @@ For each repo lane:
 - the iOS lane should not infer contracts the server lane has not already locked
 - the server lane should treat Vitest as the official verification path
 - Postman is a manual troubleshooting companion and must stay current only when the live API changes
-- Slice 2 work stays definition-only until Slice 1 live local acceptance is closed
+- Slice 2 work should start deliberately and only after the planning lane updates the program docs for any scope or milestone shift

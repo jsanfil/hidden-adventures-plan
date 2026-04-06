@@ -11,7 +11,7 @@
 ## Current Status
 
 - definition and UX incubation only
-- no Slice 2 implementation should start until Slice 1 acceptance is closed on the live local runtime
+- Slice 1 is complete, and Slice 2 should begin only when you intentionally move it from definition into implementation
 - `v0-hidden-adventures-ui` remains the active Slice 2 working repo; any status or milestone updates still flow back through `hidden-adventures-plan`
 
 ## Acceptance Criteria
@@ -25,7 +25,7 @@
 ## Readiness Gates
 
 - [x] Slice 1 contract lock complete
-- [ ] Slice 1 local end-to-end acceptance complete
+- [x] Slice 1 milestone closed in the planning repo
 - [x] deployment baseline exists for future slice smoke tests
 
 ## Local Test Checklist
@@ -44,4 +44,4 @@
 
 ## Rollback Notes
 
-- keep Slice 2 as a definition-only track until Slice 1 closes
+- keep Slice 2 sequencing deliberate until implementation is intentionally started

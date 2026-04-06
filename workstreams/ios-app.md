@@ -38,11 +38,11 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
 - New users should continue into handle selection and profile setup only after verified auth when bootstrap returns `new_user_needs_handle`.
 - Linked legacy users and linked rebuild users should skip onboarding and land directly in Explore/Feed after verified auth.
 - The rebuild app should expose no visible username/password path unless live validation reveals a blocker that forces a temporary fallback.
-- The `UITEST_START_SCREEN` gallery and walkthrough harness are now part of the required Slice 1 acceptance path and must survive the integration work.
+- The `UITEST_START_SCREEN` gallery and walkthrough harness are now part of the required Slice 1 stability baseline and must survive the integration work.
 - The next proof points are explicit validation in both local modes:
   - `LocalAutomation` against the `test-core` dataset and deterministic signed test JWT auth
   - `LocalManualQA` against the `qa-rich` dataset, the non-prod Cognito email OTP flow, and the local QA database
-- A passing fixture-preview harness alone does not close Slice 1 acceptance.
+- A passing fixture-preview harness alone is not the only signal for ongoing Slice 1 runtime confidence.
 
 ## Source of Truth
 

@@ -4,7 +4,7 @@
 
 - Run the modernization as a brand-new rebuild program, not inside the legacy repos.
 - Use this repo as the global control tower for roadmap, release slices, decisions, migration closure, and cross-repo execution status.
-- Optimize the next milestone around Slice 1 hardening and integration rather than broad early-phase foundation work.
+- Treat Slice 1 as complete and use the next milestone to move deliberately into later feature and operational follow-up.
 
 ## Program Repos
 
@@ -41,17 +41,18 @@
 - Slice 1 contract docs and Postman troubleshooting requests now reflect the implemented server surface and auth model
 - the testing and environment operating model now distinguishes local manual QA from local automation, with separate local databases and manifest-driven fixture packs
 - Slice 1 iOS runtime now defaults to server-backed auth/bootstrap, feed, detail, and profile clients while fixture preview remains explicit for the UI harness
+- Slice 1 is complete under the current milestone definition: signup, login, basic feed, profile, and adventure detail now count as the release goal
 - first deployment baseline is checked in with image versioning guidance, env templates, rollout and rollback notes, and a staging smoke script
 - the worktree-based thread setup has been retired in favor of repo-based execution on `main`
 
 ### In Progress
 
-- local live-runtime Slice 1 acceptance across auth bootstrap, feed, detail, and profile
-- release acceptance documentation for Slice 1
 - first staging smoke execution from the deployment baseline
+- Slice 2 UX and implementation planning on a deliberate start cadence
 
 ### Not Started / Later
 
+- map view implementation
 - Slice 2 create, edit, upload, and visibility execution
 - Slice 3 social engagement expansion
 - Slice 4 support, moderation, beta, and cutover
@@ -90,14 +91,14 @@
 | Lane | Status | Primary Repo | Owns | Produces | Depends On |
 | --- | --- | --- | --- | --- | --- |
 | Planning and doc sync | Active | `hidden-adventures-plan` | roadmap truth, slice docs, milestone board, cross-repo status sync | current-state snapshot, lane handoff notes, acceptance criteria | verified repo facts only |
-| Backend and ops | Active | `hidden-adventures-server` | locked Slice 1 server surface, local acceptance support, staging smoke execution | passing server checks, deploy and smoke notes, contract-safe server follow-up | implemented server endpoints and deploy assets |
-| App integration and acceptance | Active | `hidden-adventures-ios` | live-runtime validation, fallback inventory, UI-harness stability | local server-backed runtime notes, passing UI harness, live acceptance findings | locked Slice 1 contracts |
+| Backend and ops | Active | `hidden-adventures-server` | maintain the locked Slice 1 server surface and prepare later staging smoke execution | passing server checks, deploy and smoke notes, contract-safe server follow-up | implemented server endpoints and deploy assets |
+| App integration and acceptance | Active | `hidden-adventures-ios` | preserve Slice 1 runtime stability and support deliberate next-slice planning | local server-backed runtime notes, passing UI harness, follow-up findings | locked Slice 1 contracts |
 | Manual API troubleshooting assets | On demand | `hidden-adventures-api-tests` | Postman requests that mirror the live API for troubleshooting | updated troubleshooting collections and environment notes | server contract changes only |
 | Slice 2 product and UX definition | Active | `v0-hidden-adventures-ui` | create and edit flows, visibility UX, screen-map expansion | implementation-ready Slice 2 visual references and screen maps | Slice 1 scope stability |
 
 ## Release Slices
 
-- Slice 1: email OTP auth entry, auth bootstrap, handle selection, new-user onboarding/profile bootstrap, feed, map, detail, image delivery
+- Slice 1: email OTP auth entry, auth bootstrap, handle selection, new-user onboarding/profile bootstrap, basic feed, profile, detail, image delivery
 - Slice 2: create and edit adventure, uploads, location and category, visibility controls
 - Slice 3: connections, favorites, comments, ratings, profile collections
 - Slice 4: support and reporting, delete-account, moderation and admin, beta, cutover
@@ -126,21 +127,22 @@
 - The Postman Native Git repo includes checked-in Slice 1 troubleshooting requests under `postman/collections/hidden-adventures-slice-1/` that use bearer auth for connected-viewer paths instead of `viewerHandle`.
 - `handle` is the public username for profile lookup and display; it is stable in v1 and separate from both `displayName` and Cognito `username`.
 - A dedicated `v0-hidden-adventures-ui` repo exists as the Slice 1 visual design exploration and reference source.
-- `hidden-adventures-ios` contains a native SwiftUI Slice 1 UI flow for welcome, unified email-auth entry, code verification, new-user onboarding/profile setup, unified explore feed and map, and adventure detail.
+- `hidden-adventures-ios` contains a native SwiftUI Slice 1 UI flow for welcome, unified email-auth entry, code verification, new-user onboarding/profile setup, basic feed, profile, and adventure detail.
 - The iOS repo now supports explicit `LocalManualQA`, `LocalAutomation`, and `Production` server modes, while the XCTest-driven gallery and walkthrough harness remain in explicit fixture-preview mode for deterministic screenshots and acceptance captures.
 - Slice 1 auth now includes additional runtime behavior beyond bootstrap alone: persisted sessions relaunch directly into Explore/Feed, logout clears the local session and requires email OTP on next entry, and onboarding intent only applies to users who bootstrap as `new_user_needs_handle`.
 - Profile setup now persists meaningful user information beyond handle selection through `GET /api/me/profile` and `PUT /api/me/profile`, covering `displayName`, `bio`, `homeCity`, and `homeRegion`.
 - Deployment artifacts now live in `hidden-adventures-server/deploy/`, including env templates, a staging compose example, and a smoke script for root, health, feed, detail, profile, and optional auth checks.
-- The remaining Slice 1 gap is acceptance closure rather than basic implementation: the live runtime still needs explicit happy-path validation for new-user onboarding, linked-user direct sign-in, persisted session relaunch, and the documented staging smoke path still needs its first real execution.
+- Slice 1 is closed under the current milestone definition, while map view and the first staging smoke execution remain later follow-up work.
 
 ## Next Milestone Focus
 
 - keep the repo-based operating model simple: one active implementation thread per repo on `main`
-- validate the local manual-QA happy path across email OTP auth entry, auth bootstrap, onboarding, feed, detail, and profile using the dedicated non-prod Cognito flow
-- validate the local automation happy path against the deterministic `test-core` dataset and test JWT auth
+- begin Slice 2 only when you deliberately choose to move from definition into implementation
+- keep the local desktop environment as the preferred day-to-day workflow while later slice work ramps up
+- preserve Slice 1 stability across signup, login, basic feed, profile, and adventure detail while new work begins
+- plan or execute map view later as separate follow-up work, not as unfinished Slice 1 scope
 - execute the first staging smoke run from the checked-in deployment baseline
-- close the remaining Slice 1 acceptance notes around manual QA for new-user onboarding, linked-user sign-in, persisted-session relaunch, authenticated media delivery, and map behavior
-- keep Slice 2 in UX and spec definition only until Slice 1 acceptance is closed
+- keep Slice 2 sequencing deliberate so scope, contracts, and navigation changes still flow back through this repo first
 
 ## Tracking Rules
 

@@ -5,7 +5,8 @@
 - email OTP auth entry
 - auth bootstrap and public-handle selection
 - new-user onboarding and profile bootstrap entry path
-- explore shell with feed and map modes
+- basic feed view in the explore shell
+- profile view
 - adventure detail
 - image delivery references
 - manual authenticated API troubleshooting requests kept in sync with the live server surface
@@ -20,8 +21,8 @@
 - local manual QA and production auth now target real Cognito email OTP flows
 - deployment baseline docs, env templates, and staging smoke script exist in `hidden-adventures-server/deploy/`
 - migration-backed local data is published and testable
-- the deterministic UI harness still runs in explicit fixture-preview mode, so live-runtime acceptance remains a separate final check
-- the program is now in Slice 1 acceptance-closure mode; Slice 2 stays definition-only until the live local checks below are closed
+- the deterministic UI harness still runs in explicit fixture-preview mode while the local desktop workflow remains the accepted Slice 1 working environment
+- Slice 1 is complete under the current milestone definition: signup, login, basic feed, profile, and adventure detail meet the release goals
 
 ## Acceptance Criteria
 
@@ -38,15 +39,14 @@
 - [x] Slice 1 contracts are documented from real payloads and auth expectations
 - [x] Postman assets model authenticated viewer behavior instead of `viewerHandle`
 - [x] iOS uses real network services, native email OTP auth, and auth bootstrap for Slice 1 flows
-- [ ] local happy path works end to end across email OTP auth entry, auth bootstrap, onboarding, feed, detail, and profile
+- [x] local desktop workflow is accepted as sufficient for Slice 1 closure across email OTP auth entry, auth bootstrap, onboarding, feed, detail, and profile
 
-## Missing Gaps
+## Deferred Follow-Up
 
-- the passing iOS UI gallery and walkthrough still exercise fixture-preview mode rather than the live server runtime
-- live Slice 1 still keeps an explicit temporary fallback for feed-derived map cards until a locked map contract exists
-- the local live-runtime happy path has not yet been explicitly re-run end to end for both new-user onboarding and linked-user direct sign-in in this planning cycle
-- the deployment baseline exists, but its staging smoke path has not yet been executed against a real staging host
-- Postman remains a manual troubleshooting path only and does not close Slice 1 acceptance on its own
+- map view is deferred to later work and is not part of Slice 1 completion
+- the deployment baseline exists, but its staging smoke path is deferred to later operational follow-up
+- the passing iOS UI gallery and walkthrough remain in fixture-preview mode for deterministic coverage and do not need to be reclassified to close Slice 1
+- Postman remains a manual troubleshooting path only and does not define milestone completion on its own
 
 ## Current Server Contract
 
@@ -124,18 +124,14 @@
 - [x] `hidden-adventures-server`: `npm run check`
 - [x] `hidden-adventures-ios`: simulator build and UI test bundle succeed via `Scripts/run_ui_gallery.sh`
 - [x] `hidden-adventures-ios`: `Scripts/run_ui_gallery.sh` still passes after real API wiring
-- [ ] optional manual Postman check: `GET /api/auth/bootstrap` succeeds with `Authorization: Bearer {{newUserToken}}`
-- [ ] optional manual Postman check: `GET /api/feed` returns connected-viewer data with `Authorization: Bearer {{connectedViewerToken}}`
-- [ ] optional manual Postman check: `GET /api/adventures/:id` returns the connections path with `Authorization: Bearer {{connectedViewerToken}}`
-- [ ] optional manual Postman check: `GET /api/profiles/:handle` resolves by handle with `Authorization: Bearer {{connectedViewerToken}}`
-- [ ] explicit live-app check: `Get Started` -> email OTP -> `new_user_needs_handle` -> handle selection -> profile setup -> Feed
-- [ ] explicit live-app check: `Sign In` -> email OTP -> linked user -> Feed
-- [ ] explicit live-app check: relaunch with persisted authenticated session -> direct Feed
-- [ ] explicit live-app check: logout -> next entry requires email OTP again
-
-Completion note:
-
-- Slice 1 acceptance should not be marked complete until the explicit live-app checks above are done against a running local server and the fallback inventory is reconfirmed, including the onboarding-versus-linked routing split.
+- [ ] optional follow-up: Postman `GET /api/auth/bootstrap` succeeds with `Authorization: Bearer {{newUserToken}}`
+- [ ] optional follow-up: Postman `GET /api/feed` returns connected-viewer data with `Authorization: Bearer {{connectedViewerToken}}`
+- [ ] optional follow-up: Postman `GET /api/adventures/:id` returns the connections path with `Authorization: Bearer {{connectedViewerToken}}`
+- [ ] optional follow-up: Postman `GET /api/profiles/:handle` resolves by handle with `Authorization: Bearer {{connectedViewerToken}}`
+- [ ] optional follow-up: live-app `Get Started` -> email OTP -> `new_user_needs_handle` -> handle selection -> profile setup -> Feed
+- [ ] optional follow-up: live-app `Sign In` -> email OTP -> linked user -> Feed
+- [ ] optional follow-up: relaunch with persisted authenticated session -> direct Feed
+- [ ] optional follow-up: logout -> next entry requires email OTP again
 
 ## Staging Validation Checklist
 

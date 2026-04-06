@@ -7,10 +7,10 @@ Use this file to make repo-based Codex execution explicit and to keep cross-repo
 | Lane | Owner Repo | Current Status | Immediate Goal | Handoff Artifact | Gate To Close |
 | --- | --- | --- | --- | --- | --- |
 | Planning and doc sync | `hidden-adventures-plan` | Active | keep the roadmap, release docs, and milestone language aligned with verified repo facts | updated roadmap, slice docs, workstream notes | linked docs merged and consistent |
-| Backend and ops | `hidden-adventures-server` | Active | support Slice 1 acceptance closure and execute the first real staging smoke run | passing server checks, staging smoke notes, deploy artifact status | local acceptance support and first staging smoke both recorded |
-| App integration and acceptance | `hidden-adventures-ios` | Active | validate the live Slice 1 runtime against the local server without breaking the fixture-preview UI harness | live-runtime notes, fallback inventory, passing UI harness results | local happy path works against the real server |
+| Backend and ops | `hidden-adventures-server` | Active | maintain the locked Slice 1 server surface and execute the first real staging smoke run later | passing server checks, staging smoke notes, deploy artifact status | later staging smoke execution recorded |
+| App integration and acceptance | `hidden-adventures-ios` | Active | preserve Slice 1 runtime stability without breaking the fixture-preview UI harness | runtime notes, fallback inventory, passing UI harness results | local runtime remains stable for current slice work |
 | Manual API troubleshooting assets | `hidden-adventures-api-tests` | On demand | keep Postman troubleshooting requests aligned only when the live Slice 1 API changes | updated request collections and environment notes | troubleshooting assets match the current server surface |
-| Slice 2 UX and spec | `v0-hidden-adventures-ui` | Definition only | refine create, edit, upload, visibility, and expanded screen map without starting implementation | approved visual references and screen maps | Slice 2 can begin later without silently changing Slice 1 contracts |
+| Slice 2 UX and spec | `v0-hidden-adventures-ui` | Definition only | refine create, edit, upload, visibility, and expanded screen map until implementation is intentionally started | approved visual references and screen maps | Slice 2 can begin later without silently changing Slice 1 contracts |
 
 ## Lane Rules
 
@@ -19,7 +19,7 @@ Use this file to make repo-based Codex execution explicit and to keep cross-repo
 - `hidden-adventures-plan` is the only repo that should declare milestone status and cross-repo truth.
 - Slice 1 integration work must consume the locked Slice 1 contract notes, use bearer-auth viewer identity, and must not reintroduce `viewerHandle` assumptions.
 - Vitest is the official server verification path. Postman remains a manual troubleshooting companion only.
-- Slice 2 work may continue only as UX and spec definition until Slice 1 local live-runtime acceptance is closed.
+- Slice 2 work should start deliberately rather than implicitly, but it is no longer blocked by outdated Slice 1 closeout language.
 - Data migration is no longer an active day-to-day lane. Treat it as closed work with cutover-validation follow-up only.
 
 ## Stepwise Milestones
@@ -27,9 +27,9 @@ Use this file to make repo-based Codex execution explicit and to keep cross-repo
 1. Documentation reset to the repo-based operating model
 2. Slice 1 contract lock held steady on the implemented server surface
 3. Slice 1 iOS real integration held steady with the fixture-preview harness preserved
-4. Slice 1 end-to-end local acceptance verified against the live local server
+4. Slice 1 milestone definition updated and closed in the planning repo
 5. First real staging smoke execution recorded from the checked-in deployment baseline
-6. Slice 2 implementation start after Slice 1 acceptance closure
+6. Slice 2 implementation start when intentionally scheduled
 
 ## Standard Handoff Notes
 

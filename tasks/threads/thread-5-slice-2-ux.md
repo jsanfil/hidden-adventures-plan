@@ -6,7 +6,7 @@
 
 ## Mission
 
-Move Slice 2 definition forward while Slice 1 acceptance closes. Produce implementation-ready create, edit, upload, and visibility UX references without silently rewriting Slice 1 scope or contracts.
+Move Slice 2 definition forward after Slice 1 closure. Produce implementation-ready create, edit, upload, and visibility UX references without silently rewriting Slice 1 scope or contracts.
 
 ## Allowed Scope
 
@@ -39,7 +39,7 @@ Move Slice 2 definition forward while Slice 1 acceptance closes. Produce impleme
 ## Required Checks
 
 - Slice 2 definitions do not contradict the current visibility model
-- Slice 2 work is clearly marked definition-only until Slice 1 closes
+- Slice 2 work is clearly marked definition-first until implementation is intentionally started
 - any required contract additions are called out explicitly rather than assumed
 
 ## Startup Prompt
