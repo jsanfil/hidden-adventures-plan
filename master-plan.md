@@ -21,6 +21,7 @@
 - Keep `hidden-adventures-plan` as the control tower for milestone status, release notes, and cross-repo truth.
 - Require every repo lane to end each cycle with a short handoff covering what changed, what is now stable, what another repo may rely on, and what remains unresolved.
 - Treat Vitest as the official server verification path and Postman as a manual troubleshooting companion only.
+- Use [workstreams/v0-screen-porting-workflow.md](./workstreams/v0-screen-porting-workflow.md) as the repeatable pattern for any remaining screen port from `v0-hidden-adventures-ui` into `hidden-adventures-ios`.
 
 ## Current Program State
 

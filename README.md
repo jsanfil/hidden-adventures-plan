@@ -23,6 +23,7 @@ This repo is the global source of truth for the Hidden Adventures rebuild.
 - Architectural decisions live under [decisions](./decisions).
 - Release definitions live under [releases](./releases).
 - Migration notes live under [migration](./migration).
+- Use [workstreams/v0-screen-porting-workflow.md](./workstreams/v0-screen-porting-workflow.md) as the repeatable playbook for any remaining screen port from `v0-hidden-adventures-ui` into `hidden-adventures-ios`.
 - Active execution should use both Markdown and your issue board.
 
 ## Recommended Cadence

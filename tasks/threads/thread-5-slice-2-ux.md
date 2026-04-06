@@ -28,6 +28,7 @@ Move Slice 2 definition forward while Slice 1 acceptance closes. Produce impleme
 - current Slice 1 route map
 - visibility-model decision
 - current v0 visual language
+- [workstreams/v0-screen-porting-workflow.md](../../workstreams/v0-screen-porting-workflow.md) for the standard artifact and handoff pattern between v0, plan, and iOS
 
 ## Deliverables
 

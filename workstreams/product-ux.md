@@ -62,12 +62,16 @@ Redesign Hidden Adventures around modern journeys, strong visual identity, and a
 
 ## v0-to-SwiftUI Workflow
 
+Use [workstreams/v0-screen-porting-workflow.md](./v0-screen-porting-workflow.md) as the standard cross-repo workflow for every remaining screen.
+
 - Design and refine approved visuals in `v0-hidden-adventures-ui`.
+- For each screen, hand off the full artifact set: primary React screen, supporting components, screenshots under `docs/screenhots`, and the matching UX spec.
 - If a v0 change affects navigation, scope, or interaction model beyond visual fidelity, update this plan repo before native implementation.
-- Port approved screens natively into `hidden-adventures-ios`.
+- Port approved screens natively into `hidden-adventures-ios` using a mock-first native screen model and deterministic gallery coverage.
 - Add or update stable accessibility identifiers for any visually critical UI touched by the change.
 - Validate native parity with `hidden-adventures-ios/Scripts/run_ui_gallery.sh`.
-- Compare generated iOS screenshots against the v0 screen or approved screenshot reference before closing a parity task.
+- Compare generated iOS screenshots against the v0 screenshot references before closing a parity task.
+- Record any intentional native divergence explicitly instead of allowing it to remain implicit.
 
 ## Native Behavior Override
 

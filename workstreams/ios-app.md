@@ -64,12 +64,16 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
 
 ## v0-to-SwiftUI Workflow
 
+Use [workstreams/v0-screen-porting-workflow.md](./v0-screen-porting-workflow.md) as the default playbook for all remaining screen ports.
+
 - Pull visual direction and screen composition from `v0-hidden-adventures-ui`.
+- Gather the full screen artifact set before implementation starts: primary React screen, supporting React components, screenshots under `docs/screenhots`, and the matching UX spec.
 - If a v0 change implies a product or navigation change, update the plan repo before implementing it natively.
-- Implement approved screens in SwiftUI inside `hidden-adventures-ios`.
+- Implement approved screens in SwiftUI inside `hidden-adventures-ios` against a native screen model and fixture-backed gallery path first.
 - Add or update stable `accessibilityIdentifier` coverage for visually critical or interactive elements touched by the change.
 - Validate every parity change with `Scripts/run_ui_gallery.sh`.
-- Compare generated iOS screenshots against the matching v0 screen or approved screenshot reference before closing the work.
+- Compare generated iOS screenshots against the matching v0 screenshot references before closing the work.
+- Hook live data up only after visual parity is accepted, and keep fixture mode intact after integration.
 
 ## Testing
 
