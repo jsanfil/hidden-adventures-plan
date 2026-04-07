@@ -120,8 +120,7 @@ Notes:
 - `id uuid primary key`
 - `author_user_id uuid not null references users(id)`
 - `title text not null`
-- `summary text null`
-- `body text null`
+- `description text null`
 - `category_slug text null`
 - `visibility adventure_visibility not null default 'private'`
 - `status adventure_status not null default 'published'`

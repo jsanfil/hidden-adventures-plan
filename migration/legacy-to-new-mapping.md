@@ -140,8 +140,7 @@ Target mapping:
 | `_id` | import map only | keep in audit map; do not reuse as primary key |
 | `author` | `adventures.author_user_id` | resolve through `legacy_username -> users.id` |
 | `name` | `adventures.title` | required |
-| `desc` | `adventures.body` | primary description field for phase 1 |
-| derived from `desc` | `adventures.summary` | optional import-time summary or leave null |
+| `desc` | `adventures.description` | primary description field for phase 1 |
 | `category` | `adventures.category_slug` | normalize through category mapping table below |
 | `access` | `adventures.visibility` | normalize through visibility mapping below |
 | archive state | `adventures.status` | import as `published` |
