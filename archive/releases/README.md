@@ -1,5 +1,7 @@
 # Historical Release Slices
 
+Historical only. These docs are preserved for context and must not be used for current status, sequencing, or repo-next decisions.
+
 These docs are preserved for historical context from the earlier slice-based planning model.
 
 Archived files:

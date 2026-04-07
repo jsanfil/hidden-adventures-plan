@@ -6,6 +6,7 @@
 - Use this repo as the global control tower for roadmap, feature sequencing, decisions, migration closure, and cross-repo execution status.
 - Keep Slice 1 as the only bundled milestone that is already complete.
 - Deliver the rest of the product one major feature at a time instead of planning another large implementation slice.
+- Treat `archive/` as historical context only. It is not authoritative for current status, sequencing, or repo-next decisions.
 
 ## Program Repos
 
@@ -17,12 +18,25 @@
 
 ## Execution Model
 
-- Run Codex work in parallel across repos, not as multiple active implementation threads in the same repo.
+- Run Codex work in parallel across repos, and allow multiple active threads or worktrees inside a repo when scopes are explicit and non-conflicting.
 - Use each repo's `main` branch directly unless there is a repo-specific reason not to.
 - Keep `hidden-adventures-plan` as the control tower for feature status, release notes, and cross-repo truth.
 - Require every repo lane to end each cycle with a short handoff covering what changed, what is now stable, what another repo may rely on, and what remains unresolved.
 - Treat Vitest as the official server verification path and Postman as a manual troubleshooting companion only.
 - Use [workstreams/v0-screen-porting-workflow.md](./workstreams/v0-screen-porting-workflow.md) as the repeatable pattern for any remaining screen port from `v0-hidden-adventures-ui` into `hidden-adventures-ios`.
+
+## Planning Model
+
+The active operating model separates three different planning questions:
+
+- `Program Priority Order`
+  The canonical feature sequence for product delivery.
+- `Repo-Autonomous Next Work`
+  The allowed next work for each repo, including preparatory work that may happen ahead of the top-priority feature when it is additive, assumption-driven, and does not silently redefine accepted shipped scope.
+- `Active Threads`
+  The currently open execution units, including optional parallel threads or separate git worktrees inside the same repo. These are coordination artifacts, not the source of truth for sequencing.
+
+Use `master-plan.md`, `features/`, `workstreams/`, and `tasks/parallel-tracks.md` for current planning decisions. Do not use `archive/` to decide what is next.
 
 ## Feature Delivery Loop
 
@@ -33,7 +47,7 @@ Every remaining major feature should move through the same implementation loop:
 3. Implement any required server APIs in `hidden-adventures-server`.
 4. Wire the iOS app to the live APIs and keep the fixture-backed path intact for UI coverage.
 
-This loop applies to all post-Slice-1 work unless a feature is purely operational.
+This loop is the recommended ship path for post-Slice-1 work unless a feature is purely operational. It does not forbid additive repo-local preparatory work ahead of the currently shipping feature.
 
 ## Feature Completion Standard
 
@@ -55,8 +69,10 @@ Each feature is complete only when all of these gates are satisfied:
 - `master-plan.md` is the program rollup and the only place that should summarize status across all major features.
 - Each major feature has its own doc under `features/`.
 - The feature doc is the source of truth for detailed scope, dependencies, gate checklists, and proof of completion.
+- `tasks/parallel-tracks.md` is the source of truth for repo backlog rules and any optional registry of active threads or worktrees.
 - A feature should be marked `Done` in this master plan only after its feature doc shows all completion gates satisfied and the linked repo work is merged and verified.
 - Family-level docs are no longer the active unit of completion tracking.
+- `archive/` is historical only and must not be used for current status, sequencing, or repo-next decisions.
 
 ## Current Program State
 
@@ -135,6 +151,31 @@ Each feature is complete only when all of these gates are satisfied:
 | 9 | Adventure Sharing + Friend Invites | Not Started | [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md) | shareable links, text/social share, contact-based invites |
 | 10 | Expanded Authentication | Not Started | [features/expanded-authentication.md](./features/expanded-authentication.md) | phone, Google, Apple, passkeys, biometrics |
 | 11 | Support, Reporting, And Account Management | Not Started | [features/support-reporting-account-management.md](./features/support-reporting-account-management.md) | support, reports, legal/settings, logout, delete-account |
+
+## Program Priority Order
+
+- Product delivery should continue in the feature order listed above.
+- `Create Adventure` remains the first ship-priority feature after completed Slice 1 work.
+- Repos may perform preparatory work ahead of that ship order when the work is additive, assumptions are documented, and accepted feature behavior is not redefined.
+
+## Repo-Autonomous Next Work
+
+- `hidden-adventures-plan`
+  Keep the feature order, repo backlog rules, thread registry, and archive guardrails current.
+- `v0-hidden-adventures-ui`
+  Prioritize design work for the top ship-priority feature first, but later-feature exploration is allowed when clearly marked provisional.
+- `hidden-adventures-ios`
+  Prioritize accepted-design fixture-backed implementation for the current ship feature, but reusable infrastructure and non-binding groundwork for later features may move ahead when they do not force product decisions.
+- `hidden-adventures-server`
+  May work ahead across multiple future features with additive contracts, schema, endpoints, and tests, provided assumptions are documented and accepted contracts are not broken.
+- `hidden-adventures-api-tests`
+  Follow only live server behavior. Do not publish speculative troubleshooting assets for future APIs that are not live yet.
+
+## Active Threads
+
+- Active execution can run as multiple parallel threads or git worktrees, including multiple threads inside the same repo.
+- Active threads must stay inside documented scope and should map back to the program priority order, feature docs, and repo backlog rules.
+- Use [tasks/parallel-tracks.md](./tasks/parallel-tracks.md) for the current thread registry pattern and [tasks/thread-template.md](./tasks/thread-template.md) when creating or recording a thread.
 
 ## Public Interface Expectations
 

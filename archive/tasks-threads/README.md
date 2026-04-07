@@ -1,6 +1,8 @@
 # Codex Repo Lane Ops
 
-Use these docs to run Codex work by repo, not by worktree.
+Historical only. These archived lane briefs are preserved for context and must not be used to decide current repo-next work, current thread structure, or program sequencing.
+
+These docs describe the retired repo-lane model that was used before the current repo-autonomous planning rules.
 
 ## Current Operating Model
 
@@ -18,9 +20,9 @@ Use these docs to run Codex work by repo, not by worktree.
 - `thread-4-deployment-baseline.md`: server deployment and staging execution lane
 - `thread-5-slice-2-ux.md`: Slice 2 UX and screen-map definition work in `v0-hidden-adventures-ui`
 
-Server note:
+Historical server note:
 
-- `thread-2-slice-1-contract-lock.md` and `thread-4-deployment-baseline.md` both target `hidden-adventures-server`. Do not run them as separate active implementation threads at the same time. Reuse the one active server thread and switch phase focus as needed.
+- `thread-2-slice-1-contract-lock.md` and `thread-4-deployment-baseline.md` both targeted `hidden-adventures-server` in the retired model. That old constraint is preserved here for context only.
 
 ## How To Use In Codex App
 

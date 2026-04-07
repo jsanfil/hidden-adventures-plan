@@ -11,6 +11,7 @@ Use one doc per feature. Each feature doc owns:
 - QA proof and completion evidence
 
 `master-plan.md` is the rollup. These feature docs are the detailed source of done.
+These docs also distinguish ship-required work from optional repo-local prework that may happen earlier.
 
 Current active docs:
 
@@ -26,4 +27,4 @@ Current active docs:
 - `expanded-authentication.md`
 - `support-reporting-account-management.md`
 
-Historical family-level and slice-based planning docs have been moved to `archive/`.
+Historical family-level and slice-based planning docs have been moved to `archive/` and are not authoritative for current planning.

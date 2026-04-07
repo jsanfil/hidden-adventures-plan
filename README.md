@@ -23,8 +23,9 @@ This repo is the global source of truth for the Hidden Adventures rebuild.
 - Workstream details live under [workstreams](./workstreams).
 - Architectural decisions live under [decisions](./decisions).
 - Active feature-family definitions live under [features](./features).
-- Historical slice and thread docs live under [archive](./archive).
+- Historical slice and thread docs live under [archive](./archive) and are not authoritative for current planning or repo-next decisions.
 - Migration notes live under [migration](./migration).
+- Repo-autonomous next-work rules and optional active thread tracking live under [tasks/parallel-tracks.md](./tasks/parallel-tracks.md).
 - Use [workstreams/v0-screen-porting-workflow.md](./workstreams/v0-screen-porting-workflow.md) as the repeatable playbook for any remaining screen port from `v0-hidden-adventures-ui` into `hidden-adventures-ios`.
 - Active execution should use both Markdown and your issue board.
 

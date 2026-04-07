@@ -1,11 +1,17 @@
 # Parallel Tracks
 
-Use this file to make repo-based Codex execution explicit and to keep cross-repo handoffs small, testable, and reviewable.
+Use this file to make repo-based Codex execution explicit, define what each repo is allowed to do next, and keep parallel thread scopes small, testable, and reviewable.
 
 ## Current Scheduled Feature
 
 - `Create Adventure`
 - Detailed tracking doc: `features/create-adventure.md`
+
+## How To Use This File
+
+- Use `Current Scheduled Feature` to answer what the program intends to ship first.
+- Use `Repo Backlog Rules` to answer what a given repo is allowed to work on next, including preparatory work ahead of the current scheduled feature.
+- Use `Current Active Threads` only as a coordination registry for open threads or worktrees. It does not override the program priority order or feature docs.
 
 ## Standard Feature Loop
 
@@ -16,27 +22,39 @@ Every post-Slice-1 feature should move through the same repo-aware progression:
 3. required API work in `hidden-adventures-server`
 4. real iOS integration and QA without breaking the fixture-preview harness
 
-## Active Repo Lane Matrix
+This is the recommended ship path for a feature. It does not forbid additive repo-local groundwork ahead of the current scheduled feature.
 
-| Lane | Owner Repo | Current Status | Immediate Goal | Handoff Artifact | Gate To Close |
-| --- | --- | --- | --- | --- | --- |
-| Planning and doc sync | `hidden-adventures-plan` | Active | keep the roadmap, rollup status, and feature docs aligned with verified repo facts | updated roadmap, feature docs, workstream notes | linked docs merged and consistent |
-| Backend and ops | `hidden-adventures-server` | Active | maintain the locked Slice 1 server surface, then add only the APIs needed for the active feature | passing server checks, contract notes, deploy artifact status | active feature server gate passes |
-| App integration and acceptance | `hidden-adventures-ios` | Active | preserve Slice 1 runtime stability while executing the active feature loop without breaking fixture preview | runtime notes, passing UI harness results, integration findings | active feature iOS gates pass |
-| Manual API troubleshooting assets | `hidden-adventures-api-tests` | On demand | keep Postman troubleshooting requests aligned only when the live Slice 1 API changes | updated request collections and environment notes | troubleshooting assets match the current server surface |
-| Feature UX definition | `v0-hidden-adventures-ui` | Active for scheduled feature only | define the next feature clearly enough for native implementation and contract planning | approved visual references, screenshots, and screen-map notes | active feature design gate passes |
+## Repo Backlog Rules
 
-## Lane Rules
+| Repo | Primary Role | Allowed Next Work | Not Allowed To Assume | Handoff Artifact |
+| --- | --- | --- | --- | --- |
+| `hidden-adventures-plan` | planning source of truth | maintain feature order, repo backlog rules, thread registry, and completion criteria; update docs when repo facts or sequencing assumptions change | implementation-thread state as the authority for program status | updated roadmap, feature docs, task and thread notes |
+| `v0-hidden-adventures-ui` | design and UX definition | prioritize design for the current scheduled feature; explore later features when clearly marked provisional and non-binding | that provisional design means a later feature is now active or approved to ship | screenshots, UX notes, screen-map references |
+| `hidden-adventures-ios` | fixture-backed UI, live integration, and acceptance | build the scheduled feature after design is accepted; prepare reusable app infrastructure or non-binding groundwork for later features when it does not force product decisions | unapproved UX, speculative server contracts, or later-feature groundwork as shipped scope | passing UI harness results, runtime notes, integration findings |
+| `hidden-adventures-server` | additive backend contracts and operational follow-up | maintain accepted contracts, build additive APIs or schema ahead for future features, and document assumptions for any ahead-of-order work | that ahead-of-time implementation changes ship priority, UX decisions, or accepted existing contracts | passing checks, contract notes, migration or deploy notes |
+| `hidden-adventures-api-tests` | live troubleshooting assets | update Postman only for live server behavior or accepted current contract changes | speculative future APIs that are not live yet | updated troubleshooting requests and environment notes |
 
-- Parallelism is allowed across repos, not as multiple active implementation threads in the same repo.
-- Each active lane should work on the owning repo's `main` branch unless there is a repo-specific reason to do otherwise.
+## Repo Rules
+
+- Parallelism is allowed across repos and within a repo.
+- Multiple active threads or git worktrees in the same repo are allowed when scopes are explicit, narrow, and non-conflicting.
+- Each active thread should work on the owning repo's `main` branch unless there is a repo-specific reason to do otherwise.
 - `hidden-adventures-plan` is the only repo that should declare milestone status and cross-repo truth.
 - Slice 1 integration work must consume the locked Slice 1 contract notes, use bearer-auth viewer identity, and must not reintroduce `viewerHandle` assumptions.
 - Vitest is the official server verification path. Postman remains a manual troubleshooting companion only.
-- Post-Slice-1 work should be scheduled feature by feature rather than opened as a broad implementation slice.
-- Only one major product feature should be active in the delivery loop at a time unless the planning lane explicitly schedules overlap.
+- Post-Slice-1 product delivery still follows the program feature order even when repos prepare later work in advance.
+- Ahead-of-order server work must stay additive, document assumptions, and must not silently redefine accepted shipped behavior.
 - Data migration is no longer an active day-to-day lane. Treat it as closed work with cutover-validation follow-up only.
 - Staging and production readiness stay outside the feature loop until the core feature inventory is complete, except for the already checked-in deployment baseline follow-up.
+- Historical thread docs under `archive/tasks-threads/` are not authoritative for current repo-next decisions.
+
+## Current Active Threads
+
+This section is optional. Record only the active threads or worktrees that benefit from coordination visibility.
+
+| Thread Or Worktree | Repo | Scope | Related Feature | Blocking Status | Notes |
+| --- | --- | --- | --- | --- | --- |
+| _none recorded_ | - | - | - | - | Add entries as needed using `tasks/thread-template.md`. |
 
 ## Execution Order
 
