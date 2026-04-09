@@ -6,7 +6,7 @@ Deliver the real map discovery experience and add location search that can drive
 
 ## Status
 
-- Program status: `Not Started`
+- Program status: `In Progress`
 - Completion source of truth: this document
 
 ## Scope

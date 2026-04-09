@@ -4,8 +4,8 @@ Use this file to make repo-based Codex execution explicit, define what each repo
 
 ## Current Scheduled Feature
 
-- `Create Adventure`
-- Detailed tracking doc: `features/create-adventure.md`
+- `Map Discovery + Location Search`
+- Detailed tracking doc: `features/map-discovery-location-search.md`
 
 ## How To Use This File
 
@@ -59,16 +59,16 @@ This section is optional. Record only the active threads or worktrees that benef
 ## Execution Order
 
 1. Create Adventure
-2. Edit Adventure
-3. Map Discovery + Location Search
-4. Connections + Profile Discovery
-5. Profile Collections
-6. Favorites
-7. Comments
-8. Ratings
-9. Adventure Sharing + Friend Invites
-10. Expanded Authentication
-11. Support, Reporting, And Account Management
+2. Map Discovery + Location Search
+3. Connections + Profile Discovery
+4. Profile Collections
+5. Favorites
+6. Comments
+7. Ratings
+8. Adventure Sharing + Friend Invites
+9. Expanded Authentication
+10. Support, Reporting, And Account Management
+11. Edit Adventure
 12. Later operational phase for staging hardening and production readiness
 
 ## Standard Handoff Notes

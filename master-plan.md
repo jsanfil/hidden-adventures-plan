@@ -95,6 +95,7 @@ Each feature is complete only when all of these gates are satisfied:
 - Slice 1 is complete under the current milestone definition: signup, login, basic feed, profile, and adventure detail now count as the release goal
 - first deployment baseline is checked in with image versioning guidance, env templates, rollout and rollback notes, and a staging smoke script
 - the worktree-based thread setup has been retired in favor of repo-based execution on `main`
+- Create Adventure implementation, gallery coverage, server create path, and manual QA are complete
 
 ### In Progress
 
@@ -140,17 +141,17 @@ Each feature is complete only when all of these gates are satisfied:
 
 | Order | Feature | Status | Feature Doc | Summary |
 | --- | --- | --- | --- | --- |
-| 1 | Create Adventure | Next Up | [features/create-adventure.md](./features/create-adventure.md) | authoring entry, metadata, primary media, location, category, visibility |
-| 2 | Edit Adventure | Not Started | [features/edit-adventure.md](./features/edit-adventure.md) | edit existing adventure content using the authoring foundation |
-| 3 | Map Discovery + Location Search | Not Started | [features/map-discovery-location-search.md](./features/map-discovery-location-search.md) | real map plus vague-location search and 25-mile discovery scope |
-| 4 | Connections + Profile Discovery | Not Started | [features/connections-profile-discovery.md](./features/connections-profile-discovery.md) | searchable profiles, connection states, connection-aware visibility value |
-| 5 | Profile Collections | Not Started | [features/profile-collections.md](./features/profile-collections.md) | authored adventures and favorites on profile surfaces |
-| 6 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows plus saved-state rendering |
-| 7 | Comments | Not Started | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail |
-| 8 | Ratings | Not Started | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates |
-| 9 | Adventure Sharing + Friend Invites | Not Started | [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md) | shareable links, text/social share, contact-based invites |
-| 10 | Expanded Authentication | Not Started | [features/expanded-authentication.md](./features/expanded-authentication.md) | phone, Google, Apple, passkeys, biometrics |
-| 11 | Support, Reporting, And Account Management | Not Started | [features/support-reporting-account-management.md](./features/support-reporting-account-management.md) | support, reports, legal/settings, logout, delete-account |
+| 1 | Create Adventure | Done | [features/create-adventure.md](./features/create-adventure.md) | authoring entry, metadata, primary media, location, category, visibility |
+| 2 | Map Discovery + Location Search | In Progress | [features/map-discovery-location-search.md](./features/map-discovery-location-search.md) | real map plus vague-location search and 25-mile discovery scope |
+| 3 | Connections + Profile Discovery | Not Started | [features/connections-profile-discovery.md](./features/connections-profile-discovery.md) | searchable profiles, connection states, connection-aware visibility value |
+| 4 | Profile Collections | Not Started | [features/profile-collections.md](./features/profile-collections.md) | authored adventures and favorites on profile surfaces |
+| 5 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows plus saved-state rendering |
+| 6 | Comments | Not Started | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail |
+| 7 | Ratings | Not Started | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates |
+| 8 | Adventure Sharing + Friend Invites | Not Started | [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md) | shareable links, text/social share, contact-based invites |
+| 9 | Expanded Authentication | Not Started | [features/expanded-authentication.md](./features/expanded-authentication.md) | phone, Google, Apple, passkeys, biometrics |
+| 10 | Support, Reporting, And Account Management | Not Started | [features/support-reporting-account-management.md](./features/support-reporting-account-management.md) | support, reports, legal/settings, logout, delete-account |
+| 11 | Edit Adventure | Not Started | [features/edit-adventure.md](./features/edit-adventure.md) | edit existing adventure content using the authoring foundation |
 
 ## Program Priority Order
 

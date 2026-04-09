@@ -7,7 +7,7 @@ Deliver the first authoring flow so a user can create a new adventure with title
 ## Status
 
 - Product priority: `1 of 11`
-- Program ship status: `Next Up`
+- Program ship status: `Done`
 - Completion source of truth: this document
 
 ## Recommended Feature Loop
@@ -49,11 +49,11 @@ This is the recommended ship path for the feature. It does not forbid additive r
 
 ## Delivery Gates
 
-- [ ] Design accepted
-- [ ] Mock iOS accepted
-- [ ] Server accepted
-- [ ] Integrated iOS accepted
-- [ ] QA accepted
+- [x] Design accepted
+- [x] Mock iOS accepted
+- [x] Server accepted
+- [x] Integrated iOS accepted
+- [x] QA accepted
 
 ## Public Interface Expectations
 
@@ -63,12 +63,42 @@ This is the recommended ship path for the feature. It does not forbid additive r
 
 ## QA And Proof
 
-- [ ] v0 screenshots and UX notes linked
-- [ ] SwiftUI gallery coverage updated
-- [ ] walkthrough coverage updated where needed
-- [ ] server tests added for create path
-- [ ] integrated local happy path validated
-- [ ] manual QA notes recorded
+- [x] v0 screenshots and UX notes linked
+- [x] SwiftUI gallery coverage updated
+- [x] walkthrough coverage updated where needed
+- [x] server tests added for create path
+- [x] integrated local happy path validated
+- [x] manual QA notes recorded
+
+## Manual QA Notes
+
+- Tested the feature in the iPhone simulator.
+- Verified that created adventure data is written to Postgres and S3.
+
+## Proof Links
+
+- v0 UX spec: [AddAdventure.md](/Users/josephsanfilippo/Documents/projects/hidden-adventures-rebuild/v0-hidden-adventures-ui/docs/ux-specs/AddAdventure.md)
+- v0 screenshots:
+  - [AddAdventure1.png](/Users/josephsanfilippo/Documents/projects/hidden-adventures-rebuild/v0-hidden-adventures-ui/docs/screenhots/AddAdventure1.png)
+  - [AddAdventure2.png](/Users/josephsanfilippo/Documents/projects/hidden-adventures-rebuild/v0-hidden-adventures-ui/docs/screenhots/AddAdventure2.png)
+  - [AddAdventure3.png](/Users/josephsanfilippo/Documents/projects/hidden-adventures-rebuild/v0-hidden-adventures-ui/docs/screenhots/AddAdventure3.png)
+  - [AddAdventure4.png](/Users/josephsanfilippo/Documents/projects/hidden-adventures-rebuild/v0-hidden-adventures-ui/docs/screenhots/AddAdventure4.png)
+  - [AddAdventure5.png](/Users/josephsanfilippo/Documents/projects/hidden-adventures-rebuild/v0-hidden-adventures-ui/docs/screenhots/AddAdventure5.png)
+  - [AddAdventure6.png](/Users/josephsanfilippo/Documents/projects/hidden-adventures-rebuild/v0-hidden-adventures-ui/docs/screenhots/AddAdventure6.png)
+  - [AddAdventure7.png](/Users/josephsanfilippo/Documents/projects/hidden-adventures-rebuild/v0-hidden-adventures-ui/docs/screenhots/AddAdventure7.png)
+  - [AddAdventure8.png](/Users/josephsanfilippo/Documents/projects/hidden-adventures-rebuild/v0-hidden-adventures-ui/docs/screenhots/AddAdventure8.png)
+  - [AddAdventure9.png](/Users/josephsanfilippo/Documents/projects/hidden-adventures-rebuild/v0-hidden-adventures-ui/docs/screenhots/AddAdventure9.png)
+  - [AddAdventure10.png](/Users/josephsanfilippo/Documents/projects/hidden-adventures-rebuild/v0-hidden-adventures-ui/docs/screenhots/AddAdventure10.png)
+- Generated gallery screenshots:
+  - [create-photos.png](/tmp/hidden_adventures_ui_tests/gallery/create-photos.png)
+  - [create-details-empty.png](/tmp/hidden_adventures_ui_tests/gallery/create-details-empty.png)
+  - [create-details-location.png](/tmp/hidden_adventures_ui_tests/gallery/create-details-location.png)
+  - [create-location-options.png](/tmp/hidden_adventures_ui_tests/gallery/create-location-options.png)
+  - [create-location-search-empty.png](/tmp/hidden_adventures_ui_tests/gallery/create-location-search-empty.png)
+  - [create-location-search-results.png](/tmp/hidden_adventures_ui_tests/gallery/create-location-search-results.png)
+  - [create-location-pin.png](/tmp/hidden_adventures_ui_tests/gallery/create-location-pin.png)
+- Walkthrough captures:
+  - [04-create-photos.png](/tmp/hidden_adventures_ui_tests/walkthrough/04-create-photos.png)
 
 ## Ship-Required Vs Optional Prework
 
