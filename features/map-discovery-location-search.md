@@ -28,7 +28,7 @@ Deliver the real map discovery experience and add location search that can drive
 
 - [ ] Design accepted
 - [ ] Mock iOS accepted
-- [ ] Server accepted
+- [x] Server accepted
 - [ ] Integrated iOS accepted
 - [ ] QA accepted
 
@@ -42,11 +42,19 @@ Deliver the real map discovery experience and add location search that can drive
 
 - [ ] v0 screenshots and UX notes linked
 - [ ] SwiftUI gallery coverage updated
-- [ ] server tests added for location search and filtered discovery
+- [x] server tests added for location search and filtered discovery
 - [ ] integrated local happy path validated
 - [ ] manual QA notes recorded
+
+## Proof Links
+
+- `hidden-adventures-server` commit `c54f479` (`Update feed geo contract and canonical docs`) adds geo-scoped feed query support, distance sorting, radius filtering, and scope metadata on `GET /api/feed`.
+- `hidden-adventures-server/docs/contract.md` documents the live geo query contract: `latitude`, `longitude`, `radiusMiles`, optional `sort=distance`, geo scope metadata, and `distanceMiles` on scoped results.
+- `hidden-adventures-server/tests/adventures.routes.test.ts`, `tests/adventures.repository.test.ts`, and `tests/app.test.ts` cover route validation, repository filtering and ordering, and end-to-end app responses for geo-scoped discovery reads.
+- Local verification on 2026-04-10: `npm test -- tests/adventures.routes.test.ts tests/adventures.repository.test.ts tests/app.test.ts` passed with `3` test files and `36` tests green.
 
 ## Notes
 
 - Feed and map should stay synchronized when a searched location is selected.
 - Current location remains the default until the user explicitly changes scope.
+- Server acceptance currently covers geo-scoped feed reads and the live contract for radius-limited discovery. A dedicated candidate-location search endpoint or external geocoding integration is not yet documented as live in the server contract, so design, integrated iOS, and QA gates remain open.

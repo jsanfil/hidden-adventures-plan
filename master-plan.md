@@ -101,6 +101,7 @@ Each feature is complete only when all of these gates are satisfied:
 
 - first staging smoke execution from the deployment baseline
 - post-Slice-1 planning restructure from slice-based execution to feature-by-feature delivery
+- Map Discovery + Location Search now has verified server acceptance for geo-scoped feed reads, radius filtering, and distance sorting, while design, iOS acceptance, and QA remain open
 
 ### Later
 
@@ -214,6 +215,7 @@ Upcoming features are expected to add or expand public interfaces in these areas
   - `GET /api/feed`
   - `GET /api/adventures/:id`
   - `GET /api/profiles/:handle`
+- The live `GET /api/feed` contract now supports geo-scoped discovery reads with `latitude`, `longitude`, optional `radiusMiles`, optional `sort=distance`, `scope` metadata, and per-item `distanceMiles`; this is the currently accepted server portion of `Map Discovery + Location Search`.
 - Those endpoints are backed by Vitest coverage, reject the retired `viewerHandle` query-param pattern, and now require bearer auth for every business route except `GET /api/health`.
 - The current production Cognito pool has been verified for the rebuild auth path: email is an alias sign-in attribute, `EMAIL_OTP` is enabled as a first auth factor, and the rebuild app client supports `ALLOW_USER_AUTH`.
 - Local manual-QA auth now includes an additional operator note for Cognito sign-up testing: a reused email address can stop receiving a new confirmation email even after its deleted Cognito user is recreated, so fresh addresses are the reliable path for `Get Started` validation.
