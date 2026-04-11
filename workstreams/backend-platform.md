@@ -2,7 +2,7 @@
 
 ## Goal
 
-Build the new relational backend, hybrid API, and local-first cloud deployment foundation, with the immediate focus on holding the locked Slice 1 contracts steady and supporting real client integration.
+Build the new relational backend, hybrid API, and local-first cloud deployment foundation, with the immediate focus on keeping the accepted current server contract evergreen and supporting real client integration.
 
 ## Scope
 
@@ -52,7 +52,7 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
   - `GET /api/adventures/:id`
   - `GET /api/profiles/:handle`
 - The implemented Slice 1 surface is now mirrored by plan-repo contract notes and checked-in Postman Native Git troubleshooting requests under `hidden-adventures-api-tests/postman/collections/hidden-adventures-slice-1/`.
-- The locked Slice 1 contract now requires bearer auth for every business route except `GET /api/health`.
+- The accepted current server contract requires bearer auth for every business route except `GET /api/health`.
 - Local runtime now splits into:
   - `local-manual-qa`, which uses the `hidden_adventures_qa` database, a rich manifest-driven fixture pack, real non-prod Cognito, and real non-prod S3
   - `local-automation-test-core`, which uses the `hidden_adventures_test` database, a deterministic manifest-driven fixture pack, and signed test JWTs
@@ -65,8 +65,8 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
 
 ## Next Output
 
-- keep the locked contract docs current now that additive Slice 1-safe viewer profile read/write support has landed
-- keep authenticated endpoint growth additive and integration-friendly
+- keep the live contract docs evergreen so they describe implemented behavior as routes and payloads evolve
+- allow existing endpoints to be revised when accepted feature work requires it, while keeping server regression coverage and integration notes in sync
 - support local manual-QA acceptance, local automation regression, and staging smoke work without reintroducing handle-based viewer identity
 - validate the viewer profile read/write flow during acceptance testing, especially first-write row creation and normalized empty-field persistence
 - record the first real staging smoke execution with the image identifier, runtime shape, smoke results, and any rollback friction

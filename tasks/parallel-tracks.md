@@ -30,8 +30,8 @@ This is the recommended ship path for a feature. It does not forbid additive rep
 | --- | --- | --- | --- | --- |
 | `hidden-adventures-plan` | planning source of truth | maintain feature order, repo backlog rules, thread registry, and completion criteria; update docs when repo facts or sequencing assumptions change | implementation-thread state as the authority for program status | updated roadmap, feature docs, task and thread notes |
 | `v0-hidden-adventures-ui` | design and UX definition | prioritize design for the current scheduled feature; explore later features when clearly marked provisional and non-binding | that provisional design means a later feature is now active or approved to ship | screenshots, UX notes, screen-map references |
-| `hidden-adventures-ios` | fixture-backed UI, live integration, and acceptance | build the scheduled feature after design is accepted; prepare reusable app infrastructure or non-binding groundwork for later features when it does not force product decisions | unapproved UX, speculative server contracts, or later-feature groundwork as shipped scope | passing UI harness results, runtime notes, integration findings |
-| `hidden-adventures-server` | additive backend contracts and operational follow-up | maintain accepted contracts, build additive APIs or schema ahead for future features, and document assumptions for any ahead-of-order work | that ahead-of-time implementation changes ship priority, UX decisions, or accepted existing contracts | passing checks, contract notes, migration or deploy notes |
+| `hidden-adventures-ios` | fixture-backed UI, live integration, and acceptance | build the scheduled feature after design is accepted; prepare reusable app infrastructure or non-binding groundwork for later features when it does not force product decisions; refactor app code when accepted server contracts change and rerun integration and UI regression coverage | unapproved UX, speculative server contracts, or later-feature groundwork as shipped scope | passing UI harness results, runtime notes, integration findings |
+| `hidden-adventures-server` | evolving backend contracts and operational follow-up | maintain accepted live contracts, update existing APIs or schema for scheduled and accepted feature work, and document assumptions for any ahead-of-order work | that ahead-of-time implementation changes ship priority, UX decisions, or undocumented live contract changes | passing checks, evergreen contract notes, migration or deploy notes |
 | `hidden-adventures-api-tests` | live troubleshooting assets | update Postman only for live server behavior or accepted current contract changes | speculative future APIs that are not live yet | updated troubleshooting requests and environment notes |
 
 ## Repo Rules
@@ -40,10 +40,10 @@ This is the recommended ship path for a feature. It does not forbid additive rep
 - Multiple active threads or git worktrees in the same repo are allowed when scopes are explicit, narrow, and non-conflicting.
 - Each active thread should work on the owning repo's `main` branch unless there is a repo-specific reason to do otherwise.
 - `hidden-adventures-plan` is the only repo that should declare milestone status and cross-repo truth.
-- Slice 1 integration work must consume the locked Slice 1 contract notes, use bearer-auth viewer identity, and must not reintroduce `viewerHandle` assumptions.
-- Vitest is the official server verification path. Postman remains a manual troubleshooting companion only.
+- Slice 1 integration work must consume the accepted current server contract notes, use bearer-auth viewer identity, and must not reintroduce `viewerHandle` assumptions.
+- Vitest-backed regression coverage is the official server verification path and must move with live contract changes. Postman remains a manual troubleshooting companion only.
 - Post-Slice-1 product delivery still follows the program feature order even when repos prepare later work in advance.
-- Ahead-of-order server work must stay additive, document assumptions, and must not silently redefine accepted shipped behavior.
+- Ahead-of-order server work may revise existing APIs when accepted feature work requires it, but the change must be intentional, documented as live behavior, regression-tested, and handed off to iOS when app code is affected.
 - Data migration is no longer an active day-to-day lane. Treat it as closed work with cutover-validation follow-up only.
 - Staging and production readiness stay outside the feature loop until the core feature inventory is complete, except for the already checked-in deployment baseline follow-up.
 - Historical thread docs under `archive/tasks-threads/` are not authoritative for current repo-next decisions.

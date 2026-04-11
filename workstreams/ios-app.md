@@ -24,7 +24,7 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
 ## Dependencies
 
 - product and UX direction
-- locked server API contracts for each slice
+- accepted current server contract documentation for each shipped feature state
 
 ## Current State
 
@@ -33,7 +33,7 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
 - Service protocols no longer expose `viewerHandle` request overrides; the app uses server-backed auth/bootstrap state instead.
 - Live server mode is the default outside UI tests, and the app now distinguishes `LocalManualQA`, `LocalAutomation`, and `Production` server configurations.
 - Fixture preview remains a deliberate runtime mode for screenshots, previews, and deterministic walkthrough captures.
-- The current live Slice 1 fallback is explicit rather than silent: feed-derived map cards until a later route contract locks.
+- The current live Slice 1 fallback is explicit rather than silent: feed-derived map cards until a later replacement route contract is accepted and verified.
 - The welcome screen now has two intentful entry points into one email-auth mechanism: `Get Started` for onboarding intent and `Sign In` for returning-user intent.
 - New users should continue into handle selection and profile setup only after verified auth when bootstrap returns `new_user_needs_handle`.
 - Linked legacy users and linked rebuild users should skip onboarding and land directly in Explore/Feed after verified auth.
@@ -60,7 +60,7 @@ Create the new SwiftUI app foundation and deliver the mobile client for each rel
 - keep persisted-session relaunch and logout behavior stable in the supported Slice 1 auth flow
 - preserve direct-launch and walkthrough UI test coverage in fixture-preview mode
 - validate the live local happy path explicitly against the sibling server
-- remove temporary live fallbacks only when the corresponding server contracts are locked
+- remove temporary live fallbacks only when the corresponding replacement server contracts are accepted, verified, and integrated in the app
 
 ## v0-to-SwiftUI Workflow
 
@@ -88,8 +88,9 @@ Use [workstreams/v0-screen-porting-workflow.md](./v0-screen-porting-workflow.md)
   - walkthrough run
   - visual comparison against the matching v0 screen or approved screenshot reference
 - The standard acceptance path for Slice 1 integration changes is:
-  - lock server contracts first
+  - update the accepted current server contract docs first
   - replace fixture-backed service usage
+  - refactor affected client code when server contracts changed
   - rerun the UI suites
   - validate the local automation happy path against the real server
   - validate the manual QA path against the local Cognito-backed server mode when email OTP auth wiring is ready

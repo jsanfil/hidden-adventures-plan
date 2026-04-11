@@ -168,7 +168,7 @@ Each feature is complete only when all of these gates are satisfied:
 - `hidden-adventures-ios`
   Prioritize accepted-design fixture-backed implementation for the current ship feature, but reusable infrastructure and non-binding groundwork for later features may move ahead when they do not force product decisions.
 - `hidden-adventures-server`
-  May work ahead across multiple future features with additive contracts, schema, endpoints, and tests, provided assumptions are documented and accepted contracts are not broken.
+  May work ahead across multiple future features with evolving contracts, schema, endpoints, and tests, provided assumptions are documented, live contract docs stay accurate, regression coverage moves with the change, and affected iOS work is handed off explicitly.
 - `hidden-adventures-api-tests`
   Follow only live server behavior. Do not publish speculative troubleshooting assets for future APIs that are not live yet.
 
@@ -196,8 +196,8 @@ Upcoming features are expected to add or expand public interfaces in these areas
 | Lane | Status | Primary Repo | Owns | Produces | Depends On |
 | --- | --- | --- | --- | --- | --- |
 | Planning and doc sync | Active | `hidden-adventures-plan` | roadmap truth, feature inventory, milestone board, cross-repo status sync | current-state snapshot, feature sequencing notes, acceptance criteria | verified repo facts only |
-| Backend and ops | Active | `hidden-adventures-server` | maintain the locked Slice 1 server surface, support additive feature APIs, and continue staging baseline follow-up | passing server checks, additive contract notes, deploy and smoke notes | implemented server endpoints and deploy assets |
-| App integration and acceptance | Active | `hidden-adventures-ios` | preserve Slice 1 runtime stability and execute the current scheduled feature loop without breaking fixture preview | local runtime notes, passing UI harness, integration findings | locked Slice 1 contracts plus approved feature contracts |
+| Backend and ops | Active | `hidden-adventures-server` | maintain the accepted current server contract, evolve live APIs for shipped features, and continue staging baseline follow-up | passing server checks, evergreen contract notes, deploy and smoke notes | implemented server endpoints and deploy assets |
+| App integration and acceptance | Active | `hidden-adventures-ios` | preserve Slice 1 runtime stability, absorb accepted server contract updates, and execute the current scheduled feature loop without breaking fixture preview | local runtime notes, passing UI harness, integration findings | accepted current server contract plus approved feature contracts |
 | Manual API troubleshooting assets | On demand | `hidden-adventures-api-tests` | Postman requests that mirror the live API for troubleshooting | updated troubleshooting collections and environment notes | server contract changes only |
 | Feature UX definition | Active | `v0-hidden-adventures-ui` | design and refine the next scheduled feature before native implementation starts | approved visual references, screenshots, and screen-map notes | current feature selection and Slice 1 scope stability |
 
