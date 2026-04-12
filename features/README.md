@@ -18,7 +18,7 @@ Current active docs:
 - `create-adventure.md`
 - `edit-adventure.md`
 - `map-discovery-location-search.md`
-- `connections-profile-discovery.md`
+- `sidekicks-profile-discovery.md`
 - `profile-collections.md`
 - `favorites.md`
 - `comments.md`

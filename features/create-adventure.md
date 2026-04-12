@@ -26,7 +26,7 @@ This is the recommended ship path for the feature. It does not forbid additive r
 - category selection
 - location entry and selection
 - primary media selection and upload UX
-- visibility selection using `private`, `connections`, and `public`
+- visibility selection using `private`, `sidekicks`, and `public`
 
 ## Dependencies
 

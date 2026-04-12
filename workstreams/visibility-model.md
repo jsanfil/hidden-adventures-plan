@@ -28,15 +28,15 @@ Use explicit visibility policies on content and evaluate access from current rel
 - `private`
   Meaning: only the author can view the adventure
 
-- `connections`
-  Meaning: the author and approved connections can view the adventure
+- `sidekicks`
+  Meaning: the author and approved sidekicks can view the adventure
 
 - `public`
   Meaning: any signed-in user can view the adventure
 
 ## Social model dependency
 
-Visibility should depend on a modern connection model rather than legacy one-way sidekick rows.
+Visibility should depend on a modern sidekick relationship model rather than legacy one-way sidekick rows.
 
 Recommended relationship states:
 
@@ -45,7 +45,7 @@ Recommended relationship states:
 - `accepted`
 - `blocked`
 
-Only `accepted` relationships should grant access to `connections` content.
+Only `accepted` relationships should grant access to `sidekicks` content.
 
 ## Access rules
 
@@ -53,7 +53,7 @@ Only `accepted` relationships should grant access to `connections` content.
 
 - authors always see their own content regardless of visibility
 - `private` content appears only for the author
-- `connections` content appears for the author and users with an accepted connection to the author
+- `sidekicks` content appears for the author and users with an accepted sidekick relationship to the author
 - `public` content appears for all signed-in viewers
 
 ### Map
@@ -64,7 +64,7 @@ Only `accepted` relationships should grant access to `connections` content.
 ### Profile browsing
 
 - viewers can always see the author's `public` adventures
-- viewers can see `connections` adventures only when the relationship is `accepted`
+- viewers can see `sidekicks` adventures only when the relationship is `accepted`
 - viewers never see another user's `private` adventures
 
 ### Detail routes
@@ -77,9 +77,11 @@ Only `accepted` relationships should grant access to `connections` content.
 Recommended relational shape:
 
 - `adventures.visibility`
-  Enum: `private | connections | public`
+  Product enum: `private | sidekicks | public`
+  Storage note: currently persisted as `private | connections | public`
 
-- `connections`
+- `sidekicks` relationship graph
+  Storage note: currently backed by the `connections` table
   Fields: `requester_user_id`, `target_user_id`, `status`, timestamps
 
 Optional future extension:
@@ -92,9 +94,9 @@ Do not introduce exceptions in phase 1 unless a concrete product requirement app
 ## Why this is better
 
 - preserves the old product's three sharing intents
-- removes `acl[]` mutation from create/add/remove-connection flows
+- removes `acl[]` mutation from create/add/remove-sidekick flows
 - makes visibility a stable property of content
-- makes connection state a stable property of the relationship graph
+- makes sidekick state a stable property of the relationship graph
 - maps cleanly to SQL joins and policy checks
 - simplifies client copy and settings UX
 
@@ -103,13 +105,13 @@ Do not introduce exceptions in phase 1 unless a concrete product requirement app
 Recommended user-facing labels:
 
 - `Only Me`
-- `Connections`
+- `Sidekicks`
 - `Public`
 
 Guidance:
 
 - avoid exposing raw policy concepts like ACL or sidekick lists in the client
-- explain `Connections` in plain language at creation time
+- explain `Sidekicks` in plain language at creation time
 - show visibility state clearly on authored content
 - keep viewer mental models simple: who can see this now, not who is in a stored list
 
@@ -137,15 +139,15 @@ Recommended patterns:
 
 - content create/update accepts `visibility`
 - list/detail endpoints evaluate visibility server-side
-- connection endpoints own relationship state transitions
+- sidekick endpoints own relationship state transitions
 - no content endpoint should require callers to pass allowed usernames
 
 ## Open questions
 
-- Should `connections` require mutual acceptance or be modeled as follower/following with a separate "trusted" state?
+- Should `sidekicks` require mutual acceptance or be modeled as follower/following with a separate "trusted" state?
 - Should public profile fields and public content visibility be controlled separately?
 - Do we need a moderator/admin override path in phase 1, or only in later operations work?
 
 ## Decision summary
 
-Adopt `private`, `connections`, and `public` as the rebuild visibility model, backed by current relationship state rather than stored per-adventure ACL usernames.
+Adopt `private`, `sidekicks`, and `public` as the rebuild product visibility model, backed by current relationship state rather than stored per-adventure ACL usernames. In the current server implementation, `sidekicks` is still stored as `connections`.

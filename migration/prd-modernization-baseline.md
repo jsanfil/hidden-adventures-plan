@@ -75,7 +75,7 @@ The PRD should not be treated as:
 
 ### Simplify social and visibility
 
-- Treat sidekicks as a legacy social concept that may evolve into a cleaner connection model.
+- Treat sidekicks as a legacy social concept that may evolve into a cleaner sidekick relationship model.
 - Preserve the practical product need behind it: selective sharing, trusted-network discovery, and visible profile relationships.
 - Rework visibility rules into a clearer policy model instead of copying ACL-shaped UX directly into the new client.
 
@@ -94,7 +94,7 @@ The PRD should not be treated as:
 ## Key Legacy Behaviors Worth Re-expressing In New Architecture
 
 - feed visibility combines ownership, visibility mode, relationship state, and geography
-- adding or removing a social connection changes who can see previously created content
+- adding or removing a sidekick relationship changes who can see previously created content
 - profile images propagate into social and comment surfaces
 - content deletion has secondary effects on favorites and ratings
 - account deletion touches both application data and Cognito identity

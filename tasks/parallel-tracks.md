@@ -4,8 +4,8 @@ Use this file to make repo-based Codex execution explicit, define what each repo
 
 ## Current Scheduled Feature
 
-- `Connections + Profile Discovery`
-- Detailed tracking doc: `features/connections-profile-discovery.md`
+- `Sidekicks + Profile Discovery`
+- Detailed tracking doc: `features/sidekicks-profile-discovery.md`
 
 ## How To Use This File
 
@@ -60,7 +60,7 @@ This section is optional. Record only the active threads or worktrees that benef
 
 1. Create Adventure
 2. Map Discovery + Location Search
-3. Connections + Profile Discovery
+3. Sidekicks + Profile Discovery
 4. Profile Collections
 5. Favorites
 6. Comments

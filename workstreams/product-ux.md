@@ -9,7 +9,7 @@ Redesign Hidden Adventures around modern journeys, strong visual identity, and a
 - information architecture
 - navigation model
 - feed, map, detail, create, and edit flows
-- mutual-connections concept
+- mutual-sidekicks concept
 - visibility and sharing UX
 - design system direction
 

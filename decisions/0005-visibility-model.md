@@ -1,4 +1,4 @@
-# ADR-0005: Visibility Based On Policy And Connection State
+# ADR-0005: Visibility Based On Policy And Sidekick State
 
 ## Status
 
@@ -10,7 +10,7 @@ The legacy product uses a combination of adventure `access`, per-adventure `acl[
 
 ## Decision
 
-Adopt a three-level visibility model for adventures: `private`, `connections`, and `public`. Evaluate access from the adventure's visibility plus the current relationship state between viewer and author. Do not use per-adventure ACL username arrays as the primary authorization mechanism in the rebuild.
+Adopt a three-level product visibility model for adventures: `private`, `sidekicks`, and `public`. Evaluate access from the adventure's visibility plus the current relationship state between viewer and author. Do not use per-adventure ACL username arrays as the primary authorization mechanism in the rebuild. In the current server implementation, `sidekicks` remains stored as `connections`.
 
 ## Consequences
 

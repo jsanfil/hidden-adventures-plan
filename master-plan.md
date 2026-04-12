@@ -115,7 +115,7 @@ Each feature is complete only when all of these gates are satisfied:
 - Keep Cognito and S3 in phase 1 for continuity and lower migration risk.
 - Use a relational domain model with PostgreSQL + PostGIS.
 - Use a hybrid API, not resource-pure CRUD for every workflow.
-- Replace ACL arrays with explicit visibility and connection policies.
+- Replace ACL arrays with explicit visibility and sidekick policies.
 - Prefer local-first development and production parity via containers.
 - Do not let repo-level implementation drift silently change scope, contracts, or navigation without flowing back through this repo.
 
@@ -144,7 +144,7 @@ Each feature is complete only when all of these gates are satisfied:
 | --- | --- | --- | --- | --- |
 | 1 | Create Adventure | Done | [features/create-adventure.md](./features/create-adventure.md) | authoring entry, metadata, primary media, location, category, visibility |
 | 2 | Map Discovery + Location Search | Done | [features/map-discovery-location-search.md](./features/map-discovery-location-search.md) | real map plus vague-location search and 25-mile discovery scope |
-| 3 | Connections + Profile Discovery | Not Started | [features/connections-profile-discovery.md](./features/connections-profile-discovery.md) | searchable profiles, connection states, connection-aware visibility value |
+| 3 | Sidekicks + Profile Discovery | Not Started | [features/sidekicks-profile-discovery.md](./features/sidekicks-profile-discovery.md) | searchable profiles, sidekick states, sidekick-aware visibility value |
 | 4 | Profile Collections | Not Started | [features/profile-collections.md](./features/profile-collections.md) | authored adventures and favorites on profile surfaces |
 | 5 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows plus saved-state rendering |
 | 6 | Comments | Not Started | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail |
@@ -157,7 +157,7 @@ Each feature is complete only when all of these gates are satisfied:
 ## Program Priority Order
 
 - Product delivery should continue in the feature order listed above.
-- `Connections + Profile Discovery` is now the next ship-priority feature after completed `Create Adventure` and `Map Discovery + Location Search` work.
+- `Sidekicks + Profile Discovery` is now the next ship-priority feature after completed `Create Adventure` and `Map Discovery + Location Search` work.
 - Repos may perform preparatory work ahead of that ship order when the work is additive, assumptions are documented, and accepted feature behavior is not redefined.
 
 ## Repo-Autonomous Next Work
@@ -185,8 +185,8 @@ Upcoming features are expected to add or expand public interfaces in these areas
 
 - `Discovery search`
   Feed and map will need a location search input, candidate-location selection, and a 25-mile location filter mode in addition to current-location default behavior.
-- `Connections`
-  Server support will be needed for profile search, connection state transitions, and connection-aware profile and adventure reads.
+- `Sidekicks`
+  Server support will be needed for profile search, sidekick state transitions, and sidekick-aware profile and adventure reads.
 - `Sharing and invites`
   App and server support will be needed for shareable adventure links and invite flows; contacts access and text-share behavior should be planned as client capabilities with minimal server dependency unless referral tracking is added later.
 - `Expanded auth`

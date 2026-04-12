@@ -128,7 +128,7 @@ Historical snapshot only. This file is not authoritative for current sequencing,
 - [x] `hidden-adventures-ios`: `Scripts/run_ui_gallery.sh` still passes after real API wiring
 - [ ] optional follow-up: Postman `GET /api/auth/bootstrap` succeeds with `Authorization: Bearer {{newUserToken}}`
 - [ ] optional follow-up: Postman `GET /api/feed` returns connected-viewer data with `Authorization: Bearer {{connectedViewerToken}}`
-- [ ] optional follow-up: Postman `GET /api/adventures/:id` returns the connections path with `Authorization: Bearer {{connectedViewerToken}}`
+- [ ] optional follow-up: Postman `GET /api/adventures/:id` returns the sidekicks path with `Authorization: Bearer {{connectedViewerToken}}`
 - [ ] optional follow-up: Postman `GET /api/profiles/:handle` resolves by handle with `Authorization: Bearer {{connectedViewerToken}}`
 - [ ] optional follow-up: live-app `Get Started` -> email OTP -> `new_user_needs_handle` -> handle selection -> profile setup -> Feed
 - [ ] optional follow-up: live-app `Sign In` -> email OTP -> linked user -> Feed

@@ -16,14 +16,15 @@ Lock the first relational domain model for the rebuild so backend implementation
 - Keep Cognito as the external auth provider, but map it into a local `users` row owned by the rebuild backend.
 - Separate identity, profile, content, relationships, and media metadata into distinct tables.
 - Store content visibility as a stable property on adventures. Do not carry forward `acl[]`.
-- Evaluate `connections` access from current relationship state at read time.
+- Evaluate sidekick access from current relationship state at read time.
 - Keep binary media in S3 and keep metadata, moderation state, and ownership in PostgreSQL.
 - Treat counters and aggregates as derived data, not as the authoritative write path.
 
 ## Canonical Enums
 
 - `adventure_visibility`
-  Values: `private`, `connections`, `public`
+  Product values: `private`, `sidekicks`, `public`
+  Current storage values: `private`, `connections`, `public`
 
 - `connection_status`
   Values: `pending`, `accepted`, `blocked`
@@ -261,7 +262,7 @@ This schema supports a clean first API surface:
 - `GET /api/profiles/:handle`
 - `GET /api/media/:id` or a signed-delivery equivalent
 
-Connections, favorites, comments, and ratings can be added in later slices without changing the core entity boundaries.
+Sidekicks, favorites, comments, and ratings can be added in later slices without changing the core entity boundaries.
 
 ## Legacy Mapping Notes
 

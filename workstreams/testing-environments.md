@@ -74,7 +74,7 @@ The rebuild now uses:
 #### `qa-rich`
 
 - curated, visually rich dataset for interactive testing
-- includes linked personas, rich profiles, connections, public and gated adventures, and representative engagement
+- includes linked personas, rich profiles, sidekicks, public and gated adventures, and representative engagement
 - manual testers can extend it by editing manifests and adding media objects to the non-prod S3 bucket
 
 #### `test-core`
