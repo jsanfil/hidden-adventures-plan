@@ -6,7 +6,7 @@ Make selective sharing meaningful by adding searchable profile discovery and sid
 
 ## Status
 
-- Program status: `Not Started`
+- Program status: `In Progress`
 - Completion source of truth: this document
 
 ## Scope
@@ -25,7 +25,7 @@ Make selective sharing meaningful by adding searchable profile discovery and sid
 
 ## Delivery Gates
 
-- [ ] Design accepted
+- [x] Design accepted
 - [ ] Mock iOS accepted
 - [ ] Server accepted
 - [ ] Integrated iOS accepted
@@ -40,11 +40,20 @@ Make selective sharing meaningful by adding searchable profile discovery and sid
 
 ## QA And Proof
 
-- [ ] v0 screenshots and UX notes linked
+- [x] v0 screenshots and UX notes linked
 - [ ] SwiftUI gallery coverage updated
 - [ ] server tests added for sidekick transitions and policy checks
 - [ ] integrated local happy path validated
 - [ ] manual QA notes recorded
+
+## Current Progress
+
+- The accepted v0 references now include `docs/ux-specs/ProfileSidekicksDesign.md` plus the full `docs/screenshots/ProfileSidekicks*.png` screenshot set in `v0-hidden-adventures-ui`.
+- `hidden-adventures-ios` now has a fixture-backed profile-tab implementation for the first mock slice:
+  - hard-coded stats row on profile
+  - sidekicks preview card and navigation entry point
+  - client-only `SidekicksView` with local search, segmented tabs, add flow, and remove confirm/cancel flow
+- Focused iOS UI coverage now exercises the profile-sidekicks entry point and sidekicks interactions through `ProfileScreenUITests`.
 
 ## Notes
 

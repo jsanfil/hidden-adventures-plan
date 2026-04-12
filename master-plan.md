@@ -102,6 +102,7 @@ Each feature is complete only when all of these gates are satisfied:
 
 - first staging smoke execution from the deployment baseline
 - post-Slice-1 planning restructure from slice-based execution to feature-by-feature delivery
+- Sidekicks + Profile Discovery fixture-backed iOS implementation is underway, including the profile-tab sidekicks entry point and client-only sidekicks management flow
 
 ### Later
 
@@ -144,7 +145,7 @@ Each feature is complete only when all of these gates are satisfied:
 | --- | --- | --- | --- | --- |
 | 1 | Create Adventure | Done | [features/create-adventure.md](./features/create-adventure.md) | authoring entry, metadata, primary media, location, category, visibility |
 | 2 | Map Discovery + Location Search | Done | [features/map-discovery-location-search.md](./features/map-discovery-location-search.md) | real map plus vague-location search and 25-mile discovery scope |
-| 3 | Sidekicks + Profile Discovery | Not Started | [features/sidekicks-profile-discovery.md](./features/sidekicks-profile-discovery.md) | searchable profiles, sidekick states, sidekick-aware visibility value |
+| 3 | Sidekicks + Profile Discovery | In Progress | [features/sidekicks-profile-discovery.md](./features/sidekicks-profile-discovery.md) | searchable profiles, sidekick states, sidekick-aware visibility value |
 | 4 | Profile Collections | Not Started | [features/profile-collections.md](./features/profile-collections.md) | authored adventures and favorites on profile surfaces |
 | 5 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows plus saved-state rendering |
 | 6 | Comments | Not Started | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail |
