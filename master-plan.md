@@ -96,12 +96,12 @@ Each feature is complete only when all of these gates are satisfied:
 - first deployment baseline is checked in with image versioning guidance, env templates, rollout and rollback notes, and a staging smoke script
 - the worktree-based thread setup has been retired in favor of repo-based execution on `main`
 - Create Adventure implementation, gallery coverage, server create path, and manual QA are complete
+- Map Discovery + Location Search is complete with accepted v0 design, the shipped MapKit-backed Explore map and location search flow, geo-scoped feed reads, and completed automation plus manual QA
 
 ### In Progress
 
 - first staging smoke execution from the deployment baseline
 - post-Slice-1 planning restructure from slice-based execution to feature-by-feature delivery
-- Map Discovery + Location Search now has verified server acceptance for geo-scoped feed reads, radius filtering, and distance sorting, while design, iOS acceptance, and QA remain open
 
 ### Later
 
@@ -143,7 +143,7 @@ Each feature is complete only when all of these gates are satisfied:
 | Order | Feature | Status | Feature Doc | Summary |
 | --- | --- | --- | --- | --- |
 | 1 | Create Adventure | Done | [features/create-adventure.md](./features/create-adventure.md) | authoring entry, metadata, primary media, location, category, visibility |
-| 2 | Map Discovery + Location Search | In Progress | [features/map-discovery-location-search.md](./features/map-discovery-location-search.md) | real map plus vague-location search and 25-mile discovery scope |
+| 2 | Map Discovery + Location Search | Done | [features/map-discovery-location-search.md](./features/map-discovery-location-search.md) | real map plus vague-location search and 25-mile discovery scope |
 | 3 | Connections + Profile Discovery | Not Started | [features/connections-profile-discovery.md](./features/connections-profile-discovery.md) | searchable profiles, connection states, connection-aware visibility value |
 | 4 | Profile Collections | Not Started | [features/profile-collections.md](./features/profile-collections.md) | authored adventures and favorites on profile surfaces |
 | 5 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows plus saved-state rendering |
@@ -157,7 +157,7 @@ Each feature is complete only when all of these gates are satisfied:
 ## Program Priority Order
 
 - Product delivery should continue in the feature order listed above.
-- `Create Adventure` remains the first ship-priority feature after completed Slice 1 work.
+- `Connections + Profile Discovery` is now the next ship-priority feature after completed `Create Adventure` and `Map Discovery + Location Search` work.
 - Repos may perform preparatory work ahead of that ship order when the work is additive, assumptions are documented, and accepted feature behavior is not redefined.
 
 ## Repo-Autonomous Next Work
@@ -215,7 +215,7 @@ Upcoming features are expected to add or expand public interfaces in these areas
   - `GET /api/feed`
   - `GET /api/adventures/:id`
   - `GET /api/profiles/:handle`
-- The live `GET /api/feed` contract now supports geo-scoped discovery reads with `latitude`, `longitude`, optional `radiusMiles`, optional `sort=distance`, `scope` metadata, and per-item `distanceMiles`; this is the currently accepted server portion of `Map Discovery + Location Search`.
+- `Map Discovery + Location Search` is now complete across the accepted v0 design, the shipped MapKit-backed Explore map and location-search flow in iOS, the live geo-scoped `GET /api/feed` contract, and recorded automation plus manual QA proof.
 - Those endpoints are backed by Vitest coverage, reject the retired `viewerHandle` query-param pattern, and now require bearer auth for every business route except `GET /api/health`.
 - The current production Cognito pool has been verified for the rebuild auth path: email is an alias sign-in attribute, `EMAIL_OTP` is enabled as a first auth factor, and the rebuild app client supports `ALLOW_USER_AUTH`.
 - Local manual-QA auth now includes an additional operator note for Cognito sign-up testing: a reused email address can stop receiving a new confirmation email even after its deleted Cognito user is recreated, so fresh addresses are the reliable path for `Get Started` validation.

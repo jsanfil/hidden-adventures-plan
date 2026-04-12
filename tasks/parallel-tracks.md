@@ -4,8 +4,8 @@ Use this file to make repo-based Codex execution explicit, define what each repo
 
 ## Current Scheduled Feature
 
-- `Map Discovery + Location Search`
-- Detailed tracking doc: `features/map-discovery-location-search.md`
+- `Connections + Profile Discovery`
+- Detailed tracking doc: `features/connections-profile-discovery.md`
 
 ## How To Use This File
 
