@@ -26,7 +26,7 @@ Make selective sharing meaningful by adding searchable profile discovery and sid
 ## Delivery Gates
 
 - [x] Design accepted
-- [ ] Mock iOS accepted
+- [x] Mock iOS accepted
 - [ ] Server accepted
 - [ ] Integrated iOS accepted
 - [ ] QA accepted
