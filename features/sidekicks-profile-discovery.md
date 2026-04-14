@@ -27,7 +27,7 @@ Make selective sharing meaningful by adding searchable profile discovery and sid
 
 - [x] Design accepted
 - [x] Mock iOS accepted
-- [ ] Server accepted
+- [x] Server accepted
 - [ ] Integrated iOS accepted
 - [ ] QA accepted
 
@@ -41,8 +41,8 @@ Make selective sharing meaningful by adding searchable profile discovery and sid
 ## QA And Proof
 
 - [x] v0 screenshots and UX notes linked
-- [ ] SwiftUI gallery coverage updated
-- [ ] server tests added for sidekick transitions and policy checks
+- [x] SwiftUI gallery coverage updated
+- [x] server tests added for sidekick transitions and policy checks
 - [ ] integrated local happy path validated
 - [ ] manual QA notes recorded
 
