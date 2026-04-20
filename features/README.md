@@ -16,6 +16,7 @@ These docs also distinguish ship-required work from optional repo-local prework 
 Current active docs:
 
 - `create-adventure.md`
+- `discover-tab.md`
 - `edit-adventure.md`
 - `map-discovery-location-search.md`
 - `sidekicks-profile-discovery.md`

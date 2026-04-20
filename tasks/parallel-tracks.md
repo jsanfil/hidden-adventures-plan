@@ -4,8 +4,8 @@ Use this file to make repo-based Codex execution explicit, define what each repo
 
 ## Current Scheduled Feature
 
-- `Profile Collections`
-- Detailed tracking doc: `features/profile-collections.md`
+- `Discover Tab`
+- Detailed tracking doc: `features/discover-tab.md`
 
 ## How To Use This File
 
@@ -61,15 +61,16 @@ This section is optional. Record only the active threads or worktrees that benef
 1. Create Adventure
 2. Map Discovery + Location Search
 3. Sidekicks + Profile Discovery
-4. Profile Collections
-5. Favorites
-6. Comments
-7. Ratings
-8. Adventure Sharing + Friend Invites
-9. Expanded Authentication
-10. Support, Reporting, And Account Management
-11. Edit Adventure
-12. Later operational phase for staging hardening and production readiness
+4. Discover Tab
+5. Profile Collections
+6. Favorites
+7. Comments
+8. Ratings
+9. Adventure Sharing + Friend Invites
+10. Expanded Authentication
+11. Support, Reporting, And Account Management
+12. Edit Adventure
+13. Later operational phase for staging hardening and production readiness
 
 ## Standard Handoff Notes
 

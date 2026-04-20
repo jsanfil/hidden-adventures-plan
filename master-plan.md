@@ -146,19 +146,20 @@ Each feature is complete only when all of these gates are satisfied:
 | 1 | Create Adventure | Done | [features/create-adventure.md](./features/create-adventure.md) | authoring entry, metadata, primary media, location, category, visibility |
 | 2 | Map Discovery + Location Search | Done | [features/map-discovery-location-search.md](./features/map-discovery-location-search.md) | real map plus vague-location search and 25-mile discovery scope |
 | 3 | Sidekicks + Profile Discovery | Done | [features/sidekicks-profile-discovery.md](./features/sidekicks-profile-discovery.md) | searchable profiles, sidekick states, sidekick-aware visibility value |
-| 4 | Profile Collections | Not Started | [features/profile-collections.md](./features/profile-collections.md) | authored adventures and favorites on profile surfaces |
-| 5 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows plus saved-state rendering |
-| 6 | Comments | Not Started | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail |
-| 7 | Ratings | Not Started | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates |
-| 8 | Adventure Sharing + Friend Invites | Not Started | [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md) | shareable links, text/social share, contact-based invites |
-| 9 | Expanded Authentication | Not Started | [features/expanded-authentication.md](./features/expanded-authentication.md) | phone, Google, Apple, passkeys, biometrics |
-| 10 | Support, Reporting, And Account Management | Not Started | [features/support-reporting-account-management.md](./features/support-reporting-account-management.md) | support, reports, legal/settings, logout, delete-account |
-| 11 | Edit Adventure | Not Started | [features/edit-adventure.md](./features/edit-adventure.md) | edit existing adventure content using the authoring foundation |
+| 4 | Discover Tab | Not Started | [features/discover-tab.md](./features/discover-tab.md) | creator-led discovery home, mixed people and adventure search, and best-first creator catalogs |
+| 5 | Profile Collections | Not Started | [features/profile-collections.md](./features/profile-collections.md) | authored adventures and favorites on profile surfaces |
+| 6 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows plus saved-state rendering |
+| 7 | Comments | Not Started | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail |
+| 8 | Ratings | Not Started | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates |
+| 9 | Adventure Sharing + Friend Invites | Not Started | [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md) | shareable links, text/social share, contact-based invites |
+| 10 | Expanded Authentication | Not Started | [features/expanded-authentication.md](./features/expanded-authentication.md) | phone, Google, Apple, passkeys, biometrics |
+| 11 | Support, Reporting, And Account Management | Not Started | [features/support-reporting-account-management.md](./features/support-reporting-account-management.md) | support, reports, legal/settings, logout, delete-account |
+| 12 | Edit Adventure | Not Started | [features/edit-adventure.md](./features/edit-adventure.md) | edit existing adventure content using the authoring foundation |
 
 ## Program Priority Order
 
 - Product delivery should continue in the feature order listed above.
-- `Profile Collections` is now the next ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, and `Sidekicks + Profile Discovery` work.
+- `Discover Tab` is now the next ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, and `Sidekicks + Profile Discovery` work.
 - Repos may perform preparatory work ahead of that ship order when the work is additive, assumptions are documented, and accepted feature behavior is not redefined.
 
 ## Repo-Autonomous Next Work
@@ -184,8 +185,8 @@ Each feature is complete only when all of these gates are satisfied:
 
 Upcoming features are expected to add or expand public interfaces in these areas:
 
-- `Discovery search`
-  Feed and map will need a location search input, candidate-location selection, and a 25-mile location filter mode in addition to current-location default behavior.
+- `Discover`
+  Server support will be needed for curated discover-home modules, grouped people and adventure search, creator-led ranking derived from the current V2 dataset, and optional additive interaction tracking that improves recommendations over time.
 - `Sidekicks`
   Server support will be needed for profile search, sidekick state transitions, and sidekick-aware profile and adventure reads.
 - `Sharing and invites`
