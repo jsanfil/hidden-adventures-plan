@@ -6,7 +6,7 @@ Make selective sharing meaningful by adding searchable profile discovery and sid
 
 ## Status
 
-- Program status: `In Progress`
+- Program status: `Done`
 - Completion source of truth: this document
 
 ## Scope
@@ -28,8 +28,8 @@ Make selective sharing meaningful by adding searchable profile discovery and sid
 - [x] Design accepted
 - [x] Mock iOS accepted
 - [x] Server accepted
-- [ ] Integrated iOS accepted
-- [ ] QA accepted
+- [x] Integrated iOS accepted
+- [x] QA accepted
 
 ## Public Interface Expectations
 
@@ -43,17 +43,24 @@ Make selective sharing meaningful by adding searchable profile discovery and sid
 - [x] v0 screenshots and UX notes linked
 - [x] SwiftUI gallery coverage updated
 - [x] server tests added for sidekick transitions and policy checks
-- [ ] integrated local happy path validated
-- [ ] manual QA notes recorded
+- [x] integrated local happy path validated
+- [x] manual QA notes recorded
 
 ## Current Progress
 
 - The accepted v0 references now include `docs/ux-specs/ProfileSidekicksDesign.md` plus the full `docs/screenshots/ProfileSidekicks*.png` screenshot set in `v0-hidden-adventures-ui`.
-- `hidden-adventures-ios` now has a fixture-backed profile-tab implementation for the first mock slice:
-  - hard-coded stats row on profile
-  - sidekicks preview card and navigation entry point
-  - client-only `SidekicksView` with local search, segmented tabs, add flow, and remove confirm/cancel flow
-- Focused iOS UI coverage now exercises the profile-sidekicks entry point and sidekicks interactions through `ProfileScreenUITests`.
+- `hidden-adventures-ios` now ships the profile-tab sidekicks entry point, live sidekicks list and search flows, add/remove sidekick actions, and sidekick profile-card browsing.
+- Focused iOS UI coverage exercises the profile-sidekicks entry point and sidekicks interactions through `ProfileScreenUITests`, while the 2026-04-19 manual QA pass in `hidden-adventures-ios/Docs/manual-qa-results.md` records the integrated local happy path as complete.
+
+## Proof Links
+
+- `v0-hidden-adventures-ui/docs/ux-specs/ProfileSidekicksDesign.md`
+- `v0-hidden-adventures-ui/docs/screenshots/ProfileSidekicks*.png`
+- `hidden-adventures-server/docs/contract.md`
+- `hidden-adventures-server/tests/sidekicks.routes.test.ts`
+- `hidden-adventures-server/tests/sidekicks.repository.test.ts`
+- `hidden-adventures-ios/UITests/Screens/ProfileScreenUITests.swift`
+- `hidden-adventures-ios/Docs/manual-qa-results.md`
 
 ## Notes
 

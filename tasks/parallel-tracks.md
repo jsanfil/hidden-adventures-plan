@@ -4,8 +4,8 @@ Use this file to make repo-based Codex execution explicit, define what each repo
 
 ## Current Scheduled Feature
 
-- `Sidekicks + Profile Discovery`
-- Detailed tracking doc: `features/sidekicks-profile-discovery.md`
+- `Profile Collections`
+- Detailed tracking doc: `features/profile-collections.md`
 
 ## How To Use This File
 

@@ -97,12 +97,12 @@ Each feature is complete only when all of these gates are satisfied:
 - the worktree-based thread setup has been retired in favor of repo-based execution on `main`
 - Create Adventure implementation, gallery coverage, server create path, and manual QA are complete
 - Map Discovery + Location Search is complete with accepted v0 design, the shipped MapKit-backed Explore map and location search flow, geo-scoped feed reads, and completed automation plus manual QA
+- Sidekicks + Profile Discovery is complete with accepted v0 references, shipped sidekick discovery and management flows, sidekick-aware server reads, and recorded manual QA proof
 
 ### In Progress
 
 - first staging smoke execution from the deployment baseline
 - post-Slice-1 planning restructure from slice-based execution to feature-by-feature delivery
-- Sidekicks + Profile Discovery fixture-backed iOS implementation is underway, including the profile-tab sidekicks entry point and client-only sidekicks management flow
 
 ### Later
 
@@ -145,7 +145,7 @@ Each feature is complete only when all of these gates are satisfied:
 | --- | --- | --- | --- | --- |
 | 1 | Create Adventure | Done | [features/create-adventure.md](./features/create-adventure.md) | authoring entry, metadata, primary media, location, category, visibility |
 | 2 | Map Discovery + Location Search | Done | [features/map-discovery-location-search.md](./features/map-discovery-location-search.md) | real map plus vague-location search and 25-mile discovery scope |
-| 3 | Sidekicks + Profile Discovery | In Progress | [features/sidekicks-profile-discovery.md](./features/sidekicks-profile-discovery.md) | searchable profiles, sidekick states, sidekick-aware visibility value |
+| 3 | Sidekicks + Profile Discovery | Done | [features/sidekicks-profile-discovery.md](./features/sidekicks-profile-discovery.md) | searchable profiles, sidekick states, sidekick-aware visibility value |
 | 4 | Profile Collections | Not Started | [features/profile-collections.md](./features/profile-collections.md) | authored adventures and favorites on profile surfaces |
 | 5 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows plus saved-state rendering |
 | 6 | Comments | Not Started | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail |
@@ -158,7 +158,7 @@ Each feature is complete only when all of these gates are satisfied:
 ## Program Priority Order
 
 - Product delivery should continue in the feature order listed above.
-- `Sidekicks + Profile Discovery` is now the next ship-priority feature after completed `Create Adventure` and `Map Discovery + Location Search` work.
+- `Profile Collections` is now the next ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, and `Sidekicks + Profile Discovery` work.
 - Repos may perform preparatory work ahead of that ship order when the work is additive, assumptions are documented, and accepted feature behavior is not redefined.
 
 ## Repo-Autonomous Next Work
