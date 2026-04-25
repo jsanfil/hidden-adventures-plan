@@ -23,7 +23,7 @@ Replace the reserved `Saved` tab with a real `Discover` destination that helps u
 
 ## Status
 
-- Program status: `Not Started`
+- Program status: `In Progress`
 - Completion source of truth: this document
 
 ## Scope
@@ -101,11 +101,11 @@ Replace the reserved `Saved` tab with a real `Discover` destination that helps u
 
 ## Delivery Gates
 
-- [ ] Design accepted
-- [ ] Mock iOS accepted
-- [ ] Server accepted
-- [ ] Integrated iOS accepted
-- [ ] QA accepted
+- [x] Design accepted
+- [x] Mock iOS accepted
+- [x] Server accepted
+- [x] Integrated iOS accepted
+- [x] QA accepted
 
 ## Search Behavior
 
@@ -171,16 +171,31 @@ Replace the reserved `Saved` tab with a real `Discover` destination that helps u
 
 ## QA And Proof
 
-- [ ] v0 screenshots and UX notes linked
-- [ ] SwiftUI gallery coverage updated
-- [ ] server tests added for discover home and discover search
-- [ ] integrated local happy path validated
-- [ ] manual QA notes recorded
+- [x] v0 screenshots and UX notes linked
+- [x] SwiftUI gallery coverage updated
+- [x] server tests added for discover home and discover search
+- [x] integrated local happy path validated
+- [x] manual QA notes recorded
+
+## Current Progress
+
+- `hidden-adventures-ios` now wires the Discover home and grouped search flows to the live `GET /api/discover/home` and `GET /api/discover/search` server endpoints while keeping the fixture-backed path available for previews and deterministic UI coverage.
+- The shipped iOS Discover flow now renders live adventurer and adventure media, preserves grouped `People` and `Adventures` search behavior, and reuses the existing profile and adventure detail destinations from Discover cards and rows.
+- Focused local verification covered both fixture and live paths through `DiscoverServiceTests` and `DiscoverScreenUITests`, including a local-automation run against the real server-backed Discover endpoints.
+- Server-side Discover contracts are live and consumed by iOS
+- manual QA tests run and test results recorded.
+
+## Proof Links
+
+- `hidden-adventures-server/docs/contract.md`
+- `hidden-adventures-ios/App/Services/DiscoverService.swift`
+- `hidden-adventures-ios/Tests/DiscoverServiceTests.swift`
+- `hidden-adventures-ios/UITests/Screens/DiscoverScreenUITests.swift`
 
 ## Implementation Defaults
 
 - Tab name is `Discover`.
-- Discover becomes the next feature to implement after completed `Sidekicks + Profile Discovery` work.
+- Discover is the current in-progress feature after completed `Sidekicks + Profile Discovery` work.
 - `Profile Collections` remains a separate later feature focused on profile-surface collections.
 - `Favorites` remains a separate later feature focused on save and unsave mechanics plus favorite-state hydration.
 - v1 is intentionally simpler than the prior draft because it must match current data reality.
