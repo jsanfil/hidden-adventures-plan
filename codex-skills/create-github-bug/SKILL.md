@@ -78,7 +78,10 @@ Remove empty optional sections instead of leaving placeholders behind.
 If a screenshot is provided:
 
 - If it already has a durable URL, include it directly in `Evidence`.
+- If the screenshot was pasted into the Codex thread, first attempt to read an image from the macOS clipboard. If an image is present, save it to a temporary PNG automatically and upload it to GitHub without asking the user for a file path.
+- Because `gh issue create` cannot directly upload binary image attachments into an issue body, use a hybrid flow when clipboard upload is needed: create the issue first, then upload the screenshot through the GitHub web composer and place it in the issue body or first comment.
 - If it is only attached in the Codex thread or available as a local file, summarize the visual issue in words and note where the screenshot lives.
+- If the clipboard no longer contains an image, do not block issue creation; fall back to the written evidence summary and say that the screenshot could not be attached automatically.
 - Do not block issue creation on image upload support.
 
 The written description should stand on its own even if the screenshot is not accessible in GitHub later.
@@ -86,9 +89,11 @@ The written description should stand on its own even if the screenshot is not ac
 ## Title Style
 
 Keep titles short and concrete.
+Prefer `<ViewOrArea> <specific symptom>` when a view, screen, or subsystem is obvious from the prompt.
 
 - Good: `ProfileView avatar is misaligned to the right`
 - Good: `Feed radius filter is ignored on server reads`
+- Good: `DiscoverView avatar fallback bubble is too transparent`
 - Avoid: `Fix bug`
 - Avoid: `UI issue from screenshot`
 
@@ -127,13 +132,19 @@ The avatar in `ProfileView` sits too far to the right relative to the rest of th
 1. Infer the repo.
 2. Draft the title and minimal issue body.
 3. Create the issue with `gh issue create` in the owning repo.
+   If a screenshot was pasted into the thread and the clipboard still contains image data, plan to attach it immediately after issue creation without asking the user for a filesystem path.
 4. If labels already exist, apply the default labels during creation.
+   Prefer `gh issue create --label ...` for simple single-repo bugs.
+   If using `gh api` to create the issue, quote `labels[]` arguments in `zsh` to avoid shell globbing problems.
 5. If the shared project `Hidden Adventures Bug Workflow` is available, add the issue to it and mirror the labels into project fields when practical:
+   - After adding the issue, fetch the project item ID before editing fields.
+   - Fetch the project field IDs and single-select option IDs before calling `gh project item-edit`.
    - `status:ready` -> `Status: Todo`
    - `prio:p0` -> `Priority: P0`
    - `prio:p1` -> `Priority: P1`
    - `prio:p2` -> `Priority: P2`
    Labels remain the source of truth if the project is not updated.
-6. Return the repo, issue number, and title to the user.
+6. If screenshot upload is needed and clipboard image capture succeeded, upload the image through the GitHub web issue composer and include it in the issue body or first comment.
+7. Return the repo, issue number, and title to the user, and mention whether the screenshot was attached or only referenced.
 
 If project mirroring is skipped, still create the minimal issue and mention that the issue labels are authoritative.
