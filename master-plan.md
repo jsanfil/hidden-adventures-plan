@@ -146,7 +146,7 @@ Each feature is complete only when all of these gates are satisfied:
 | 1 | Create Adventure | Done | [features/create-adventure.md](./features/create-adventure.md) | authoring entry, metadata, primary media, location, category, visibility |
 | 2 | Map Discovery + Location Search | Done | [features/map-discovery-location-search.md](./features/map-discovery-location-search.md) | real map plus vague-location search and 25-mile discovery scope |
 | 3 | Sidekicks + Profile Discovery | Done | [features/sidekicks-profile-discovery.md](./features/sidekicks-profile-discovery.md) | searchable profiles, sidekick states, sidekick-aware visibility value |
-| 4 | Discover Tab | Not Started | [features/discover-tab.md](./features/discover-tab.md) | creator-led discovery home, mixed people and adventure search, and best-first creator catalogs |
+| 4 | Discover Tab | Not Started | [features/discover-tab.md](./features/discover-tab.md) | adventurer browse, popular adventures, and grouped people and adventure text search |
 | 5 | Profile Collections | Not Started | [features/profile-collections.md](./features/profile-collections.md) | authored adventures and favorites on profile surfaces |
 | 6 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows plus saved-state rendering |
 | 7 | Comments | Not Started | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail |
@@ -186,7 +186,7 @@ Each feature is complete only when all of these gates are satisfied:
 Upcoming features are expected to add or expand public interfaces in these areas:
 
 - `Discover`
-  Server support will be needed for curated discover-home modules, grouped people and adventure search, creator-led ranking derived from the current V2 dataset, and optional additive interaction tracking that improves recommendations over time.
+  Server support will be needed for simple discover-home browse modules, grouped people and adventure text search, and straightforward server-owned ordering derived from existing public profile and adventure data.
 - `Sidekicks`
   Server support will be needed for profile search, sidekick state transitions, and sidekick-aware profile and adventure reads.
 - `Sharing and invites`

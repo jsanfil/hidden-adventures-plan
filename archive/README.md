@@ -6,6 +6,8 @@ These docs are not authoritative for current status, sequencing, repo-next decis
 
 Current archive areas:
 
+- `features/`
+  Archived feature specs that have been replaced or retired. These copies are historical context only and are not authoritative for active planning.
 - `releases/`
   Historical slice-oriented release docs and templates.
 - `tasks-threads/`

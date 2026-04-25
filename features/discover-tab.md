@@ -2,25 +2,24 @@
 
 ## Summary
 
-Replace the reserved `Saved` tab with a real `Discover` destination that helps users find great adventures through creators, standout posts, and broader regional or destination-oriented discovery.
+Replace the reserved `Saved` tab with a real `Discover` destination that helps users browse adventurers and adventures using data the rebuild already stores and exposes cleanly.
 
 ## Product Intent
 
-- The app is ultimately about finding cool places to explore rather than building a friend network.
-- Discover should lean into the social layer only insofar as people act as strong curators of places and adventure taste.
-- This feature exists because `Saved` is a utility destination, while `Discover` should become a repeat-use discovery destination that earns a main-tab slot.
-- The experience should feel more editorial and inspirational than the current local feed without becoming a generic social app.
+- The app is still about finding cool places through people and content, but Discover v1 should stay grounded in straightforward public profile and adventure data.
+- This feature exists because `Saved` is a utility destination, while `Discover` should become a repeat-use browsing destination that earns a main-tab slot.
+- The experience should feel broader than the local feed and less map-driven than Explore, without pretending the app already has a recommendation system or a second place-search surface.
 
 ## Positioning
 
 - `Home Feed`
-  Local adventure stream for what is happening around the viewer now.
+  Local, location-driven stream of what is happening around the viewer now.
 - `Map`
-  Place-based exploration around a selected location with geographic scope and map interactions.
+  Place-based exploration around a selected location with geographic scope.
 - `Discover`
-  Broader regional and destination-oriented discovery through creators, standout adventures, and mixed people plus adventure search.
+  Broader public browsing across adventurers and adventures, plus grouped people and adventure text search.
 - `Profile`
-  The viewer's own identity, authored content, saved content, and later profile-based collections.
+  The viewer's own identity, authored content, saved content later, and account-centered surfaces.
 
 ## Status
 
@@ -31,57 +30,74 @@ Replace the reserved `Saved` tab with a real `Discover` destination that helps u
 
 - new `Discover` main-tab destination
 - discovery-home modules, not blank search
-- unified search across people and adventures
-- creator-led presentation with adventure value still central
-- reuse of the existing profile concept when opening creators
-- best-first authored-adventure ordering when entering profiles from Discover
-- saved-content displacement from main-tab navigation into later profile collections work
+- unified text search across people and adventures
+- adventurers and adventures both visible on the home
+- reuse of the existing profile concept when opening adventurers
+- no Discover-only profile surface
+- no Discover-specific authored-adventure ordering change in v1
+- no geographic query expansion inside Discover search
 
 ## Experience Principles
 
-- Discover is a place-discovery feature first, not a social-network feature.
-- People should lead visually because they are the curation lens, but adventures must remain equal in product value.
-- The default state should be a discovery home, not a blank search screen.
-- Geographic scope should feel broader than the local feed: regional and destination-oriented rather than purely nearby or fully global by default.
-- The screen should help users find creators worth browsing and adventures worth opening without introducing DMs, groups, or community mechanics.
+- Keep Discover browse-first.
+- Keep the data story honest.
+- Keep adventurers present, but do not overclaim why an adventurer is worth following.
+- Keep adventures central in product value.
+- Keep Discover distinct from feed and map by being broader and non-local by default.
+- Avoid heavy filtering, recommendation framing, social-network mechanics, and vague place-search behavior.
 
 ## Dependencies
 
 - stable profile foundation
 - stable authored-adventure profile reads
-- stable sidekick/profile search foundation
-- server-owned ranking and discover API support
+- stable profile search foundation
+- stable public adventure read models
+- server support for Discover home and grouped search
 
 ## Default UX Shape
 
 - Main-tab label is `Discover`.
-- The top of the screen is a single search bar that supports both people and adventures.
-- The default home should open as curated sections rather than a search-only layout.
-- v1 home modules should be ordered as:
-  1. `Creators To Explore`
-  2. `Rising Explorers`
-  3. `Standout Adventures`
-  4. `Browse By Category`
-  5. `Destination Creators`
-- Search results should be grouped into `People` and `Adventures` rather than forced into a single mixed list.
-- The first interaction model should bias toward browsing and tapping into creator profiles rather than performing advanced filtering.
+- The top of the screen is a single search bar.
+- The default home opens to two modules in this order:
+  1. `Explore Adventurers`
+  2. `Popular Adventures`
+- Search results are grouped into `People` and `Adventures`.
+- Search results render in one continuous vertical scroll.
+- The first interaction model favors browsing and tapping into profiles or adventure detail, not advanced filtering.
 
-## Creator And Profile Behavior
+## Home Module Definitions
 
-- Creator cards should answer "Why should I browse this person's adventures?" rather than "Why should I connect with this person?"
-- Creator cards should include:
-  - avatar
-  - display name and handle
-  - short bio snippet when available
-  - home city and region when available
-  - adventure count
-  - top categories derived from authored adventures
-  - preview media or adventure collage
-  - a short recommendation reason
-- Primary creator-card CTA should be `View Profile`.
-- Discover must reuse the same core profile concept already used elsewhere in the app rather than introducing a special Discover-only profile screen.
-- When a user opens a creator profile from Discover, authored adventures should default to `best` ordering rather than purely recent ordering.
-- Profile entry from Discover should still feel close to the existing `ProfileView` concept, with the main change being emphasis and ordering rather than a separate screen identity.
+- `Explore Adventurers`
+  - Source only adventurers with at least one public published adventure.
+  - Order by public published adventure count descending, then most recent public published adventure descending.
+  - Card contents:
+    - avatar when present
+    - display name or handle
+    - handle
+    - home city and region when present
+    - public adventure count
+    - top 1-2 adventure categories
+    - preview media from public authored adventures
+  - Do not require bio snippets, recommendation reasons, "featured" explanations, or destination claims.
+
+- `Popular Adventures`
+  - Source public published adventures only.
+  - Order by favorite count descending, then comment count descending, then average rating descending, then publish recency descending.
+  - Use existing derived stats or projections only; do not require new telemetry or recommendation infrastructure.
+  - Card contents:
+    - primary image
+    - title
+    - author identity
+    - category
+    - place label or location text when available
+    - rating display only if the current read model already exposes it cleanly
+
+## Adventurer And Profile Behavior
+
+- Adventurer cards should answer "who has public adventures worth browsing?" in a simple, factual way.
+- Discover must reuse the same core profile concept already used elsewhere in the app.
+- Opening an adventurer from Discover should keep the current profile adventure ordering behavior.
+- Do not introduce a new `best` sort in v1.
 
 ## Delivery Gates
 
@@ -91,39 +107,65 @@ Replace the reserved `Saved` tab with a real `Discover` destination that helps u
 - [ ] Integrated iOS accepted
 - [ ] QA accepted
 
+## Search Behavior
+
+- Keep unified search in scope for v1.
+- Discover search is grouped text search, not place search.
+- A query should be matched independently against `People` and `Adventures`, then rendered as two sections in a single vertically scrolling result screen.
+- `People` appears first.
+- `Adventures` appears below it.
+- If one section has no results, omit that section and keep the other section in the same single scroll.
+- Do not use segmented tabs, nested scrolling areas, or separate result pages for `People` and `Adventures`.
+
+- `People` search behavior:
+  - use existing searchable profile fields already supported by the profile discovery foundation
+  - base v1 matching on display name and handle
+  - order people results using the same simple adventurer ranking used by `Explore Adventurers` when tie-breaking is needed
+
+- `Adventures` search behavior:
+  - search currently stored adventure fields that are safe and straightforward to support in v1
+  - title is the required match field
+  - description and place label may be included only if the live contract already exposes them cleanly and implementation remains straightforward
+  - order adventure results by text relevance first, then publish recency as a tie-breaker
+
+- explicit `Dakota` example:
+  - if a user types `Dakota`, Discover should return:
+    - `People`: adventurers whose display name or handle matches `Dakota`
+    - `Adventures`: adventures whose searchable text fields match `Dakota`
+  - Discover should not interpret `Dakota` as a geographic request for all adventures in North Dakota or South Dakota
+  - geographic intent remains owned by the completed map/location-search experience
+
 ## Public Interface Expectations
 
 - `GET /api/discover/home`
 - `GET /api/discover/search`
-- optional `sort=recent|best` support on `GET /api/profiles/:handle`
-- grouped Discover response types for creators and adventures
+- grouped Discover response types for adventurers and adventures
+- no new `sort=best` requirement on `GET /api/profiles/:handle` for this feature
 
 ## Ranking And Data Strategy
 
-- Discover ranking should be server-owned rather than assembled client-side because the server is closest to the database and ranking inputs.
-- Discover must work on day one from the existing V2 dataset and should not depend on newly accumulated Discover-only telemetry before it becomes useful.
-- v1 ranking should use existing live data plus derived server-side scoring:
-  - published adventure count
-  - recency
+- Ranking stays server-owned, but v1 ordering should be deliberately simple.
+- Use only data already stored or already projected safely:
+  - public published adventure count
+  - published timestamps
   - category mix
   - favorite count
   - comment count
-  - rating count
-  - average rating
-  - author location fields
-  - optional destination context
-- v1 should use light personalization only:
-  - destination or selected region context when available
-  - viewer home region when available
-  - authored-category affinity when it can be derived safely
-- New Discover interaction tracking may be added, but it must be additive only and should improve ranking over time rather than gate the first release.
-- Do not rely on fixture-only profile social-proof values such as `likes` or `views` unless they become part of a deliberate live server contract.
-- Do not require a heavy precomputed recommendation system for v1 if query-time ranking or lightweight derived scoring is sufficient.
+  - rating count and average rating where already derived
+  - author display and location fields when present
+- Use simple text matching for search; do not require geocoding, destination inference, or place expansion.
+- Do not require:
+  - recommendation reasons
+  - destination metadata
+  - Discover-specific telemetry
+  - personalization
+  - editorial curation flags
+  - category home modules
 
 ## Saved And Favorites Placement
 
 - Replacing the reserved `Saved` tab with `Discover` is a navigation and product-positioning decision, not a statement that saved content is unimportant.
-- Saved and favorited adventures should move under later profile-based collection surfaces rather than remain a main-tab destination.
+- Saved and favorited browsing should move under later profile collections and favorites work rather than remain a main-tab destination.
 - `Profile Collections` remains the follow-on feature that should absorb saved and authored-content browsing surfaces.
 - `Favorites` remains the separate follow-on feature that should own save and unsave mechanics plus favorite-state hydration.
 
@@ -131,7 +173,7 @@ Replace the reserved `Saved` tab with a real `Discover` destination that helps u
 
 - [ ] v0 screenshots and UX notes linked
 - [ ] SwiftUI gallery coverage updated
-- [ ] server tests added for discover home, discover search, and profile best-sort reads
+- [ ] server tests added for discover home and discover search
 - [ ] integrated local happy path validated
 - [ ] manual QA notes recorded
 
@@ -141,29 +183,21 @@ Replace the reserved `Saved` tab with a real `Discover` destination that helps u
 - Discover becomes the next feature to implement after completed `Sidekicks + Profile Discovery` work.
 - `Profile Collections` remains a separate later feature focused on profile-surface collections.
 - `Favorites` remains a separate later feature focused on save and unsave mechanics plus favorite-state hydration.
-- Discover v1 uses existing live signals plus server-derived ranking:
-  - published adventure count
-  - recency
-  - category mix
-  - favorite count
-  - comment count
-  - rating count
-  - average rating
-  - author location fields
-  - optional destination context
-- Any new Discover interaction tracking is additive only and must not be required for launch quality.
+- v1 is intentionally simpler than the prior draft because it must match current data reality.
+- If profile or adventure fields are sparse, the UI should fall back gracefully rather than inventing content.
 
 ## Non-Goals
 
 - Do not turn Discover into a DM, inbox, or chat surface.
 - Do not optimize the screen around friendship mechanics, interest groups, or community management.
 - Do not make Discover a clone of the local feed or the map experience.
-- Do not rank the entire surface as a pure popularity board driven only by post count.
 - Do not introduce a second profile concept that competes with the existing profile flow.
+- Do not add browse-by-category, destination, or rising-explorer home modules in v1.
+- Do not add recommendation-reason copy or destination-oriented search behavior.
+- Do not expand ambiguous text queries like `Dakota` into map-region results.
 
 ## Notes
 
-- Discover is about place discovery, not DMs, groups, or friend-network mechanics.
-- People lead visually because they are curators of places rather than the primary product destination.
+- Discover is about place discovery without becoming a second place-search system.
+- Adventurers are present because people help users browse public adventures, not because the app is becoming a social-network product.
 - Saved and favorited items are no longer a main-tab destination and should land under later profile-based collection surfaces.
-- Discover ranking should work immediately from the existing V2 dataset, with any new interaction tracking improving the surface over time rather than gating launch.
