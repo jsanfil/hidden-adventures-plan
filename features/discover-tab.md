@@ -23,7 +23,7 @@ Replace the reserved `Saved` tab with a real `Discover` destination that helps u
 
 ## Status
 
-- Program status: `In Progress`
+- Program status: `Done`
 - Completion source of truth: this document
 
 ## Scope
@@ -183,7 +183,8 @@ Replace the reserved `Saved` tab with a real `Discover` destination that helps u
 - The shipped iOS Discover flow now renders live adventurer and adventure media, preserves grouped `People` and `Adventures` search behavior, and reuses the existing profile and adventure detail destinations from Discover cards and rows.
 - Focused local verification covered both fixture and live paths through `DiscoverServiceTests` and `DiscoverScreenUITests`, including a local-automation run against the real server-backed Discover endpoints.
 - Server-side Discover contracts are live and consumed by iOS
-- manual QA tests run and test results recorded.
+- manual QA tests run and test results recorded
+- Discover Tab is complete and `Profile Collections` is now the next scheduled feature in the program sequence.
 
 ## Proof Links
 
@@ -195,9 +196,9 @@ Replace the reserved `Saved` tab with a real `Discover` destination that helps u
 ## Implementation Defaults
 
 - Tab name is `Discover`.
-- Discover is the current in-progress feature after completed `Sidekicks + Profile Discovery` work.
-- `Profile Collections` remains a separate later feature focused on profile-surface collections.
-- `Favorites` remains a separate later feature focused on save and unsave mechanics plus favorite-state hydration.
+- Discover Tab is complete after completed `Sidekicks + Profile Discovery` work.
+- `Profile Collections` remains the follow-on feature focused on profile-surface collections.
+- `Favorites` remains a later feature focused on save and unsave mechanics plus favorite-state hydration.
 - v1 is intentionally simpler than the prior draft because it must match current data reality.
 - If profile or adventure fields are sparse, the UI should fall back gracefully rather than inventing content.
 

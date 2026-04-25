@@ -1,0 +1,4 @@
+interface:
+  display_name: "Execute GitHub Bug"
+  short_description: "Claim one bug, implement it, and stop at review-ready"
+  default_prompt: "Use $execute-github-bug to claim one eligible Hidden Adventures bug issue, create the branch, implement the fix, run validation, update the issue and PR, and stop at ready-for-review without merging or closing."

@@ -98,12 +98,13 @@ Each feature is complete only when all of these gates are satisfied:
 - Create Adventure implementation, gallery coverage, server create path, and manual QA are complete
 - Map Discovery + Location Search is complete with accepted v0 design, the shipped MapKit-backed Explore map and location search flow, geo-scoped feed reads, and completed automation plus manual QA
 - Sidekicks + Profile Discovery is complete with accepted v0 references, shipped sidekick discovery and management flows, sidekick-aware server reads, and recorded manual QA proof
+- Discover Tab is complete with accepted v0 references, shipped Discover home and grouped search flows, live `GET /api/discover/home` and `GET /api/discover/search` integration, and recorded automation plus manual QA proof
 
 ### In Progress
 
 - first staging smoke execution from the deployment baseline
 - post-Slice-1 planning restructure from slice-based execution to feature-by-feature delivery
-- Discover Tab is now in progress: `hidden-adventures-ios` is wired to the live Discover home and grouped search APIs, fixture preview remains intact, and focused local automation now covers both fixture and server-backed Discover flows
+- Profile Collections is now the active ship-priority feature after completed Discover Tab work, while feature delivery remains `Not Started` in its feature doc until design or implementation evidence lands
 
 ### Later
 
@@ -147,7 +148,7 @@ Each feature is complete only when all of these gates are satisfied:
 | 1 | Create Adventure | Done | [features/create-adventure.md](./features/create-adventure.md) | authoring entry, metadata, primary media, location, category, visibility |
 | 2 | Map Discovery + Location Search | Done | [features/map-discovery-location-search.md](./features/map-discovery-location-search.md) | real map plus vague-location search and 25-mile discovery scope |
 | 3 | Sidekicks + Profile Discovery | Done | [features/sidekicks-profile-discovery.md](./features/sidekicks-profile-discovery.md) | searchable profiles, sidekick states, sidekick-aware visibility value |
-| 4 | Discover Tab | In Progress | [features/discover-tab.md](./features/discover-tab.md) | adventurer browse, popular adventures, and grouped people and adventure text search |
+| 4 | Discover Tab | Done | [features/discover-tab.md](./features/discover-tab.md) | adventurer browse, popular adventures, and grouped people and adventure text search |
 | 5 | Profile Collections | Not Started | [features/profile-collections.md](./features/profile-collections.md) | authored adventures and favorites on profile surfaces |
 | 6 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows plus saved-state rendering |
 | 7 | Comments | Not Started | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail |
@@ -160,7 +161,7 @@ Each feature is complete only when all of these gates are satisfied:
 ## Program Priority Order
 
 - Product delivery should continue in the feature order listed above.
-- `Discover Tab` is the active ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, and `Sidekicks + Profile Discovery` work.
+- `Profile Collections` is the active ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, `Sidekicks + Profile Discovery`, and `Discover Tab` work.
 - Repos may perform preparatory work ahead of that ship order when the work is additive, assumptions are documented, and accepted feature behavior is not redefined.
 
 ## Repo-Autonomous Next Work
@@ -186,8 +187,8 @@ Each feature is complete only when all of these gates are satisfied:
 
 Upcoming features are expected to add or expand public interfaces in these areas:
 
-- `Discover`
-  Server support will be needed for simple discover-home browse modules, grouped people and adventure text search, and straightforward server-owned ordering derived from existing public profile and adventure data.
+- `Profile collections`
+  Server support will be needed for visibility-aware authored-adventure and favorites collection reads on profile surfaces, whether via dedicated collection endpoints or expanded profile responses.
 - `Sidekicks`
   Server support will be needed for profile search, sidekick state transitions, and sidekick-aware profile and adventure reads.
 - `Sharing and invites`
@@ -219,7 +220,7 @@ Upcoming features are expected to add or expand public interfaces in these areas
   - `GET /api/adventures/:id`
   - `GET /api/profiles/:handle`
 - `Map Discovery + Location Search` is now complete across the accepted v0 design, the shipped MapKit-backed Explore map and location-search flow in iOS, the live geo-scoped `GET /api/feed` contract, and recorded automation plus manual QA proof.
-- `Discover Tab` is now in progress across live iOS integration: the app consumes `GET /api/discover/home` and `GET /api/discover/search`, preserves the fixture-preview path for UI coverage, and has focused local Discover service and UI automation proof in `hidden-adventures-ios`.
+- `Discover Tab` is now complete across accepted v0 references, live iOS integration for `GET /api/discover/home` and `GET /api/discover/search`, preserved fixture-preview coverage, focused local Discover service and UI automation proof, and recorded manual QA.
 - Those endpoints are backed by Vitest coverage, reject the retired `viewerHandle` query-param pattern, and now require bearer auth for every business route except `GET /api/health`.
 - The current production Cognito pool has been verified for the rebuild auth path: email is an alias sign-in attribute, `EMAIL_OTP` is enabled as a first auth factor, and the rebuild app client supports `ALLOW_USER_AUTH`.
 - Local manual-QA auth now includes an additional operator note for Cognito sign-up testing: a reused email address can stop receiving a new confirmation email even after its deleted Cognito user is recreated, so fresh addresses are the reliable path for `Get Started` validation.

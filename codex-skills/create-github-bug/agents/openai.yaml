@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create GitHub Bug"
+  short_description: "Turn a short prompt into a repo-local bug issue"
+  default_prompt: "Use $create-github-bug to turn this natural-language bug report into a minimal GitHub issue in the correct Hidden Adventures repo, with concise acceptance criteria and evidence notes."

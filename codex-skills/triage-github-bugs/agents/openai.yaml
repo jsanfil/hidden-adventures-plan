@@ -1,0 +1,4 @@
+interface:
+  display_name: "Triage GitHub Bugs"
+  short_description: "Normalize and coordinate bug issues across repos"
+  default_prompt: "Use $triage-github-bugs to review the ready and triage bug issues in the Hidden Adventures iOS and server repos, normalize labels and priority, and create cross-repo coordination links only when needed."

@@ -4,8 +4,8 @@ Use this file to make repo-based Codex execution explicit, define what each repo
 
 ## Current Scheduled Feature
 
-- `Discover Tab`
-- Detailed tracking doc: `features/discover-tab.md`
+- `Profile Collections`
+- Detailed tracking doc: `features/profile-collections.md`
 
 ## How To Use This File
 
