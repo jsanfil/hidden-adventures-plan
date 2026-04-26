@@ -136,15 +136,16 @@ The avatar in `ProfileView` sits too far to the right relative to the rest of th
 4. If labels already exist, apply the default labels during creation.
    Prefer `gh issue create --label ...` for simple single-repo bugs.
    If using `gh api` to create the issue, quote `labels[]` arguments in `zsh` to avoid shell globbing problems.
-5. If the shared project `Hidden Adventures Bug Workflow` is available, add the issue to it and mirror the labels into project fields when practical:
+5. For Hidden Adventures bugs, if the shared project `Hidden Adventures Bug Workflow` is available, add the issue to it and mirror the labels into project fields as part of the default completion path:
    - After adding the issue, fetch the project item ID before editing fields.
    - Fetch the project field IDs and single-select option IDs before calling `gh project item-edit`.
    - `status:ready` -> `Status: Todo`
    - `prio:p0` -> `Priority: P0`
    - `prio:p1` -> `Priority: P1`
    - `prio:p2` -> `Priority: P2`
-   Labels remain the source of truth if the project is not updated.
+   - If the project add or field mirroring fails, treat the run as incomplete and surface the failure to the user instead of silently finishing.
 6. If screenshot upload is needed and clipboard image capture succeeded, upload the image through the GitHub web issue composer and include it in the issue body or first comment.
-7. Return the repo, issue number, and title to the user, and mention whether the screenshot was attached or only referenced.
+7. Verify the created issue is linked to the project and that mirrored project fields match the labels at minimum for `Status` and `Priority`.
+8. Return the repo, issue number, and title to the user, and mention whether the screenshot was attached or only referenced.
 
-If project mirroring is skipped, still create the minimal issue and mention that the issue labels are authoritative.
+If the shared project is unavailable or inaccessible, say that explicitly in the final response and note that labels are the fallback source of truth.
