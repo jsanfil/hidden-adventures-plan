@@ -22,6 +22,8 @@ If the bug is in iOS and requires simulator investigation, use the relevant iOS 
 - If GitHub app mutations fail with permission or integration errors, immediately fall back to `gh api` instead of retrying through the app tools.
 - Prefer `gh pr create --body-file <path>` over large inline `--body` strings when creating PRs from the shell.
 - If `gh pr create` is blocked by quoting, shell, or environment issues even with `--body-file`, create the PR with `gh api repos/<owner>/<repo>/pulls`.
+- When opening a PR for a bug in the same repo as the issue, include a GitHub auto-closing keyword in the PR body such as `Fixes #<issue>` or `Closes #<issue>`, not just `Refs #<issue>`.
+- Use `Refs #<issue>` only when the issue should stay open after merge, such as cross-repo follow-up work or intentionally partial delivery.
 - Apply workflow-label transitions serially, not in parallel, so final issue state is not left ambiguous by stale reads.
 - If local branch creation is blocked by sandbox restrictions, request escalation immediately rather than delaying the claim flow.
 
@@ -63,7 +65,7 @@ Examples:
 6. Add or update tests first.
 7. Implement the smallest fix that satisfies the issue.
 8. Run the relevant repo validation.
-9. Open or update a PR linked to the issue.
+9. Open or update a PR linked to the issue, using `Fixes #<issue>` in the PR body when the bug and PR are in the same repo.
 10. Update the issue with branch, PR, and validation evidence.
 11. Remove `status:in-progress` and add `status:ready-for-review`.
 12. If the issue is on the shared project, mirror that state to `Status: Done`.
