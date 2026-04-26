@@ -16,6 +16,15 @@ Before code changes:
 
 If the bug is in iOS and requires simulator investigation, use the relevant iOS debugging skill after claiming the issue.
 
+## GitHub and Tooling Fallbacks
+
+- Prefer the GitHub app tools when they can read or mutate issue and PR state directly.
+- If GitHub app mutations fail with permission or integration errors, immediately fall back to `gh api` instead of retrying through the app tools.
+- Prefer `gh pr create --body-file <path>` over large inline `--body` strings when creating PRs from the shell.
+- If `gh pr create` is blocked by quoting, shell, or environment issues even with `--body-file`, create the PR with `gh api repos/<owner>/<repo>/pulls`.
+- Apply workflow-label transitions serially, not in parallel, so final issue state is not left ambiguous by stale reads.
+- If local branch creation is blocked by sandbox restrictions, request escalation immediately rather than delaying the claim flow.
+
 ## Claiming Rules
 
 Only claim issues that:
@@ -46,17 +55,18 @@ Examples:
 
 ## Execution Flow
 
-1. Read the issue body and linked evidence carefully.
+1. Read the issue body, comments, and linked evidence carefully.
 2. Confirm the owning repo and current branch state.
-3. Claim the issue.
-4. Reproduce or validate the bug before fixing it when feasible.
-5. Add or update tests first.
-6. Implement the smallest fix that satisfies the issue.
-7. Run the relevant repo validation.
-8. Open or update a PR linked to the issue.
-9. Update the issue with branch, PR, and validation evidence.
-10. Remove `status:in-progress` and add `status:ready-for-review`.
-11. If the issue is on the shared project, mirror that state to `Status: Done`.
+3. Create the working branch early so the claim comment can reference the real branch name.
+4. Claim the issue.
+5. Reproduce or validate the bug before fixing it when feasible.
+6. Add or update tests first.
+7. Implement the smallest fix that satisfies the issue.
+8. Run the relevant repo validation.
+9. Open or update a PR linked to the issue.
+10. Update the issue with branch, PR, and validation evidence.
+11. Remove `status:in-progress` and add `status:ready-for-review`.
+12. If the issue is on the shared project, mirror that state to `Status: Done`.
 
 Stop there.
 
@@ -82,6 +92,7 @@ In `hidden-adventures-ios`, run the narrowest relevant validation that still pro
 - targeted build
 - targeted XCTest or gallery validation
 - simulator or screenshot validation when the bug is visual
+- one lightweight UI-facing regression when the bug is primarily visual or presentation-driven and an automated UI check is practical
 
 In `hidden-adventures-server`, run:
 
