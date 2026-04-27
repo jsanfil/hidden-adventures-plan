@@ -29,6 +29,8 @@
 
 The active operating model separates three different planning questions:
 
+- `Current Scheduled Feature`
+  The single feature the program intends to ship next.
 - `Program Priority Order`
   The canonical feature sequence for product delivery.
 - `Repo-Autonomous Next Work`
@@ -36,7 +38,7 @@ The active operating model separates three different planning questions:
 - `Active Threads`
   The currently open execution units, including optional parallel threads or separate git worktrees inside the same repo. These are coordination artifacts, not the source of truth for sequencing.
 
-Use `master-plan.md`, `features/`, `workstreams/`, and `tasks/parallel-tracks.md` for current planning decisions. Do not use `archive/` to decide what is next.
+Use `master-plan.md`, `features/`, and `workstreams/` for current planning decisions. Do not use `archive/` to decide what is next.
 
 ## Feature Delivery Loop
 
@@ -67,9 +69,9 @@ Each feature is complete only when all of these gates are satisfied:
 ## Tracking Model
 
 - `master-plan.md` is the program rollup and the only place that should summarize status across all major features.
+- `master-plan.md` is also the source of truth for the current scheduled feature and the overall feature sequence.
 - Each major feature has its own doc under `features/`.
 - The feature doc is the source of truth for detailed scope, dependencies, gate checklists, and proof of completion.
-- `tasks/parallel-tracks.md` is the source of truth for repo backlog rules and any optional registry of active threads or worktrees.
 - A feature should be marked `Done` in this master plan only after its feature doc shows all completion gates satisfied and the linked repo work is merged and verified.
 - Family-level docs are no longer the active unit of completion tracking.
 - `archive/` is historical only and must not be used for current status, sequencing, or repo-next decisions.
@@ -158,6 +160,13 @@ Each feature is complete only when all of these gates are satisfied:
 | 11 | Support, Reporting, And Account Management | Not Started | [features/support-reporting-account-management.md](./features/support-reporting-account-management.md) | support, reports, legal/settings, logout, delete-account |
 | 12 | Edit Adventure | Not Started | [features/edit-adventure.md](./features/edit-adventure.md) | edit existing adventure content using the authoring foundation |
 
+## Current Scheduled Feature
+
+- `Favorites`
+- Feature doc: [features/favorites.md](./features/favorites.md)
+- Why it is current:
+  It is the next unscheduled ship-priority feature after `Discover Tab`, and the remaining profile-surface favorites work now belongs there after authored profile browsing shipped under the existing profile surfaces.
+
 ## Program Priority Order
 
 - Product delivery should continue in the feature order listed above.
@@ -181,7 +190,7 @@ Each feature is complete only when all of these gates are satisfied:
 
 - Active execution can run as multiple parallel threads or git worktrees, including multiple threads inside the same repo.
 - Active threads must stay inside documented scope and should map back to the program priority order, feature docs, and repo backlog rules.
-- Use [tasks/parallel-tracks.md](./tasks/parallel-tracks.md) for the current thread registry pattern and [tasks/thread-template.md](./tasks/thread-template.md) when creating or recording a thread.
+- Record a scoped thread or worktree note only when it materially helps coordination, and keep that note outside the active planning surface unless it becomes durable program context.
 
 ## Public Interface Expectations
 

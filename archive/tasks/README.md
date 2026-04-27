@@ -1,6 +1,6 @@
 # Tasks and Templates
 
-This directory holds durable templates for task creation, repo backlog rules, and parallel execution tracking.
+Historical snapshot only. This directory preserves older task and thread templates that are no longer part of the active planning surface.
 
 Recommended workflow:
 
@@ -13,8 +13,6 @@ Execution notes:
 - Run parallel Codex work across repos, and allow multiple active threads or git worktrees inside the same repo when scopes are explicit and non-conflicting.
 - Use each owning repo's `main` branch unless there is a repo-specific reason to do otherwise.
 - Keep `hidden-adventures-plan` as the only repo that declares milestone status and cross-repo truth.
-- Treat `tasks/parallel-tracks.md` as the source of truth for repo-autonomous next-work rules.
 
-The active repo-lane matrix lives in `tasks/parallel-tracks.md`.
-Use `tasks/thread-template.md` when you want to record a scoped thread or worktree.
+Track the current scheduled feature and repo sequencing in `master-plan.md`.
 Historical lane playbooks from the prior execution model now live under `archive/tasks-threads/` and are not authoritative for current decisions.

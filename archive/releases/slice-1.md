@@ -1,6 +1,6 @@
 # Slice 1: Hardening And Integration
 
-Historical snapshot only. This file is not authoritative for current sequencing, repo-next decisions, or active operating rules. Use `master-plan.md`, `features/`, and `tasks/parallel-tracks.md` for live planning.
+Historical snapshot only. This file is not authoritative for current sequencing, repo-next decisions, or active operating rules. Use `master-plan.md`, `features/`, and `workstreams/` for live planning.
 
 ## Scope
 
