@@ -4,8 +4,8 @@ Use this file to make repo-based Codex execution explicit, define what each repo
 
 ## Current Scheduled Feature
 
-- `Profile Collections`
-- Detailed tracking doc: `features/profile-collections.md`
+- `Favorites`
+- Detailed tracking doc: `features/favorites.md`
 
 ## How To Use This File
 
@@ -62,8 +62,8 @@ This section is optional. Record only the active threads or worktrees that benef
 2. Map Discovery + Location Search
 3. Sidekicks + Profile Discovery
 4. Discover Tab
-5. Profile Collections
-6. Favorites
+5. Favorites
+6. Profile Collections (superseded as a standalone feature; remaining scope moved into Favorites)
 7. Comments
 8. Ratings
 9. Adventure Sharing + Friend Invites

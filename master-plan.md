@@ -104,7 +104,7 @@ Each feature is complete only when all of these gates are satisfied:
 
 - first staging smoke execution from the deployment baseline
 - post-Slice-1 planning restructure from slice-based execution to feature-by-feature delivery
-- Profile Collections is now the active ship-priority feature after completed Discover Tab work, while feature delivery remains `Not Started` in its feature doc until design or implementation evidence lands
+- Favorites is now the active ship-priority feature after completed Discover Tab work and after confirming authored-adventure profile browsing already shipped as part of the existing profile surfaces
 
 ### Later
 
@@ -149,8 +149,8 @@ Each feature is complete only when all of these gates are satisfied:
 | 2 | Map Discovery + Location Search | Done | [features/map-discovery-location-search.md](./features/map-discovery-location-search.md) | real map plus vague-location search and 25-mile discovery scope |
 | 3 | Sidekicks + Profile Discovery | Done | [features/sidekicks-profile-discovery.md](./features/sidekicks-profile-discovery.md) | searchable profiles, sidekick states, sidekick-aware visibility value |
 | 4 | Discover Tab | Done | [features/discover-tab.md](./features/discover-tab.md) | adventurer browse, popular adventures, and grouped people and adventure text search |
-| 5 | Profile Collections | Not Started | [features/profile-collections.md](./features/profile-collections.md) | authored adventures and favorites on profile surfaces |
-| 6 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows plus saved-state rendering |
+| 5 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows, saved-state rendering, and favorites collections on profile surfaces |
+| 6 | Profile Collections | Superseded | [features/profile-collections.md](./features/profile-collections.md) | authored profile browsing already shipped; remaining favorites-on-profile scope moved into Favorites |
 | 7 | Comments | Not Started | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail |
 | 8 | Ratings | Not Started | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates |
 | 9 | Adventure Sharing + Friend Invites | Not Started | [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md) | shareable links, text/social share, contact-based invites |
@@ -161,7 +161,7 @@ Each feature is complete only when all of these gates are satisfied:
 ## Program Priority Order
 
 - Product delivery should continue in the feature order listed above.
-- `Profile Collections` is the active ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, `Sidekicks + Profile Discovery`, and `Discover Tab` work.
+- `Favorites` is the active ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, `Sidekicks + Profile Discovery`, and `Discover Tab` work.
 - Repos may perform preparatory work ahead of that ship order when the work is additive, assumptions are documented, and accepted feature behavior is not redefined.
 
 ## Repo-Autonomous Next Work
@@ -187,8 +187,8 @@ Each feature is complete only when all of these gates are satisfied:
 
 Upcoming features are expected to add or expand public interfaces in these areas:
 
-- `Profile collections`
-  Server support will be needed for visibility-aware authored-adventure and favorites collection reads on profile surfaces, whether via dedicated collection endpoints or expanded profile responses.
+- `Favorites`
+  Server support will be needed for favorite create and delete flows, favorite-state hydration in relevant read models, and profile favorites collection reads, whether via dedicated collection endpoints or expanded profile responses.
 - `Sidekicks`
   Server support will be needed for profile search, sidekick state transitions, and sidekick-aware profile and adventure reads.
 - `Sharing and invites`
