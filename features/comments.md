@@ -6,7 +6,7 @@ Add visible comment threads and comment creation on adventure detail while prese
 
 ## Status
 
-- Program status: `Not Started`
+- Program status: `In Progress`
 - Completion source of truth: this document
 
 ## Scope
@@ -26,7 +26,7 @@ Add visible comment threads and comment creation on adventure detail while prese
 
 - [ ] Design accepted
 - [ ] Mock iOS accepted
-- [ ] Server accepted
+- [x] Server accepted
 - [ ] Integrated iOS accepted
 - [ ] QA accepted
 
@@ -40,10 +40,18 @@ Add visible comment threads and comment creation on adventure detail while prese
 
 - [ ] v0 screenshots and UX notes linked
 - [ ] SwiftUI gallery coverage updated
-- [ ] server tests added for comment reads and writes
+- [x] server tests added for comment reads and writes
 - [ ] integrated local happy path validated
 - [ ] manual QA notes recorded
 
 ## Notes
 
 - Comment presentation should use current profile state rather than denormalized snapshots where possible.
+- Server support is implemented in `hidden-adventures-server` for `GET /api/adventures/:id/comments` and `POST /api/adventures/:id/comments`, including visibility checks, completed-local-account enforcement for writes, current profile-backed author fields, and `adventure_stats.comment_count` refresh on create.
+
+## Proof Links
+
+- `hidden-adventures-server`: `docs/contract.md`
+- `hidden-adventures-server`: `tests/adventures.routes.test.ts`
+- `hidden-adventures-server`: `tests/adventures.repository.test.ts`
+- Verification: `npm run check`; `npm test`

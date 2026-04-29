@@ -154,7 +154,7 @@ Each feature is complete only when all of these gates are satisfied:
 | 4 | Discover Tab | Done | [features/discover-tab.md](./features/discover-tab.md) | adventurer browse, popular adventures, and grouped people and adventure text search |
 | 5 | Favorites | Done | [features/favorites.md](./features/favorites.md) | save and unsave flows, saved-state rendering, and favorites collections on profile surfaces |
 | 6 | Profile Collections | Superseded | [features/profile-collections.md](./features/profile-collections.md) | authored profile browsing already shipped; remaining favorites-on-profile scope moved into Favorites |
-| 7 | Comments | Not Started | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail |
+| 7 | Comments | In Progress | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail; server read/create contract is implemented and tested |
 | 8 | Ratings | Not Started | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates |
 | 9 | Adventure Sharing + Friend Invites | Not Started | [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md) | shareable links, text/social share, contact-based invites |
 | 10 | Expanded Authentication | Not Started | [features/expanded-authentication.md](./features/expanded-authentication.md) | phone, Google, Apple, passkeys, biometrics |
@@ -232,7 +232,11 @@ Upcoming features are expected to add or expand public interfaces in these areas
 - `Map Discovery + Location Search` is now complete across the accepted v0 design, the shipped MapKit-backed Explore map and location-search flow in iOS, the live geo-scoped `GET /api/feed` contract, and recorded automation plus manual QA proof.
 - `Discover Tab` is now complete across accepted v0 references, live iOS integration for `GET /api/discover/home` and `GET /api/discover/search`, preserved fixture-preview coverage, focused local Discover service and UI automation proof, and recorded manual QA.
 - `Favorites` is now complete across accepted design, iOS save and unsave behavior, saved-state rendering, profile favorites surfaces, server support, live integration, and QA accepted by direct program handoff.
+- `Comments` server support is implemented and tested for visibility-aware comment list and create flows on adventure detail; design, mock iOS, live iOS integration, and QA remain open.
 - Implemented business endpoints are backed by Vitest coverage, reject the retired `viewerHandle` query-param pattern, and now require bearer auth for every business route except `GET /api/health`.
+- The server now exposes the Comments API surface for:
+  - `GET /api/adventures/:id/comments`
+  - `POST /api/adventures/:id/comments`
 - The current production Cognito pool has been verified for the rebuild auth path: email is an alias sign-in attribute, `EMAIL_OTP` is enabled as a first auth factor, and the rebuild app client supports `ALLOW_USER_AUTH`.
 - Local manual-QA auth now includes an additional operator note for Cognito sign-up testing: a reused email address can stop receiving a new confirmation email even after its deleted Cognito user is recreated, so fresh addresses are the reliable path for `Get Started` validation.
 - Gmail-specific filtering of `no-reply@verificationemail.com` means confirmation delivery should be verified in another inbox or provider before treating it as a Cognito sender failure.
