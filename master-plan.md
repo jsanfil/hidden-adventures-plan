@@ -101,12 +101,13 @@ Each feature is complete only when all of these gates are satisfied:
 - Map Discovery + Location Search is complete with accepted v0 design, the shipped MapKit-backed Explore map and location search flow, geo-scoped feed reads, and completed automation plus manual QA
 - Sidekicks + Profile Discovery is complete with accepted v0 references, shipped sidekick discovery and management flows, sidekick-aware server reads, and recorded manual QA proof
 - Discover Tab is complete with accepted v0 references, shipped Discover home and grouped search flows, live `GET /api/discover/home` and `GET /api/discover/search` integration, and recorded automation plus manual QA proof
+- Favorites is complete with accepted design, iOS save and unsave behavior, saved-state rendering, profile favorites surfaces, server support, live integration, and QA accepted by direct program handoff
 
 ### In Progress
 
 - first staging smoke execution from the deployment baseline
 - post-Slice-1 planning restructure from slice-based execution to feature-by-feature delivery
-- Favorites is now the active ship-priority feature after completed Discover Tab work and after confirming authored-adventure profile browsing already shipped as part of the existing profile surfaces
+- Comments is now the active ship-priority feature after completed Favorites work
 
 ### Later
 
@@ -151,7 +152,7 @@ Each feature is complete only when all of these gates are satisfied:
 | 2 | Map Discovery + Location Search | Done | [features/map-discovery-location-search.md](./features/map-discovery-location-search.md) | real map plus vague-location search and 25-mile discovery scope |
 | 3 | Sidekicks + Profile Discovery | Done | [features/sidekicks-profile-discovery.md](./features/sidekicks-profile-discovery.md) | searchable profiles, sidekick states, sidekick-aware visibility value |
 | 4 | Discover Tab | Done | [features/discover-tab.md](./features/discover-tab.md) | adventurer browse, popular adventures, and grouped people and adventure text search |
-| 5 | Favorites | Not Started | [features/favorites.md](./features/favorites.md) | save and unsave flows, saved-state rendering, and favorites collections on profile surfaces |
+| 5 | Favorites | Done | [features/favorites.md](./features/favorites.md) | save and unsave flows, saved-state rendering, and favorites collections on profile surfaces |
 | 6 | Profile Collections | Superseded | [features/profile-collections.md](./features/profile-collections.md) | authored profile browsing already shipped; remaining favorites-on-profile scope moved into Favorites |
 | 7 | Comments | Not Started | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail |
 | 8 | Ratings | Not Started | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates |
@@ -162,15 +163,15 @@ Each feature is complete only when all of these gates are satisfied:
 
 ## Current Scheduled Feature
 
-- `Favorites`
-- Feature doc: [features/favorites.md](./features/favorites.md)
+- `Comments`
+- Feature doc: [features/comments.md](./features/comments.md)
 - Why it is current:
-  It is the next unscheduled ship-priority feature after `Discover Tab`, and the remaining profile-surface favorites work now belongs there after authored profile browsing shipped under the existing profile surfaces.
+  It is the next unscheduled ship-priority feature after completed `Favorites` work.
 
 ## Program Priority Order
 
 - Product delivery should continue in the feature order listed above.
-- `Favorites` is the active ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, `Sidekicks + Profile Discovery`, and `Discover Tab` work.
+- `Comments` is the active ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, `Sidekicks + Profile Discovery`, `Discover Tab`, and `Favorites` work.
 - Repos may perform preparatory work ahead of that ship order when the work is additive, assumptions are documented, and accepted feature behavior is not redefined.
 
 ## Repo-Autonomous Next Work
@@ -196,10 +197,10 @@ Each feature is complete only when all of these gates are satisfied:
 
 Upcoming features are expected to add or expand public interfaces in these areas:
 
-- `Favorites`
-  Server support will be needed for favorite create and delete flows, favorite-state hydration in relevant read models, and profile favorites collection reads, whether via dedicated collection endpoints or expanded profile responses.
-- `Sidekicks`
-  Server support will be needed for profile search, sidekick state transitions, and sidekick-aware profile and adventure reads.
+- `Comments`
+  Server support will be needed for comment list and create flows on adventure detail, with authorization and visibility behavior aligned to the adventure read model.
+- `Ratings`
+  Server support will be needed for rating create and update flows plus aggregate rating display in adventure read models.
 - `Sharing and invites`
   App and server support will be needed for shareable adventure links and invite flows; contacts access and text-share behavior should be planned as client capabilities with minimal server dependency unless referral tracking is added later.
 - `Expanded auth`
@@ -230,7 +231,8 @@ Upcoming features are expected to add or expand public interfaces in these areas
   - `GET /api/profiles/:handle`
 - `Map Discovery + Location Search` is now complete across the accepted v0 design, the shipped MapKit-backed Explore map and location-search flow in iOS, the live geo-scoped `GET /api/feed` contract, and recorded automation plus manual QA proof.
 - `Discover Tab` is now complete across accepted v0 references, live iOS integration for `GET /api/discover/home` and `GET /api/discover/search`, preserved fixture-preview coverage, focused local Discover service and UI automation proof, and recorded manual QA.
-- Those endpoints are backed by Vitest coverage, reject the retired `viewerHandle` query-param pattern, and now require bearer auth for every business route except `GET /api/health`.
+- `Favorites` is now complete across accepted design, iOS save and unsave behavior, saved-state rendering, profile favorites surfaces, server support, live integration, and QA accepted by direct program handoff.
+- Implemented business endpoints are backed by Vitest coverage, reject the retired `viewerHandle` query-param pattern, and now require bearer auth for every business route except `GET /api/health`.
 - The current production Cognito pool has been verified for the rebuild auth path: email is an alias sign-in attribute, `EMAIL_OTP` is enabled as a first auth factor, and the rebuild app client supports `ALLOW_USER_AUTH`.
 - Local manual-QA auth now includes an additional operator note for Cognito sign-up testing: a reused email address can stop receiving a new confirmation email even after its deleted Cognito user is recreated, so fresh addresses are the reliable path for `Get Started` validation.
 - Gmail-specific filtering of `no-reply@verificationemail.com` means confirmation delivery should be verified in another inbox or provider before treating it as a Cognito sender failure.
