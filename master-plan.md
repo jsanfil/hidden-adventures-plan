@@ -102,12 +102,13 @@ Each feature is complete only when all of these gates are satisfied:
 - Sidekicks + Profile Discovery is complete with accepted v0 references, shipped sidekick discovery and management flows, sidekick-aware server reads, and recorded manual QA proof
 - Discover Tab is complete with accepted v0 references, shipped Discover home and grouped search flows, live `GET /api/discover/home` and `GET /api/discover/search` integration, and recorded automation plus manual QA proof
 - Favorites is complete with accepted design, iOS save and unsave behavior, saved-state rendering, profile favorites surfaces, server support, live integration, and QA accepted by direct program handoff
+- Comments is complete with accepted design references, fixture-backed iOS UI, live iOS integration for comment list and create on adventure detail, focused service and UI automation proof, and recorded local manual QA
 
 ### In Progress
 
 - first staging smoke execution from the deployment baseline
 - post-Slice-1 planning restructure from slice-based execution to feature-by-feature delivery
-- Comments is now the active ship-priority feature after completed Favorites work
+- Ratings is now the active ship-priority feature after completed Comments work
 
 ### Later
 
@@ -154,7 +155,7 @@ Each feature is complete only when all of these gates are satisfied:
 | 4 | Discover Tab | Done | [features/discover-tab.md](./features/discover-tab.md) | adventurer browse, popular adventures, and grouped people and adventure text search |
 | 5 | Favorites | Done | [features/favorites.md](./features/favorites.md) | save and unsave flows, saved-state rendering, and favorites collections on profile surfaces |
 | 6 | Profile Collections | Superseded | [features/profile-collections.md](./features/profile-collections.md) | authored profile browsing already shipped; remaining favorites-on-profile scope moved into Favorites |
-| 7 | Comments | In Progress | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail; server read/create contract is implemented and tested |
+| 7 | Comments | Done | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail with accepted iOS integration, contract coverage, gallery proof, and passed local manual QA |
 | 8 | Ratings | Not Started | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates |
 | 9 | Adventure Sharing + Friend Invites | Not Started | [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md) | shareable links, text/social share, contact-based invites |
 | 10 | Expanded Authentication | Not Started | [features/expanded-authentication.md](./features/expanded-authentication.md) | phone, Google, Apple, passkeys, biometrics |
@@ -163,15 +164,15 @@ Each feature is complete only when all of these gates are satisfied:
 
 ## Current Scheduled Feature
 
-- `Comments`
-- Feature doc: [features/comments.md](./features/comments.md)
+- `Ratings`
+- Feature doc: [features/ratings.md](./features/ratings.md)
 - Why it is current:
-  It is the next unscheduled ship-priority feature after completed `Favorites` work.
+  It is the next unscheduled ship-priority feature after completed `Comments` work.
 
 ## Program Priority Order
 
 - Product delivery should continue in the feature order listed above.
-- `Comments` is the active ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, `Sidekicks + Profile Discovery`, `Discover Tab`, and `Favorites` work.
+- `Ratings` is the active ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, `Sidekicks + Profile Discovery`, `Discover Tab`, `Favorites`, and `Comments` work.
 - Repos may perform preparatory work ahead of that ship order when the work is additive, assumptions are documented, and accepted feature behavior is not redefined.
 
 ## Repo-Autonomous Next Work
@@ -198,7 +199,7 @@ Each feature is complete only when all of these gates are satisfied:
 Upcoming features are expected to add or expand public interfaces in these areas:
 
 - `Comments`
-  Server support will be needed for comment list and create flows on adventure detail, with authorization and visibility behavior aligned to the adventure read model.
+  Server read and create support is implemented for adventure detail, and the integrated iOS comments flow has passed local manual QA.
 - `Ratings`
   Server support will be needed for rating create and update flows plus aggregate rating display in adventure read models.
 - `Sharing and invites`
@@ -232,7 +233,7 @@ Upcoming features are expected to add or expand public interfaces in these areas
 - `Map Discovery + Location Search` is now complete across the accepted v0 design, the shipped MapKit-backed Explore map and location-search flow in iOS, the live geo-scoped `GET /api/feed` contract, and recorded automation plus manual QA proof.
 - `Discover Tab` is now complete across accepted v0 references, live iOS integration for `GET /api/discover/home` and `GET /api/discover/search`, preserved fixture-preview coverage, focused local Discover service and UI automation proof, and recorded manual QA.
 - `Favorites` is now complete across accepted design, iOS save and unsave behavior, saved-state rendering, profile favorites surfaces, server support, live integration, and QA accepted by direct program handoff.
-- `Comments` server support is implemented and tested for visibility-aware comment list and create flows on adventure detail; design, mock iOS, live iOS integration, and QA remain open.
+- `Comments` is now complete across accepted design references, fixture-backed iOS UI, live iOS integration for comment list and create on adventure detail, focused service and UI automation proof, passing full gallery regression coverage, and recorded local manual QA.
 - Implemented business endpoints are backed by Vitest coverage, reject the retired `viewerHandle` query-param pattern, and now require bearer auth for every business route except `GET /api/health`.
 - The server now exposes the Comments API surface for:
   - `GET /api/adventures/:id/comments`
