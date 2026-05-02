@@ -103,13 +103,13 @@ Each feature is complete only when all of these gates are satisfied:
 - Discover Tab is complete with accepted v0 references, shipped Discover home and grouped search flows, live `GET /api/discover/home` and `GET /api/discover/search` integration, and recorded automation plus manual QA proof
 - Favorites is complete with accepted design, iOS save and unsave behavior, saved-state rendering, profile favorites surfaces, server support, live integration, and QA accepted by direct program handoff
 - Comments is complete with accepted design references, fixture-backed iOS UI, live iOS integration for comment list and create on adventure detail, focused service and UI automation proof, and recorded local manual QA
-- Ratings server support is now implemented with detail-scoped `viewerRating`, rating upsert and clear endpoints, legacy-baseline-preserving aggregate refresh, and passing server verification while iOS integration and QA remain open
+- Ratings is complete with accepted adventure-detail design references, shipped iOS rating create/update/clear behavior, feed aggregate sync on return from detail, legacy-baseline-preserving server support, and recorded automation plus manual QA proof
 
 ### In Progress
 
 - first staging smoke execution from the deployment baseline
 - post-Slice-1 planning restructure from slice-based execution to feature-by-feature delivery
-- Ratings is now the active ship-priority feature after completed Comments work
+- Adventure Sharing + Friend Invites is now the active ship-priority feature after completed Ratings work
 
 ### Later
 
@@ -157,7 +157,7 @@ Each feature is complete only when all of these gates are satisfied:
 | 5 | Favorites | Done | [features/favorites.md](./features/favorites.md) | save and unsave flows, saved-state rendering, and favorites collections on profile surfaces |
 | 6 | Profile Collections | Superseded | [features/profile-collections.md](./features/profile-collections.md) | authored profile browsing already shipped; remaining favorites-on-profile scope moved into Favorites |
 | 7 | Comments | Done | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail with accepted iOS integration, contract coverage, gallery proof, and passed local manual QA |
-| 8 | Ratings | In Progress | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates |
+| 8 | Ratings | Done | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates with accepted iOS integration, automation coverage, and passed local manual QA |
 | 9 | Adventure Sharing + Friend Invites | Not Started | [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md) | shareable links, text/social share, contact-based invites |
 | 10 | Expanded Authentication | Not Started | [features/expanded-authentication.md](./features/expanded-authentication.md) | phone, Google, Apple, passkeys, biometrics |
 | 11 | Support, Reporting, And Account Management | Not Started | [features/support-reporting-account-management.md](./features/support-reporting-account-management.md) | support, reports, legal/settings, logout, delete-account |
@@ -165,15 +165,15 @@ Each feature is complete only when all of these gates are satisfied:
 
 ## Current Scheduled Feature
 
-- `Ratings`
-- Feature doc: [features/ratings.md](./features/ratings.md)
+- `Adventure Sharing + Friend Invites`
+- Feature doc: [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md)
 - Why it is current:
-  It is the next unscheduled ship-priority feature after completed `Comments` work.
+  It is the next unscheduled ship-priority feature after completed `Ratings` work.
 
 ## Program Priority Order
 
 - Product delivery should continue in the feature order listed above.
-- `Ratings` is the active ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, `Sidekicks + Profile Discovery`, `Discover Tab`, `Favorites`, and `Comments` work.
+- `Adventure Sharing + Friend Invites` is the active ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, `Sidekicks + Profile Discovery`, `Discover Tab`, `Favorites`, `Comments`, and `Ratings` work.
 - Repos may perform preparatory work ahead of that ship order when the work is additive, assumptions are documented, and accepted feature behavior is not redefined.
 
 ## Repo-Autonomous Next Work
@@ -197,12 +197,12 @@ Each feature is complete only when all of these gates are satisfied:
 
 ## Public Interface Expectations
 
-Upcoming features are expected to add or expand public interfaces in these areas:
+Current and upcoming feature work adds or expands public interfaces in these areas:
 
 - `Comments`
   Server read and create support is implemented for adventure detail, and the integrated iOS comments flow has passed local manual QA.
 - `Ratings`
-  Server support will be needed for rating create and update flows plus aggregate rating display in adventure read models.
+  Rating create, update, and clear flows plus aggregate rating display are now implemented across the shipped adventure-detail experience and supporting read models.
 - `Sharing and invites`
   App and server support will be needed for shareable adventure links and invite flows; contacts access and text-share behavior should be planned as client capabilities with minimal server dependency unless referral tracking is added later.
 - `Expanded auth`
@@ -235,6 +235,7 @@ Upcoming features are expected to add or expand public interfaces in these areas
 - `Discover Tab` is now complete across accepted v0 references, live iOS integration for `GET /api/discover/home` and `GET /api/discover/search`, preserved fixture-preview coverage, focused local Discover service and UI automation proof, and recorded manual QA.
 - `Favorites` is now complete across accepted design, iOS save and unsave behavior, saved-state rendering, profile favorites surfaces, server support, live integration, and QA accepted by direct program handoff.
 - `Comments` is now complete across accepted design references, fixture-backed iOS UI, live iOS integration for comment list and create on adventure detail, focused service and UI automation proof, passing full gallery regression coverage, and recorded local manual QA.
+- `Ratings` is now complete across accepted adventure-detail design references, live iOS rating create/update/clear behavior, feed aggregate sync after returning from detail, preserved fixture-preview coverage, focused service and UI automation proof, and recorded local manual QA.
 - Implemented business endpoints are backed by Vitest coverage, reject the retired `viewerHandle` query-param pattern, and now require bearer auth for every business route except `GET /api/health`.
 - The server now exposes the Comments API surface for:
   - `GET /api/adventures/:id/comments`
