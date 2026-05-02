@@ -103,6 +103,7 @@ Each feature is complete only when all of these gates are satisfied:
 - Discover Tab is complete with accepted v0 references, shipped Discover home and grouped search flows, live `GET /api/discover/home` and `GET /api/discover/search` integration, and recorded automation plus manual QA proof
 - Favorites is complete with accepted design, iOS save and unsave behavior, saved-state rendering, profile favorites surfaces, server support, live integration, and QA accepted by direct program handoff
 - Comments is complete with accepted design references, fixture-backed iOS UI, live iOS integration for comment list and create on adventure detail, focused service and UI automation proof, and recorded local manual QA
+- Ratings server support is now implemented with detail-scoped `viewerRating`, rating upsert and clear endpoints, legacy-baseline-preserving aggregate refresh, and passing server verification while iOS integration and QA remain open
 
 ### In Progress
 
@@ -156,7 +157,7 @@ Each feature is complete only when all of these gates are satisfied:
 | 5 | Favorites | Done | [features/favorites.md](./features/favorites.md) | save and unsave flows, saved-state rendering, and favorites collections on profile surfaces |
 | 6 | Profile Collections | Superseded | [features/profile-collections.md](./features/profile-collections.md) | authored profile browsing already shipped; remaining favorites-on-profile scope moved into Favorites |
 | 7 | Comments | Done | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail with accepted iOS integration, contract coverage, gallery proof, and passed local manual QA |
-| 8 | Ratings | Not Started | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates |
+| 8 | Ratings | In Progress | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates |
 | 9 | Adventure Sharing + Friend Invites | Not Started | [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md) | shareable links, text/social share, contact-based invites |
 | 10 | Expanded Authentication | Not Started | [features/expanded-authentication.md](./features/expanded-authentication.md) | phone, Google, Apple, passkeys, biometrics |
 | 11 | Support, Reporting, And Account Management | Not Started | [features/support-reporting-account-management.md](./features/support-reporting-account-management.md) | support, reports, legal/settings, logout, delete-account |
@@ -238,6 +239,10 @@ Upcoming features are expected to add or expand public interfaces in these areas
 - The server now exposes the Comments API surface for:
   - `GET /api/adventures/:id/comments`
   - `POST /api/adventures/:id/comments`
+- The server now exposes the Ratings API surface for:
+  - `POST /api/adventures/:id/rating`
+  - `DELETE /api/adventures/:id/rating`
+  - `GET /api/adventures/:id` now includes nullable `viewerRating` for the authenticated viewer
 - The current production Cognito pool has been verified for the rebuild auth path: email is an alias sign-in attribute, `EMAIL_OTP` is enabled as a first auth factor, and the rebuild app client supports `ALLOW_USER_AUTH`.
 - Local manual-QA auth now includes an additional operator note for Cognito sign-up testing: a reused email address can stop receiving a new confirmation email even after its deleted Cognito user is recreated, so fresh addresses are the reliable path for `Get Started` validation.
 - Gmail-specific filtering of `no-reply@verificationemail.com` means confirmation delivery should be verified in another inbox or provider before treating it as a Cognito sender failure.
