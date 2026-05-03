@@ -162,6 +162,7 @@ Each feature is complete only when all of these gates are satisfied:
 | 10 | Expanded Authentication | Not Started | [features/expanded-authentication.md](./features/expanded-authentication.md) | phone, Google, Apple, passkeys, biometrics |
 | 11 | Support, Reporting, And Account Management | Not Started | [features/support-reporting-account-management.md](./features/support-reporting-account-management.md) | support, reports, legal/settings, logout, delete-account |
 | 12 | Edit Adventure | Not Started | [features/edit-adventure.md](./features/edit-adventure.md) | edit existing adventure content using the authoring foundation |
+| 13 | Link Support + Install Routing | Not Started | [features/link-support-install-routing.md](./features/link-support-install-routing.md) | client and server link resolution for invites, public shares, install-open, and fallback routing |
 
 ## Current Scheduled Feature
 
@@ -205,6 +206,8 @@ Current and upcoming feature work adds or expands public interfaces in these are
   Rating create, update, and clear flows plus aggregate rating display are now implemented across the shipped adventure-detail experience and supporting read models.
 - `Sharing and invites`
   Native share-sheet adventure sharing for `public` adventures and native app-invite sharing from Profile are now shipped in iOS with minimal server dependency and no Contacts permission requirement.
+- `Link support and install routing`
+  Full client and server link resolution for invites and public-adventure shares remains a dedicated later feature covering universal-link behavior, fallback routing, and canonical public link ownership.
 - `Expanded auth`
   Auth work is a dedicated later feature, not an incidental extension of Slice 1. Federated identity, phone auth, passkeys, and biometrics should be treated as deliberate contract and QA expansions.
 
