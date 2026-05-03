@@ -104,12 +104,12 @@ Each feature is complete only when all of these gates are satisfied:
 - Favorites is complete with accepted design, iOS save and unsave behavior, saved-state rendering, profile favorites surfaces, server support, live integration, and QA accepted by direct program handoff
 - Comments is complete with accepted design references, fixture-backed iOS UI, live iOS integration for comment list and create on adventure detail, focused service and UI automation proof, and recorded local manual QA
 - Ratings is complete with accepted adventure-detail design references, shipped iOS rating create/update/clear behavior, feed aggregate sync on return from detail, legacy-baseline-preserving server support, and recorded automation plus manual QA proof
+- Adventure Sharing + Friend Invites is complete with shipped native share-sheet invite sharing from Profile, visibility-aware public adventure sharing from Detail, focused automation coverage, and recorded local manual QA
 
 ### In Progress
 
 - first staging smoke execution from the deployment baseline
 - post-Slice-1 planning restructure from slice-based execution to feature-by-feature delivery
-- Adventure Sharing + Friend Invites is now the active ship-priority feature after completed Ratings work
 
 ### Later
 
@@ -158,22 +158,22 @@ Each feature is complete only when all of these gates are satisfied:
 | 6 | Profile Collections | Superseded | [features/profile-collections.md](./features/profile-collections.md) | authored profile browsing already shipped; remaining favorites-on-profile scope moved into Favorites |
 | 7 | Comments | Done | [features/comments.md](./features/comments.md) | comment list and composer on adventure detail with accepted iOS integration, contract coverage, gallery proof, and passed local manual QA |
 | 8 | Ratings | Done | [features/ratings.md](./features/ratings.md) | rating interaction and rating display aggregates with accepted iOS integration, automation coverage, and passed local manual QA |
-| 9 | Adventure Sharing + Friend Invites | Not Started | [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md) | shareable links, text/social share, contact-based invites |
+| 9 | Adventure Sharing + Friend Invites | Done | [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md) | shareable links, native share-sheet invites, and visibility-aware public adventure sharing |
 | 10 | Expanded Authentication | Not Started | [features/expanded-authentication.md](./features/expanded-authentication.md) | phone, Google, Apple, passkeys, biometrics |
 | 11 | Support, Reporting, And Account Management | Not Started | [features/support-reporting-account-management.md](./features/support-reporting-account-management.md) | support, reports, legal/settings, logout, delete-account |
 | 12 | Edit Adventure | Not Started | [features/edit-adventure.md](./features/edit-adventure.md) | edit existing adventure content using the authoring foundation |
 
 ## Current Scheduled Feature
 
-- `Adventure Sharing + Friend Invites`
-- Feature doc: [features/adventure-sharing-friend-invites.md](./features/adventure-sharing-friend-invites.md)
+- `Expanded Authentication`
+- Feature doc: [features/expanded-authentication.md](./features/expanded-authentication.md)
 - Why it is current:
-  It is the next unscheduled ship-priority feature after completed `Ratings` work.
+  It is the next unscheduled ship-priority feature after completed `Adventure Sharing + Friend Invites` work.
 
 ## Program Priority Order
 
 - Product delivery should continue in the feature order listed above.
-- `Adventure Sharing + Friend Invites` is the active ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, `Sidekicks + Profile Discovery`, `Discover Tab`, `Favorites`, `Comments`, and `Ratings` work.
+- `Expanded Authentication` is the active ship-priority feature after completed `Create Adventure`, `Map Discovery + Location Search`, `Sidekicks + Profile Discovery`, `Discover Tab`, `Favorites`, `Comments`, `Ratings`, and `Adventure Sharing + Friend Invites` work.
 - Repos may perform preparatory work ahead of that ship order when the work is additive, assumptions are documented, and accepted feature behavior is not redefined.
 
 ## Repo-Autonomous Next Work
@@ -204,7 +204,7 @@ Current and upcoming feature work adds or expands public interfaces in these are
 - `Ratings`
   Rating create, update, and clear flows plus aggregate rating display are now implemented across the shipped adventure-detail experience and supporting read models.
 - `Sharing and invites`
-  App and server support will be needed for shareable adventure links and invite flows; contacts access and text-share behavior should be planned as client capabilities with minimal server dependency unless referral tracking is added later.
+  Native share-sheet adventure sharing for `public` adventures and native app-invite sharing from Profile are now shipped in iOS with minimal server dependency and no Contacts permission requirement.
 - `Expanded auth`
   Auth work is a dedicated later feature, not an incidental extension of Slice 1. Federated identity, phone auth, passkeys, and biometrics should be treated as deliberate contract and QA expansions.
 
@@ -236,6 +236,7 @@ Current and upcoming feature work adds or expands public interfaces in these are
 - `Favorites` is now complete across accepted design, iOS save and unsave behavior, saved-state rendering, profile favorites surfaces, server support, live integration, and QA accepted by direct program handoff.
 - `Comments` is now complete across accepted design references, fixture-backed iOS UI, live iOS integration for comment list and create on adventure detail, focused service and UI automation proof, passing full gallery regression coverage, and recorded local manual QA.
 - `Ratings` is now complete across accepted adventure-detail design references, live iOS rating create/update/clear behavior, feed aggregate sync after returning from detail, preserved fixture-preview coverage, focused service and UI automation proof, and recorded local manual QA.
+- `Adventure Sharing + Friend Invites` is now complete across the shipped native invite share-sheet flow from Profile, public-adventure share-sheet behavior on Detail, preserved fixture-preview stability, focused unit and UI automation proof, and recorded local manual QA.
 - Implemented business endpoints are backed by Vitest coverage, reject the retired `viewerHandle` query-param pattern, and now require bearer auth for every business route except `GET /api/health`.
 - The server now exposes the Comments API surface for:
   - `GET /api/adventures/:id/comments`

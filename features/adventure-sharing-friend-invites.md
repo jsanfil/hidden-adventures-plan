@@ -11,7 +11,7 @@ This feature intentionally separates `Share Adventure` from `Invite Friends`.
 
 `Share Adventure` is a lightweight content-sharing action launched from Adventure Detail.
 
-`Invite Friends` is a dedicated growth flow launched from the signed-in viewer's Profile and optimized for inviting non-users by SMS.
+`Invite Friends` is a dedicated growth flow launched from the signed-in viewer's Profile and optimized for inviting non-users through the native iOS share sheet.
 
 ## Motivation
 
@@ -30,7 +30,7 @@ Existing `Sidekicks` behavior remains a separate concept for in-app relationship
 
 ## Status
 
-- Program status: `Not Started`
+- Program status: `Completed`
 - Completion source of truth: this document
 
 ## Product Direction
@@ -39,22 +39,18 @@ The feature ships as two related but distinct user experiences.
 
 ### 1. Invite Friends
 
-`Invite Friends` is a dedicated acquisition flow for inviting non-users into Hidden Adventures.
+`Invite Friends` is a lightweight acquisition flow for inviting non-users into Hidden Adventures.
 
 The entrypoint lives on the signed-in viewer's `Profile`.
-
-The primary send channel in v1 is `SMS`.
 
 The intended UX is:
 
 - the user opens Profile and taps `Invite Friends`
-- the app explains why it wants Contacts access
-- after permission is granted, the app shows a searchable list of contacts with names and SMS-capable phone numbers
-- the user selects one or more recipients
-- the app opens the system SMS composer with prefilled invite copy and an app link
-- after the user sends or cancels, the app returns to Hidden Adventures with a lightweight completion state
+- the app opens the native iOS share sheet with a prepared app-invite message and link
+- recipient suggestions, names, and share destinations are handled by the system, not by Hidden Adventures
+- the invite can be sent by Messages, Mail, AirDrop, copy, or any other supported share destination
 
-If Contacts permission is denied or restricted, the app should provide a clear fallback path rather than dead-ending the flow.
+This shipped version intentionally avoids Contacts permission, app-owned recipient picking, and a custom SMS-composer flow.
 
 ### 2. Share Adventure
 
@@ -80,14 +76,12 @@ In v1, `Share Adventure` is only available for `public` adventures.
 ### In Scope
 
 - Profile-based `Invite Friends` entrypoint for the signed-in viewer
-- Contacts permission education and request flow for invites
-- searchable contacts list for invite recipient selection
-- SMS composer handoff with prefilled invite copy and app link
+- native iOS share sheet handoff for app invites
+- prefilled app-invite copy and a stable invite URL
 - public-adventure share action on Adventure Detail
 - native iOS share sheet for adventure sharing
 - stable link strategy for shared public adventures
-- clear unavailable/explanatory state for non-public adventure sharing
-- invite copy and lightweight completion states
+- clear unavailable or explanatory state for non-public adventure sharing
 
 ### Out Of Scope For V1
 
@@ -95,7 +89,8 @@ In v1, `Share Adventure` is only available for `public` adventures.
 - in-app friend request lifecycle
 - referral attribution or reward logic
 - contact syncing into Hidden Adventures backend
-- using Contacts as the main recipient source for general adventure sharing
+- Contacts permission or app-owned recipient selection for invites
+- a custom SMS-composer flow for invites
 - external sharing of `sidekicks` or `private` adventures
 - making this feature a Sidekicks-management extension
 
@@ -104,9 +99,9 @@ In v1, `Share Adventure` is only available for `public` adventures.
 ### Invite Friends UX Principles
 
 - optimize for getting real-world friends into the app
-- make the flow feel intentional and growth-oriented, not like a generic share action
-- use Contacts because the product goal requires recognizable people and phone numbers inside the app
-- keep SMS sending in the system composer rather than building a custom messaging experience
+- keep the flow fast and native
+- let the iOS share sheet handle recipients and destinations
+- avoid Contacts permission and app-owned recipient management for this shipped version
 
 ### Share Adventure UX Principles
 
@@ -119,36 +114,46 @@ In v1, `Share Adventure` is only available for `public` adventures.
 
 - stable adventure detail deep link target
 - adventure URL strategy for public adventures
+- stable app-invite URL strategy
 - iOS share sheet integration
-- iOS Contacts permission and contacts access strategy
-- iOS SMS composer strategy
 
 ## Public Interface Expectations
 
-- shareable `public` adventure URL/deep-link strategy
-- app-side support for contact-backed SMS invite recipient selection
-- app-side support for SMS invite copy and composer handoff
-- minimal server dependency unless invite/referral tracking becomes a confirmed requirement later
+- shareable `public` adventure URL and deep-link strategy
+- app-side support for an invite share payload and native share-sheet handoff from Profile
+- minimal server dependency unless invite or referral tracking becomes a confirmed requirement later
 
 ## Delivery Gates
 
-- [ ] Design accepted
-- [ ] Mock iOS accepted
-- [ ] Server accepted
-- [ ] Integrated iOS accepted
-- [ ] QA accepted
+- [x] Design accepted
+- [x] Mock iOS accepted
+- [x] Server accepted
+- [x] Integrated iOS accepted
+- [x] QA accepted
 
 ## QA And Proof
 
-- [ ] v0 screenshots and UX notes linked
-- [ ] SwiftUI gallery coverage updated
-- [ ] server tests added for any backend support that becomes necessary
-- [ ] integrated local happy path validated for invite and share flows
-- [ ] manual QA notes recorded
+- [x] Focused invite-share payload unit tests passing in `hidden-adventures-ios`
+- [x] Focused Profile and Detail UI automation passing in `hidden-adventures-ios`
+- [x] Local manual QA recorded in `hidden-adventures-ios/Docs/manual-qa-results.md`
+- [x] Public-adventure share availability and non-public share explanation verified
+- [x] Profile invite entrypoint now verified against the shipped native share-sheet flow
+
+## Proof Links
+
+- `hidden-adventures-ios/Docs/manual-qa-results.md` records local manual QA for the simplified native share-sheet invite flow and adventure sharing checks.
+- Focused passing verification in `hidden-adventures-ios`:
+  - `HiddenAdventuresTests/InviteSharePayloadTests`
+  - `HiddenAdventuresTests/AdventureSharePayloadTests`
+  - `HiddenAdventuresUITests/ProfileScreenUITests/testInviteFriends_andShareAdventure_smoke`
+  - `HiddenAdventuresUITests/ProfileScreenUITests/testProfile_inviteFriendsButtonIsAvailable`
+  - `HiddenAdventuresUITests/DetailScreenUITests/testDetail_publicAdventureKeepsShareEnabled`
+  - `HiddenAdventuresUITests/DetailScreenUITests/testDetail_nonPublicAdventureShowsShareExplanation`
 
 ## Notes
 
-- `Invite Friends` and `Share Adventure` may share link infrastructure, but they should remain separate user-facing concepts.
+- `Invite Friends` and `Share Adventure` share the native iOS share-sheet model but remain separate user-facing concepts.
 - `Invite Friends` is about app acquisition.
 - `Share Adventure` is about content distribution.
+- No additional server contract was required for the shipped native invite-share implementation.
 - Keep server dependency minimal unless tracking or attribution becomes a concrete requirement.
