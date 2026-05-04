@@ -1,5 +1,8 @@
 # Backend Schema Draft
 
+> Historical schema draft only. This doc captures early modeling intent and is not the live source of truth for the implemented backend schema.
+> Use `hidden-adventures-server/db/migrations/` for the implemented schema, `hidden-adventures-server/docs/contract.md` for live API behavior, and `hidden-adventures-server/README.md` for repo-local operational guidance.
+
 ## Goal
 
 Lock the first relational domain model for the rebuild so backend implementation can start without recreating the legacy Mongo and ACL patterns.

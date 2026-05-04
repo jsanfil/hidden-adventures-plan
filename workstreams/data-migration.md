@@ -33,7 +33,7 @@ Move legacy Mongo-backed data and existing media references into the new relatio
 - [migration/postgresql-import-flow.md](../migration/postgresql-import-flow.md)
 - [migration/cognito-account-linking-findings.md](../migration/cognito-account-linking-findings.md)
 - [migration/reconciliation-checklist.md](../migration/reconciliation-checklist.md)
-- [workstreams/backend-schema-draft.md](./backend-schema-draft.md)
+- [archive/workstreams/backend-schema-draft.md](../archive/workstreams/backend-schema-draft.md)
 
 ## Available Legacy Source
 

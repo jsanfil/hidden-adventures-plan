@@ -22,5 +22,5 @@ Adopt a three-level product visibility model for adventures: `private`, `sidekic
 
 - [workstreams/visibility-model.md](../workstreams/visibility-model.md)
 - [workstreams/product-ux.md](../workstreams/product-ux.md)
-- [workstreams/backend-platform.md](../workstreams/backend-platform.md)
+- [archive/workstreams/backend-platform.md](../archive/workstreams/backend-platform.md)
 - [migration/legacy-inventory.md](../migration/legacy-inventory.md)

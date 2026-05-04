@@ -95,7 +95,7 @@ Each feature is complete only when all of these gates are satisfied:
 - the testing and environment operating model now distinguishes local manual QA from local automation, with separate local databases and manifest-driven fixture packs
 - Slice 1 iOS runtime now defaults to server-backed auth/bootstrap, feed, detail, and profile clients while fixture preview remains explicit for the UI harness
 - Slice 1 is complete under the current milestone definition: signup, login, basic feed, profile, and adventure detail now count as the release goal
-- first deployment baseline is checked in with image versioning guidance, env templates, rollout and rollback notes, and a staging smoke script
+- first deployment baseline is checked in with image versioning guidance, env templates, rollout and rollback notes, and smoke automation for an optional smoke environment
 - the worktree-based thread setup has been retired in favor of repo-based execution on `main`
 - Create Adventure implementation, gallery coverage, server create path, and manual QA are complete
 - Map Discovery + Location Search is complete with accepted v0 design, the shipped MapKit-backed Explore map and location search flow, geo-scoped feed reads, and completed automation plus manual QA
@@ -108,13 +108,13 @@ Each feature is complete only when all of these gates are satisfied:
 
 ### In Progress
 
-- first staging smoke execution from the deployment baseline
+- first optional smoke-environment execution from the deployment baseline
 - post-Slice-1 planning restructure from slice-based execution to feature-by-feature delivery
 
 ### Later
 
 - all remaining user-facing feature work listed in the execution order below
-- LightSail staging hardening beyond the first smoke pass
+- Lightsail production-topology rehearsal with digest capture, monitoring setup, and rollback notes
 - production-readiness validation and cutover preparation after the core feature set is complete
 
 ## Program Principles
@@ -216,7 +216,7 @@ Current and upcoming feature work adds or expands public interfaces in these are
 | Lane | Status | Primary Repo | Owns | Produces | Depends On |
 | --- | --- | --- | --- | --- | --- |
 | Planning and doc sync | Active | `hidden-adventures-plan` | roadmap truth, feature inventory, milestone board, cross-repo status sync | current-state snapshot, feature sequencing notes, acceptance criteria | verified repo facts only |
-| Backend and ops | Active | `hidden-adventures-server` | maintain the accepted current server contract, evolve live APIs for shipped features, and continue staging baseline follow-up | passing server checks, evergreen contract notes, deploy and smoke notes | implemented server endpoints and deploy assets |
+| Backend and ops | Active | `hidden-adventures-server` | maintain the accepted current server contract, evolve live APIs for shipped features, and continue the digest-based deployment baseline plus optional smoke-environment follow-up | passing server checks, evergreen contract notes, deploy and smoke notes | implemented server endpoints and deploy assets |
 | App integration and acceptance | Active | `hidden-adventures-ios` | preserve Slice 1 runtime stability, absorb accepted server contract updates, and execute the current scheduled feature loop without breaking fixture preview | local runtime notes, passing UI harness, integration findings | accepted current server contract plus approved feature contracts |
 | Manual API troubleshooting assets | On demand | `hidden-adventures-api-tests` | Postman requests that mirror the live API for troubleshooting | updated troubleshooting collections and environment notes | server contract changes only |
 | Feature UX definition | Active | `v0-hidden-adventures-ui` | design and refine the next scheduled feature before native implementation starts | approved visual references, screenshots, and screen-map notes | current feature selection and Slice 1 scope stability |
@@ -262,14 +262,16 @@ Current and upcoming feature work adds or expands public interfaces in these are
 - The iOS repo now supports explicit `LocalManualQA`, `LocalAutomation`, and `Production` server modes, while the XCTest-driven gallery and walkthrough harness remain in explicit fixture-preview mode for deterministic screenshots and acceptance captures.
 - Slice 1 auth now includes additional runtime behavior beyond bootstrap alone: persisted sessions relaunch directly into Explore/Feed, logout clears the local session and requires email OTP on next entry, and onboarding intent only applies to users who bootstrap as `new_user_needs_handle`.
 - Profile setup now persists meaningful user information beyond handle selection through `GET /api/me/profile` and `PUT /api/me/profile`, covering `displayName`, `bio`, `homeCity`, and `homeRegion`.
-- Deployment artifacts now live in `hidden-adventures-server/deploy/`, including env templates, a staging compose example, and a smoke script for root, health, feed, detail, profile, and optional auth checks.
-- Slice 1 is closed under the current milestone definition, while the remaining feature inventory and the first staging smoke execution are tracked as later work.
+- Deployment artifacts now live in `hidden-adventures-server/deploy/`, including env templates, a compose example for an optional smoke environment, and a smoke script for root, health, feed, detail, profile, and optional auth checks.
+- The canonical deployment outline now assumes one Lightsail VM behind a Lightsail load balancer, digest-based image promotion, external PostgreSQL, and no required on-box Apache or Nginx layer for the first production baseline.
+- Slice 1 is closed under the current milestone definition, while the remaining feature inventory and the first optional smoke-environment execution are tracked as later work.
 
 ## Later Operational Phase
 
 After the core feature inventory is complete:
 
-- run LightSail staging hardening and the full staging smoke cycle
+- run the first optional smoke-environment execution and capture the promoted digest, runtime notes, and rollback target
+- configure the first production monitoring, alerting, and backup checks described in [workstreams/deployment-ops.md](./workstreams/deployment-ops.md)
 - prepare production environment, secrets, and rollout safety checks
 - execute final production-readiness validation
 - plan cutover and post-launch follow-up

@@ -10,7 +10,7 @@ Define how the legacy Mongo archive maps into the rebuild relational model so mi
 - Archive profile: [archive-profile.md](./archive-profile.md)
 - Legacy inventory: [legacy-inventory.md](./legacy-inventory.md)
 - Cognito linking findings: [cognito-account-linking-findings.md](./cognito-account-linking-findings.md)
-- Target relational model: [backend-schema-draft.md](../workstreams/backend-schema-draft.md)
+- Historical target relational model: [backend-schema-draft.md](../archive/workstreams/backend-schema-draft.md)
 
 ## Migration Principles
 

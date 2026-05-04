@@ -6,7 +6,7 @@ This document is the cross-repo source of truth for local testing, fixture data,
 
 The rebuild now uses:
 
-- two environments: `local` and `production`
+- two primary environments: `local` and `production`
 - two local runtime modes:
   - `local-manual-qa`
   - `local-automation-test-core`
@@ -106,6 +106,17 @@ The rebuild now uses:
 - schema changes land through forward migrations
 - backups and restore procedures belong to the production operations workflow
 
+### Optional Smoke Environment
+
+- an `optional smoke environment` is a temporary or semi-persistent pre-production host used only to verify the cloud deployment path
+- it is not a required standing pre-production environment in the current phase
+- if created, it should mirror the production topology closely enough to validate:
+  - image pull by digest
+  - migration execution with the promoted image
+  - load balancer reachability when public HTTPS matters
+  - smoke automation against the deployed host
+- local validation remains the primary non-production acceptance path
+
 ## AWS Resource Assumptions
 
 ### Local Non-Prod Resources
@@ -128,9 +139,32 @@ The rebuild now uses:
 - the deployable unit is an immutable Docker image, not a running container copied from another host
 - images should be built from the repo and pushed to a registry, preferably ECR
 - the Lightsail host should pull by image digest and restart the server container from that digest
+- a Lightsail load balancer is the preferred public entrypoint for the first production baseline
 - PostgreSQL is external to the app container
 - Cognito and S3 stay as AWS-managed services outside Lightsail
-- there is no required dedicated staging environment in this phase; local validation is the main non-production acceptance path
+- there is no required standing pre-production environment in this phase; local validation is the main non-production acceptance path and any cloud pre-production host should be described as an `optional smoke environment`
+
+## Validation Surface Split
+
+### Local Validation
+
+- fixture and schema iteration
+- manual QA against non-production Cognito and S3
+- deterministic automation against `hidden_adventures_test`
+- the main acceptance path before a cloud rollout
+
+### Optional Smoke Environment Validation
+
+- verifies that the promoted image can be pulled and started on Lightsail
+- verifies that environment injection, migrations, and public routing are correct
+- runs post-deploy smoke checks through the deployed host
+- is used to de-risk production rollout mechanics, not to replace local feature acceptance
+
+### Production Validation
+
+- runs the same digest-based rollout flow intended for live traffic
+- verifies health through the production load balancer entrypoint
+- relies on production-safe smoke checks, monitoring, alerting, and backup visibility
 
 ## Mobile App Manual QA Backend Prep
 

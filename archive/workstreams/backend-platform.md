@@ -1,5 +1,8 @@
 # Workstream: Backend Platform
 
+> Historical workstream only. This doc is not the live source of truth for current server development.
+> Use `hidden-adventures-server/docs/contract.md` for implemented API behavior, `hidden-adventures-server/README.md` for repo-local runtime and workflow guidance, and `hidden-adventures-server/db/migrations/` for the implemented schema.
+
 ## Goal
 
 Build the new relational backend, hybrid API, and local-first cloud deployment foundation, with the immediate focus on keeping the accepted current server contract evergreen and supporting real client integration.
@@ -30,7 +33,7 @@ Build the new relational backend, hybrid API, and local-first cloud deployment f
 ## Reference
 
 - [workstreams/visibility-model.md](./visibility-model.md)
-- [workstreams/backend-schema-draft.md](./backend-schema-draft.md)
+- [archive/workstreams/backend-schema-draft.md](./backend-schema-draft.md)
 - [migration/cognito-account-linking-findings.md](../migration/cognito-account-linking-findings.md)
 
 ## Done Means

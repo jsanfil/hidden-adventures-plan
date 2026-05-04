@@ -21,6 +21,7 @@ This repo is the global source of truth for the Hidden Adventures rebuild.
 
 - The master roadmap lives in [master-plan.md](./master-plan.md).
 - Workstream details live under [workstreams](./workstreams).
+- Deployment and operations guidance lives in [workstreams/deployment-ops.md](./workstreams/deployment-ops.md).
 - Architectural decisions live under [decisions](./decisions).
 - Active feature-family definitions live under [features](./features).
 - Historical slice and thread docs live under [archive](./archive) and are not authoritative for current planning or repo-next decisions.

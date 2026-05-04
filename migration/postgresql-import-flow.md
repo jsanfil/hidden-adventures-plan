@@ -10,7 +10,7 @@ Define a repeatable import pipeline that converts the legacy Mongo archive into 
 - Archive profile: [archive-profile.md](./archive-profile.md)
 - Legacy mapping rules: [legacy-to-new-mapping.md](./legacy-to-new-mapping.md)
 - Cognito linking findings: [cognito-account-linking-findings.md](./cognito-account-linking-findings.md)
-- Target schema: [backend-schema-draft.md](../workstreams/backend-schema-draft.md)
+- Historical target schema: [backend-schema-draft.md](../archive/workstreams/backend-schema-draft.md)
 - Original Cognito pool export: generate on demand from the server repo with `npm run migration:export-cognito`
 
 ## Recommended Strategy
