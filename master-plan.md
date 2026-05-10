@@ -19,7 +19,7 @@
 ## Execution Model
 
 - Run Codex work in parallel across repos, and allow multiple active threads or worktrees inside a repo when scopes are explicit and non-conflicting.
-- Use each repo's `main` branch directly unless there is a repo-specific reason not to.
+- Start implementation work in each repo on a scoped feature branch rather than committing directly on `main`.
 - Keep `hidden-adventures-plan` as the control tower for feature status, release notes, and cross-repo truth.
 - Require every repo lane to end each cycle with a short handoff covering what changed, what is now stable, what another repo may rely on, and what remains unresolved.
 - Treat Vitest as the official server verification path and Postman as a manual troubleshooting companion only.
@@ -96,7 +96,7 @@ Each feature is complete only when all of these gates are satisfied:
 - Slice 1 iOS runtime now defaults to server-backed auth/bootstrap, feed, detail, and profile clients while fixture preview remains explicit for the UI harness
 - Slice 1 is complete under the current milestone definition: signup, login, basic feed, profile, and adventure detail now count as the release goal
 - first deployment baseline is checked in with image versioning guidance, env templates, rollout and rollback notes, and smoke automation for an optional smoke environment
-- the worktree-based thread setup has been retired in favor of repo-based execution on `main`
+- the worktree-based thread setup has been retired in favor of repo-based execution with scoped feature branches
 - Create Adventure implementation, gallery coverage, server create path, and manual QA are complete
 - Map Discovery + Location Search is complete with accepted v0 design, the shipped MapKit-backed Explore map and location search flow, geo-scoped feed reads, and completed automation plus manual QA
 - Sidekicks + Profile Discovery is complete with accepted v0 references, shipped sidekick discovery and management flows, sidekick-aware server reads, and recorded manual QA proof
@@ -181,19 +181,20 @@ Each feature is complete only when all of these gates are satisfied:
 ## Repo-Autonomous Next Work
 
 - `hidden-adventures-plan`
-  Keep the feature order, repo backlog rules, thread registry, and archive guardrails current.
+  Keep the feature order, repo backlog rules, thread registry, archive guardrails, and feature-branch expectation current.
 - `v0-hidden-adventures-ui`
-  Prioritize design work for the top ship-priority feature first, but later-feature exploration is allowed when clearly marked provisional.
+  Prioritize design work for the top ship-priority feature first, but later-feature exploration is allowed when clearly marked provisional; start implementation on a scoped feature branch when work begins.
 - `hidden-adventures-ios`
-  Prioritize accepted-design fixture-backed implementation for the current ship feature, but reusable infrastructure and non-binding groundwork for later features may move ahead when they do not force product decisions.
+  Prioritize accepted-design fixture-backed implementation for the current ship feature, but reusable infrastructure and non-binding groundwork for later features may move ahead when they do not force product decisions; start implementation on a scoped feature branch when work begins.
 - `hidden-adventures-server`
-  May work ahead across multiple future features with evolving contracts, schema, endpoints, and tests, provided assumptions are documented, live contract docs stay accurate, regression coverage moves with the change, and affected iOS work is handed off explicitly.
+  May work ahead across multiple future features with evolving contracts, schema, endpoints, and tests, provided assumptions are documented, live contract docs stay accurate, regression coverage moves with the change, and affected iOS work is handed off explicitly; start implementation on a scoped feature branch when work begins.
 - `hidden-adventures-api-tests`
-  Follow only live server behavior. Do not publish speculative troubleshooting assets for future APIs that are not live yet.
+  Follow only live server behavior. Do not publish speculative troubleshooting assets for future APIs that are not live yet, and start implementation on a scoped feature branch when work begins.
 
 ## Active Threads
 
 - Active execution can run as multiple parallel threads or git worktrees, including multiple threads inside the same repo.
+- Each implementation thread should own its own scoped feature branch so repo execution stays isolated from `main`.
 - Active threads must stay inside documented scope and should map back to the program priority order, feature docs, and repo backlog rules.
 - Record a scoped thread or worktree note only when it materially helps coordination, and keep that note outside the active planning surface unless it becomes durable program context.
 
