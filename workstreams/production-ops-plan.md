@@ -1,27 +1,29 @@
-# Workstream: Production Runtime & CI/CD Implementation Plan
+# Workstream: Production API Operations Implementation Plan
 
-This document is the canonical production-ops plan for the rebuild program. It supersedes [deployment-ops.md](./deployment-ops.md) for runtime topology, deployment flow, and rollout sequencing.
+This document is the canonical production API operations plan for the rebuild program. It supersedes [deployment-ops.md](./deployment-ops.md) for API runtime topology, deployment flow, operating procedures, and rollout sequencing.
 
 ## Goal
 
-Stand up a lean, repeatable production environment for Hidden Adventures on the existing Lightsail VM using:
+Stand up a lean, repeatable production API service for Hidden Adventures iOS clients on the existing Lightsail VM using:
 
-- Caddy for host-level HTTPS, routing, and basic auth
-- Docker Compose for the application runtime
+- Caddy for host-level HTTPS and public API routing
+- Docker Compose for the API and PostgreSQL runtime
 - Amazon ECR for immutable image promotion
-- GitHub Actions for CI/CD orchestration
+- a push-button solo deploy flow for the API
+- optional GitHub Actions automation later, if it clearly reduces operator effort
 - S3-backed PostgreSQL backups
+- source-controlled SOPs in the scripts repo for routine operation, rollback, diagnostics, and restore
 
 ## Why This Plan Changed
 
 The earlier deployment outline assumed a Lightsail load balancer in front of the VM. This newer plan moves TLS termination and routing onto the VM with Caddy. That decision changes the implementation order and the operational surface:
 
 - it removes the extra load balancer layer, which lowers cost and configuration overhead
-- it keeps public routing, TLS, and basic auth in one explicit host-level config
+- it keeps public routing and TLS in one explicit host-level config
 - it still preserves immutable deployments, digest-aware promotion discipline, and rollback readiness
 - it accepts a simpler first production baseline in exchange for fewer moving pieces
 
-This means the new work is not just "deploy Compose" but "build a complete host runtime contract" covering DNS, HTTPS, reverse proxying, container lifecycle, backups, and operator procedures.
+This means the new work is not just "deploy Compose" but "build a complete API operating contract" covering DNS, HTTPS, reverse proxying, container lifecycle, release automation, backups, and operator procedures.
 
 ## Fixed Decisions And Rationale
 
@@ -29,36 +31,38 @@ This means the new work is not just "deploy Compose" but "build a complete host 
 
 - Use one existing Lightsail VM as the production host.
 - Run `caddy` directly on the host.
-- Run `api`, `admin`, and `postgres` in Docker Compose.
+- Run `api` and `postgres` in Docker Compose for this plan.
+- Keep `admin` out of the active production baseline until a separate admin plan exists.
 - Store legal/static pages at `/var/www/hidden-adventures/public`.
 
 Why:
 
 - It matches the current desire to avoid Terraform, Kubernetes, and broader infra automation.
 - It keeps production close to local Docker development.
-- It gives explicit control over routing and admin protection without introducing another AWS resource layer first.
+- It gives explicit control over public API routing without introducing another AWS resource layer first.
 
-### Public domains
+### Public domains for this plan
 
 - `hiddenadventures.lucidios.com` serves the public entrypoint.
-- `admin-adventures.lucidios.com` serves the admin console.
+- `admin-adventures.lucidios.com` is reserved for future admin work and is not required for the production API baseline.
 
 Why:
 
-- The separation keeps public and operator-facing traffic distinct.
-- It allows the admin surface to use stricter controls without complicating the public app domain.
+- The public API endpoint is the only domain required to complete this plan.
+- Reserving the admin domain avoids re-deciding naming later without letting admin work delay the API baseline.
 
 ### Deployment model
 
-- Build immutable images in CI.
-- Push images to ECR.
+- Build and test the API locally first.
+- Push immutable API images to ECR from the laptop with the scripts-repo release command.
 - Deploy by explicit image reference from the VM.
-- Record git SHA, image tag, and deployed digest for every rollout.
+- Keep deploy tracking lightweight and automatic enough for one-person rollback safety.
 
 Why:
 
 - Digest-based promotion keeps production reproducible.
-- CI-driven builds avoid ad hoc server-side compilation.
+- Avoiding server-side compilation keeps production simpler and more repeatable.
+- A script-first workflow fits the current one-person operating model better than a heavy release pipeline.
 - Rollback stays simple when the previous known-good image is clearly recorded.
 
 ### Database placement
@@ -85,13 +89,10 @@ Internet
   |
   +-- admin-adventures.lucidios.com
         |
-        +-- Caddy on host
-              +-- basic auth
-              +-- -> admin container :3001
+        +-- reserved for future admin plan
 
 Docker Compose
   +-- api
-  +-- admin
   +-- postgres
 
 Host paths
@@ -106,10 +107,9 @@ Host paths
 #### Step 1. Verify the fixed public inputs
 
 - Confirm the Lightsail static IP already exists and is attached to the target VM.
-- Confirm both DNS records point at that static IP.
-- Confirm the production domains are final:
+- Confirm the public API DNS record points at that static IP.
+- Confirm the production API domain is final:
   - `hiddenadventures.lucidios.com`
-  - `admin-adventures.lucidios.com`
 
 Why:
 
@@ -119,7 +119,6 @@ Why:
 #### Step 2. Decide the minimum AWS assets needed for v1
 
 - Create or confirm one ECR repository for the API image.
-- Create or confirm one ECR repository for the admin image.
 - Create or confirm one S3 bucket for production database backups.
 - Create or confirm IAM credentials for the VM with access limited to:
   - ECR pull
@@ -134,14 +133,12 @@ Why:
 
 - Define the final contents for:
   - `/opt/hidden-adventures/env/api.env`
-  - `/opt/hidden-adventures/env/admin.env`
   - `/opt/hidden-adventures/env/postgres.env`
-  - `/opt/hidden-adventures/.deploy.env`
+  - `/opt/hidden-adventures/env/deploy.env`
 - Separate variables into:
   - application runtime config
-  - admin runtime config
   - database credentials
-  - deployment metadata such as ECR registry URLs and image tags
+  - deployment metadata such as `API_IMAGE`
 
 Why:
 
@@ -230,7 +227,7 @@ Why:
 
 - Caddy gives automatic HTTPS with a smaller config footprint than managing Nginx plus certbot.
 - Binding the app containers to loopback-only ports keeps them off the public interface.
-- Host-level basic auth is the fastest safe control for the v1 admin surface.
+- Keeping routing at the host level makes container networking easier to inspect and operate.
 
 #### Step 8. Validate and reload Caddy
 
@@ -270,8 +267,8 @@ Why:
 Create:
 
 - `/opt/hidden-adventures/env/api.env`
-- `/opt/hidden-adventures/env/admin.env`
 - `/opt/hidden-adventures/env/postgres.env`
+- `/opt/hidden-adventures/env/deploy.env`
 
 Seed `postgres.env` with:
 
@@ -281,12 +278,18 @@ POSTGRES_USER=hidden_adventures
 POSTGRES_PASSWORD=<strong-password>
 ```
 
+Seed `deploy.env` with:
+
+```dotenv
+API_IMAGE=<initial-api-image-ref>
+```
+
 Why:
 
 - Splitting env files by service keeps credential boundaries clear.
 - The Compose file becomes stable while secrets rotate independently.
 
-#### Step 11. Start the runtime locally on the VM once before CI/CD wiring
+#### Step 11. Start the runtime locally on the VM once before API release automation
 
 Run:
 
@@ -300,236 +303,223 @@ docker compose ps
 Why:
 
 - The first successful boot should happen with the smallest possible moving surface.
-- It is easier to debug Compose, env files, and host networking before GitHub Actions is involved.
+- It is easier to debug Compose, env files, and host networking before release automation is involved.
 
-### Phase 5: Automate image promotion and rollout
+### Phase 5: Build API release automation in the scripts repo
 
-#### Step 12. Run the source-controlled deploy script from the host runtime path
+Goal: create the push-button release interface used by every later phase.
 
-After `sh scripts/apply.sh`, the managed deploy script lives at:
+Repo: `hidden-adventures-scripts`
 
-```bash
-/opt/hidden-adventures/scripts/deploy.sh
-```
+Artifacts to create or modify:
 
-Why:
+- `scripts/release-api.sh`
+- `SOPs/api-release.md`
+- `SOPs/api-rollback.md`
 
-- The host should pull exact promoted images rather than build them.
-- A tiny deploy script keeps operator behavior repeatable and inspectable.
+Required `release-api.sh` commands:
 
-#### Step 13. Add deploy metadata tracking
+- `push`: build the API image from the server repo, tag it with git SHA plus timestamp, push it to ECR, resolve the digest, and print the immutable image ref.
+- `deploy <image-ref>`: update the production API image ref, invoke the server-side deploy flow, run migrations, restart `api`, run smoke checks, and log the result.
+- `ship`: run `push`, then deploy the exact image that was just pushed.
+- `rollback <image-ref>`: deploy a previous image ref, run smoke checks, and log the rollback.
 
-- Extend `/opt/hidden-adventures/env/deploy.env` to include:
-  - registry URL
-  - `API_IMAGE`
-  - `ADMIN_IMAGE`
-  - deploy region
-- Record for every rollout:
-  - date/time
-  - operator
-  - git SHA
-  - image tag
-  - image digest
-  - migration result
-  - smoke result
-  - rollback target
+Required config contract:
 
-Why:
+- The script reads local operator config from a scripts-repo env file such as `.env.production.local`; this file is never committed.
+- The production VM stores runtime config under `/opt/hidden-adventures/env`.
+- The deployed API image is recorded in `/opt/hidden-adventures/env/deploy.env` as `API_IMAGE=<immutable-image-ref>`.
+- Deploy history is appended on the VM to `/opt/hidden-adventures/deploy-log.jsonl`.
 
-- Digest-only rigor is hard to maintain if the deploy record is informal.
-- Rollback confidence comes from knowing exactly what was running before the latest deploy.
+Acceptance checks:
 
-#### Step 14. Decide how migrations run during deploy
+- `scripts/release-api.sh --help` documents every command and required env var.
+- `scripts/release-api.sh push --dry-run` validates local config without pushing.
+- `scripts/release-api.sh deploy --dry-run <image-ref>` shows the SSH and deploy steps without changing production.
+- `SOPs/api-release.md` and `SOPs/api-rollback.md` explain the exact operator commands for normal release and rollback.
 
-- Prefer one explicit deploy-time migration step using the same promoted server image.
-- Run migrations before final smoke approval.
-- Treat migrations as forward-only unless a tested down path exists.
+Handoff to Phase 6:
 
-Why:
+- Codex can open `hidden-adventures-scripts` and implement `scripts/release-api.sh` plus the first two API SOPs before touching server runtime behavior.
 
-- This preserves the old deployment doc's strongest operational rule even though the runtime topology changed.
-- Database rollback improvisation is usually the highest-risk part of incident response.
+### Phase 6: Make the production runtime API-only
 
-### Phase 6: Add smoke checks and operator diagnostics
+Goal: ensure the VM Compose runtime runs `postgres` and `api`, with `admin` absent or disabled.
 
-#### Step 15. Create the smoke test script
+Repo: `hidden-adventures-scripts`
 
-After `sh scripts/apply.sh`, the managed smoke script lives at:
+Artifacts to create or modify:
 
-```bash
-/opt/hidden-adventures/scripts/smoke.sh
-```
+- production `docker-compose.yml`
+- env templates or examples for `api.env`, `postgres.env`, and `deploy.env`
+- `scripts/apply.sh`
+- `scripts/deploy.sh`
 
-Why:
+Required behavior:
 
-- This gives a minimal cross-layer check of DNS, TLS, Caddy routing, app reachability, and static file serving.
-- It is intentionally small so it can run after every deploy without noise.
+- `api` uses `API_IMAGE` from `/opt/hidden-adventures/env/deploy.env`.
+- `postgres` remains the only database service.
+- `admin` is not part of the active production baseline.
+- `deploy.sh` pulls `API_IMAGE`, runs migrations with the API image, starts or restarts `api`, and leaves `postgres` running.
+- `apply.sh` installs or updates the scripts, Compose file, public assets, Caddy staging file, and `SOPs/` folder onto the server.
 
-#### Step 16. Standardize the first-line logs to inspect
+Acceptance checks:
 
-- `docker compose logs -f api`
-- `docker compose logs -f admin`
-- `docker compose logs -f postgres`
-- `sudo journalctl -u caddy -f`
+- `docker compose config` succeeds on the VM.
+- `docker compose ps` shows `postgres` and `api` after deploy.
+- `admin` is not required for the production API baseline.
+- A reboot recovery check confirms Compose can bring the API runtime back up cleanly.
 
-Why:
+Handoff to Phase 7:
 
-- Operators need one agreed set of debugging entrypoints before production incidents happen.
-- This preserves the useful observability baseline from the older deployment notes without requiring a full logging stack yet.
+- The VM is ready to receive a real API image from ECR and run it without admin services.
 
-### Phase 7: Automate backups and document restore
+### Phase 7: Prove API deploy end to end
 
-#### Step 17. Run the source-controlled Postgres backup script
+Goal: ship the first real API image from local development to production.
 
-After `sh scripts/apply.sh`, the managed backup script lives at:
+Repos:
 
-```bash
-/opt/hidden-adventures/scripts/backup-postgres.sh
-```
+- `hidden-adventures-server`
+- `hidden-adventures-scripts`
 
-Why:
+Required flow:
 
-- Co-locating Postgres with the app host is only acceptable if backups are automatic and off-box.
-- Using `pg_dump -Fc` keeps the backup format practical for later targeted restore work.
+1. Run the server repo's local test and build validation.
+2. Run `scripts/release-api.sh push` from the scripts repo.
+3. Capture the immutable image ref printed by the script.
+4. Run `scripts/release-api.sh deploy <image-ref>` or `scripts/release-api.sh ship`.
+5. Confirm the deploy log entry includes timestamp, git SHA, release tag, image ref, previous image ref, migration result, and smoke result.
 
-#### Step 18. Schedule the daily backup job
+Acceptance checks:
 
-Install a cron entry:
+- VM pulls the image from ECR.
+- Migrations complete successfully.
+- `api` starts successfully.
+- Caddy routes public API traffic to the container.
+- Smoke checks pass against `hiddenadventures.lucidios.com`.
+- The previous image ref is available for rollback.
 
-```cron
-0 3 * * * /opt/hidden-adventures/scripts/backup-postgres.sh
-```
+Handoff to Phase 8:
 
-Why:
+- The production API is deployed and reachable through the public domain, so the iOS client can be pointed at it.
 
-- A backup that depends on a human remembering to run it is not a real backup policy.
-- A single predictable daily run is enough for the first production baseline.
+### Phase 8: Connect the iOS client to the production API
 
-#### Step 19. Write and rehearse restore steps
+Goal: prove the production API can serve an iOS development build.
 
-- Document how to:
-  - fetch the latest S3 dump
-  - restore into a fresh Postgres container or replacement volume
-  - verify the restored database
-- Perform one dry run before calling production routine.
+Repo: `hidden-adventures-ios`
 
-Why:
+Required behavior:
 
-- Backup success without restore rehearsal creates false confidence.
-- The earlier deployment doc correctly treated backup and restore as separate responsibilities.
+- Add or verify a production API base URL configuration for development builds.
+- Ensure the client can target `https://hiddenadventures.lucidios.com`.
+- Run the current client flow against production for the API paths already implemented.
+- Keep this as a development-build verification milestone, not TestFlight or App Store readiness.
 
-### Phase 8: Wire GitHub Actions CI/CD
+Acceptance checks:
 
-#### Step 20. Build and push production images in GitHub Actions
+- iOS dev build reaches the production API through HTTPS.
+- Core read paths work from the app.
+- Auth works if required by the currently implemented client flow.
+- No localhost or LAN-only assumptions remain in the selected production API configuration path.
 
-- Add one workflow that:
-  - runs the relevant test suite
-  - builds the API image
-  - builds the admin image
-  - pushes both to ECR
-  - captures immutable digests
+Handoff to Phase 9:
 
-Why:
+- The API is serving a real client path, so database backup and restore can be hardened before routine operation.
 
-- CI should become the trusted producer of deployable artifacts.
-- Capturing digests in CI avoids ambiguous "latest tag" promotion behavior.
+### Phase 9: Add backups and restore SOPs
 
-#### Step 21. Choose the deploy trigger shape
+Goal: make on-host Postgres acceptable for routine API operation.
 
-- Prefer a manually approved production workflow first.
-- Pass the exact promoted image refs to the VM deploy step by updating the server-local deploy env.
-- Keep automatic deploy-to-production disabled until the manual path is reliable.
+Repo: `hidden-adventures-scripts`
 
-Why:
+Artifacts to create or modify:
 
-- Manual approval is the safer default while the first rollout process is still being proven.
-- This keeps CI/CD useful without forcing full autonomous production release behavior on day one.
+- `scripts/backup-postgres.sh`
+- `scripts/restore-postgres.sh` or a documented restore command sequence if a script is too risky
+- `SOPs/db-backup.md`
+- `SOPs/db-restore.md`
 
-#### Step 22. Connect CI output to VM rollout
+Required behavior:
 
-- The deploy action should either:
-  - SSH to the VM and update `/opt/hidden-adventures/env/deploy.env`, then run `/opt/hidden-adventures/scripts/deploy.sh`
-  - or write the promoted image refs into the server-local deploy env location the VM already consumes
-- Re-run `smoke.sh` immediately after deploy.
+- Backups run with `pg_dump -Fc`.
+- Backups upload to the configured S3 bucket.
+- Backup output includes enough metadata to identify database, timestamp, and source host.
+- Restore SOP covers restore into a fresh volume or replacement container without overwriting production by accident.
+- Cron is installed for daily backup after manual backup succeeds.
 
-Why:
+Acceptance checks:
 
-- The CI/CD handoff must update the host runtime definition managed by the ops bundle repo, not leave operators to infer which image to pull.
-- Immediate smoke checks turn deployment from "container started" into "service is actually reachable."
+- Manual backup uploads to S3 successfully.
+- Scheduled backup is installed.
+- Restore rehearsal succeeds against a non-production target or disposable restore volume.
+- SOP identifies the latest restore point and the command sequence to use during an incident.
 
-### Phase 9: Build the first admin console release
+Handoff to Phase 10:
 
-#### Step 23. Define the v1 admin scope
+- Backup and restore are real operating capabilities, so the remaining work is to gather all operator procedures into a usable runbook set.
 
-The first admin surface should show:
+### Phase 10: Write operator SOPs and production readiness checklist
 
-- total users
-- new users
-- total adventures
-- visibility breakdown
-- recent activity
+Goal: make production operation possible without rediscovering commands during stress.
 
-Why:
+Repo: `hidden-adventures-scripts`
 
-- This is enough to validate the admin runtime path and give useful operator visibility.
-- Keeping v1 intentionally small prevents the admin console from delaying the production baseline itself.
+Required SOP folder contents:
 
-#### Step 24. Keep admin protection at the proxy layer first
+- `SOPs/api-release.md`
+- `SOPs/api-rollback.md`
+- `SOPs/api-smoke-checks.md`
+- `SOPs/api-diagnostics.md`
+- `SOPs/db-backup.md`
+- `SOPs/db-restore.md`
+- `SOPs/server-reboot-recovery.md`
 
-- Protect `admin-adventures.lucidios.com` with Caddy basic auth.
-- Add app-level auth later only if the console grows beyond a lightweight internal operator tool.
+Required SOP content:
 
-Why:
+- Each SOP starts with `When to use this`.
+- Each SOP lists exact commands.
+- Each SOP names expected success signals.
+- Each SOP names stop conditions where the operator should not keep improvising.
+- SOPs must be copied to the Lightsail server by `apply.sh`.
 
-- Host-level auth is the fastest low-complexity protection that satisfies the current need.
-- This avoids coupling production rollout to a brand-new internal auth system.
+Acceptance checks:
 
-### Phase 10: Define rollout, rollback, and production-readiness gates
+- SOPs are present in the scripts repo.
+- SOPs are present on the server after `apply.sh`.
+- A fresh Codex agent can follow the SOPs without needing context from this chat.
+- The production readiness checklist below passes.
 
-#### Step 25. Run the first end-to-end production rehearsal
+## Production Readiness Criteria
 
-- Pull real images from ECR.
-- Bring up Compose on the VM.
-- verify Caddy routing and HTTPS
-- run smoke checks
-- capture logs and runtime notes
+The production API baseline is complete only when all of these are true:
 
-Why:
+- API images can be built locally and pushed to ECR with `scripts/release-api.sh push`.
+- A pushed image can be deployed with `scripts/release-api.sh deploy <image-ref>`.
+- `scripts/release-api.sh ship` can push and immediately deploy one image.
+- `scripts/release-api.sh rollback <previous-image-ref>` can restore the previous API image.
+- The VM runs `postgres` and `api` without requiring `admin`.
+- API deploy runs migrations and smoke checks automatically.
+- Deploy log records current and previous image refs.
+- iOS dev build can talk to the production API domain.
+- Daily Postgres backup uploads to S3.
+- Restore has been rehearsed once.
+- SOPs exist in the scripts repo and are installed onto the Lightsail server.
 
-- The first live rehearsal should validate the full chain, not isolated components.
-- This is the point where the plan becomes an operating procedure instead of a design.
+## Future Work Not Covered By This Plan
 
-#### Step 26. Write the rollback checklist beside the deploy checklist
+Do not include these as numbered phases in the production API plan:
 
-Rollback should be:
+- Admin console implementation.
+- Admin container production deployment.
+- Admin ECR repository and admin release automation.
+- GitHub Actions as the primary release system.
+- TestFlight or App Store production client rollout.
+- Managed Postgres migration.
+- Load balancer, Terraform, Kubernetes, or broader observability stack.
 
-1. identify the last known-good image reference
-2. restore `/opt/hidden-adventures/env/deploy.env` or runtime image refs to that version
-3. run `/opt/hidden-adventures/scripts/deploy.sh`
-4. re-run `/opt/hidden-adventures/scripts/smoke.sh`
-5. log the incident and follow-up actions
-
-Why:
-
-- Single-host deployments are only safe when rollback is explicit and short.
-- Keeping rollback focused on image version change avoids unnecessary host drift during incidents.
-
-#### Step 27. Mark production baseline complete only when these are true
-
-- DNS resolves correctly for both domains
-- Caddy serves valid HTTPS for both domains
-- Compose restarts cleanly after host reboot
-- API smoke checks pass
-- legal static pages load publicly
-- admin domain is protected and reachable
-- CI builds and publishes immutable images
-- production deploys use recorded image refs
-- daily backups upload to S3 successfully
-- one restore rehearsal has been completed
-
-Why:
-
-- Production readiness should be defined by proven behaviors, not by the existence of config files.
+Create separate formal plans for these later, after the production API service is operating reliably.
 
 ## Non-Goals
 
@@ -539,6 +529,8 @@ Why:
 - a separate load balancer tier
 - Grafana or a broader observability platform for the first rollout
 - a standing pre-production environment
+- making GitHub Actions mandatory for production release
+- shipping the admin console in the first production API milestone
 
 ## Recommended Execution Order
 
@@ -547,18 +539,21 @@ Why:
 3. Clone the public ops bundle repo and create local env files.
 4. Apply the repo-managed runtime, public, and staged Caddy assets.
 5. Install and validate Caddy.
-6. Boot the runtime manually on the VM once.
-7. Verify deploy, smoke, and backup scripts from the live host paths.
-8. Add backup automation and restore notes.
-9. Wire GitHub Actions build-and-push.
-10. Connect CI deploy handoff to the VM.
-11. Ship the v1 admin console.
-12. Run the first production rehearsal and capture rollback notes.
+6. Boot the runtime manually on the VM once with the current Postgres-only state.
+7. Build `scripts/release-api.sh` and the API release/rollback SOPs in `hidden-adventures-scripts`.
+8. Make the production Compose and deploy scripts API-only.
+9. Run the first API image push and production deploy using an immutable image ref.
+10. Connect an iOS dev build to the production API domain.
+11. Add backup automation, restore support, and DB SOPs.
+12. Complete the full SOP folder and production readiness checklist.
 
 ## Done Means
 
-- Hidden Adventures can be deployed to the existing Lightsail VM without manual image builds on the host.
-- HTTPS, routing, and admin access control are handled by a stable host-level Caddy config.
+- Hidden Adventures has an operating production API service on the existing Lightsail VM.
+- HTTPS and public API routing are handled by a stable host-level Caddy config.
+- The VM runs `postgres` and `api` without requiring `admin`.
 - The public API and legal pages pass repeatable smoke checks after deploy.
+- The API release flow is push-button for one operator: push, deploy, ship, and rollback all use the same script family.
+- The iOS dev build can talk to the production API domain.
 - The database is backed up to S3 automatically and restore steps have been rehearsed.
-- Operators have a concrete deploy log, rollback checklist, and first-line diagnostics path.
+- SOPs exist in the scripts repo, are installed onto the server, and cover release, rollback, smoke checks, diagnostics, DB backup, DB restore, and reboot recovery.
