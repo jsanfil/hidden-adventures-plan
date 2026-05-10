@@ -163,6 +163,7 @@ Each feature is complete only when all of these gates are satisfied:
 | 11 | Support, Reporting, And Account Management | Not Started | [features/support-reporting-account-management.md](./features/support-reporting-account-management.md) | support, reports, legal/settings, logout, delete-account |
 | 12 | Edit Adventure | Not Started | [features/edit-adventure.md](./features/edit-adventure.md) | edit existing adventure content using the authoring foundation |
 | 13 | Link Support + Install Routing | Not Started | [features/link-support-install-routing.md](./features/link-support-install-routing.md) | client and server link resolution for invites, public shares, install-open, and fallback routing |
+| 14 | iOS Notifications | Not Started | [features/ios-notifications.md](./features/ios-notifications.md) | admin-controlled release announcements plus nearby discovery and dormant-return re-engagement pushes |
 
 ## Current Scheduled Feature
 

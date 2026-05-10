@@ -26,6 +26,7 @@ Current active docs:
 - `ratings.md`
 - `adventure-sharing-friend-invites.md`
 - `expanded-authentication.md`
+- `ios-notifications.md`
 - `support-reporting-account-management.md`
 
 Historical family-level and slice-based planning docs have been moved to `archive/` and are not authoritative for current planning.
