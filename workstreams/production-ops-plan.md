@@ -175,7 +175,7 @@ Why:
 Run:
 
 ```bash
-sudo mkdir -p /opt/hidden-adventures/{env,scripts,backups}
+sudo mkdir -p /opt/hidden-adventures/{env,scripts,backups,staged}
 sudo mkdir -p /var/www/hidden-adventures/public
 sudo chown -R ubuntu:ubuntu /opt/hidden-adventures
 ```
@@ -185,52 +185,45 @@ Why:
 - Runtime files, operator scripts, and backups need clear ownership boundaries.
 - Keeping static public content outside the container runtime makes legal-page serving more durable and easier to inspect.
 
-#### Step 6. Install the initial legal/public files
+#### Step 6. Clone the production ops bundle repo and apply the managed host assets
 
-- Place the initial static assets under `/var/www/hidden-adventures/public`.
-- Confirm at minimum:
-  - `privacy-policy.html`
-  - `terms-conditions.html`
+On the Lightsail VM:
+
+```bash
+cd /opt
+git clone <public-hidden-adventures-scripts-repo-url> hidden-adventures-scripts
+cd /opt/hidden-adventures-scripts
+sh scripts/apply.sh
+```
+
+This repo is now the canonical source for:
+
+- `/opt/hidden-adventures/docker-compose.yml`
+- `/opt/hidden-adventures/scripts/*.sh`
+- `/opt/hidden-adventures/staged/Caddyfile`
+- `/var/www/hidden-adventures/public/*`
+
+Real env files remain local to the server under `/opt/hidden-adventures/env` and are not committed to the public repo.
 
 Why:
 
-- The public smoke checks already depend on these files.
-- Serving them from the host avoids tying legal-page availability to container startup.
+- The VM should consume source-controlled host assets rather than hand-authored files copied from markdown snippets.
+- The public smoke checks already depend on the legal pages that the apply step installs.
 
 ### Phase 3: Configure host-level HTTPS and routing
 
-#### Step 7. Write the production Caddyfile
+#### Step 7. Install the staged production Caddyfile
 
-Create `/etc/caddy/Caddyfile`:
+The ops bundle repo stages the canonical config at:
 
-```caddy
-hiddenadventures.lucidios.com {
-    encode gzip
+```bash
+/opt/hidden-adventures/staged/Caddyfile
+```
 
-    root * /var/www/hidden-adventures
+Install it explicitly with:
 
-    handle /api/* {
-        reverse_proxy 127.0.0.1:3000
-    }
-
-    handle /public/* {
-        file_server
-    }
-
-    handle {
-        file_server
-    }
-}
-
-admin-adventures.lucidios.com {
-    encode gzip
-
-    basicauth {
-        joe <HASH>
-    }
-
-    reverse_proxy 127.0.0.1:3001
-}
+```bash
+sudo cp /opt/hidden-adventures/staged/Caddyfile /etc/caddy/Caddyfile
 ```
 
 Why:
@@ -256,43 +249,15 @@ Why:
 
 ### Phase 4: Define the container runtime
 
-#### Step 9. Create the production Compose file
+#### Step 9. Apply the production Compose file and keep local env files on the VM
 
-Create `/opt/hidden-adventures/docker-compose.yml`:
+The ops bundle repo owns the canonical `docker-compose.yml` and installs it into:
 
-```yaml
-services:
-  api:
-    image: ${API_IMAGE}
-    restart: unless-stopped
-    env_file:
-      - ./env/api.env
-    ports:
-      - "127.0.0.1:3000:3000"
-    depends_on:
-      - postgres
-
-  admin:
-    image: ${ADMIN_IMAGE}
-    restart: unless-stopped
-    env_file:
-      - ./env/admin.env
-    ports:
-      - "127.0.0.1:3001:3000"
-    depends_on:
-      - postgres
-
-  postgres:
-    image: postgis/postgis:16-3.4
-    restart: unless-stopped
-    env_file:
-      - ./env/postgres.env
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
+```bash
+/opt/hidden-adventures/docker-compose.yml
 ```
+
+The repo also carries example env templates for reference, but the real runtime env files stay server-local.
 
 Why:
 
@@ -339,24 +304,12 @@ Why:
 
 ### Phase 5: Automate image promotion and rollout
 
-#### Step 12. Create the deploy script
+#### Step 12. Run the source-controlled deploy script from the host runtime path
 
-Create `/opt/hidden-adventures/scripts/deploy.sh`:
+After `sh scripts/apply.sh`, the managed deploy script lives at:
 
 ```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-cd /opt/hidden-adventures
-
-source .deploy.env
-
-aws ecr get-login-password --region us-west-2 \
-  | docker login --username AWS --password-stdin <account>.dkr.ecr.us-west-2.amazonaws.com
-
-docker compose pull api admin
-docker compose up -d
-docker compose ps
+/opt/hidden-adventures/scripts/deploy.sh
 ```
 
 Why:
@@ -366,7 +319,7 @@ Why:
 
 #### Step 13. Add deploy metadata tracking
 
-- Extend `.deploy.env` to include:
+- Extend `/opt/hidden-adventures/env/deploy.env` to include:
   - registry URL
   - `API_IMAGE`
   - `ADMIN_IMAGE`
@@ -401,15 +354,10 @@ Why:
 
 #### Step 15. Create the smoke test script
 
-Create `/opt/hidden-adventures/scripts/smoke.sh`:
+After `sh scripts/apply.sh`, the managed smoke script lives at:
 
 ```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-curl -fsS https://hiddenadventures.lucidios.com/api/health
-curl -fsS https://hiddenadventures.lucidios.com/public/privacy-policy.html
-curl -fsS https://hiddenadventures.lucidios.com/public/terms-conditions.html
+/opt/hidden-adventures/scripts/smoke.sh
 ```
 
 Why:
@@ -431,21 +379,12 @@ Why:
 
 ### Phase 7: Automate backups and document restore
 
-#### Step 17. Create the Postgres backup script
+#### Step 17. Run the source-controlled Postgres backup script
 
-Create `/opt/hidden-adventures/scripts/backup-postgres.sh`:
+After `sh scripts/apply.sh`, the managed backup script lives at:
 
 ```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-DATE=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
-FILE="/opt/hidden-adventures/backups/db_$DATE.dump"
-
-docker compose exec -T postgres \
-  pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc > "$FILE"
-
-aws s3 cp "$FILE" s3://<your-backup-bucket>/postgres/
+/opt/hidden-adventures/scripts/backup-postgres.sh
 ```
 
 Why:
@@ -498,7 +437,7 @@ Why:
 #### Step 21. Choose the deploy trigger shape
 
 - Prefer a manually approved production workflow first.
-- Pass the exact promoted image refs to the VM deploy step.
+- Pass the exact promoted image refs to the VM deploy step by updating the server-local deploy env.
 - Keep automatic deploy-to-production disabled until the manual path is reliable.
 
 Why:
@@ -509,13 +448,13 @@ Why:
 #### Step 22. Connect CI output to VM rollout
 
 - The deploy action should either:
-  - SSH to the VM and update `.deploy.env`, then run `deploy.sh`
-  - or write the promoted image refs into a known location the VM can consume
+  - SSH to the VM and update `/opt/hidden-adventures/env/deploy.env`, then run `/opt/hidden-adventures/scripts/deploy.sh`
+  - or write the promoted image refs into the server-local deploy env location the VM already consumes
 - Re-run `smoke.sh` immediately after deploy.
 
 Why:
 
-- The CI/CD handoff must update the host runtime definition, not leave operators to infer which image to pull.
+- The CI/CD handoff must update the host runtime definition managed by the ops bundle repo, not leave operators to infer which image to pull.
 - Immediate smoke checks turn deployment from "container started" into "service is actually reachable."
 
 ### Phase 9: Build the first admin console release
@@ -565,9 +504,9 @@ Why:
 Rollback should be:
 
 1. identify the last known-good image reference
-2. restore `.deploy.env` or runtime image refs to that version
-3. run `deploy.sh`
-4. re-run `smoke.sh`
+2. restore `/opt/hidden-adventures/env/deploy.env` or runtime image refs to that version
+3. run `/opt/hidden-adventures/scripts/deploy.sh`
+4. re-run `/opt/hidden-adventures/scripts/smoke.sh`
 5. log the incident and follow-up actions
 
 Why:
@@ -605,11 +544,11 @@ Why:
 
 1. Confirm DNS, domains, ECR, S3, and IAM inputs.
 2. Prepare the VM packages and directory layout.
-3. Install static legal pages.
-4. Configure and validate Caddy.
-5. Create Compose and env files.
+3. Clone the public ops bundle repo and create local env files.
+4. Apply the repo-managed runtime, public, and staged Caddy assets.
+5. Install and validate Caddy.
 6. Boot the runtime manually on the VM once.
-7. Add deploy and smoke scripts.
+7. Verify deploy, smoke, and backup scripts from the live host paths.
 8. Add backup automation and restore notes.
 9. Wire GitHub Actions build-and-push.
 10. Connect CI deploy handoff to the VM.
